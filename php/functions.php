@@ -20,6 +20,9 @@ if(isset($_POST['function'])){
 			}
 			echo json_encode($return);
 		break;
+		case 'setPeople':
+			echo json_encode('we were set! I promise.');
+		break;
 		default:
 			echo "Error - No function called '".$_POST['function']."'";
 			exit();
