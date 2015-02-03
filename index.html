@@ -27,6 +27,7 @@
 		<!-- SCRIPTS -->
 		<script src = "js/jquery-2.1.3.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<script src = "js/util.js"></script>
 	</body>
 </html>
 
@@ -36,40 +37,42 @@
 	});
 
 	var $people = $('#people');
-
-	$.ajax({
-		url: 'php/functions.php',
-		type: 'post',
-		data: {'function':'getPeople'},
-		success: function(people, status) {
-			console.log(status);
-			console.log(people);
-			$.each(people, function(i, person) {
-				console.log(person.name);
-				$people.append('<li><strong>Id: </strong>'+ person.ID + ', <strong>Name: </strong>' +person.name+ ', <strong>Desc: </strong>' +person.desc+ '</li>')
+	
+	var callbackOne = function(response) {
+		if(response.status == 'success'){
+			console.log(response.data);
+			$.each(response.data, function(i, person) {
+				//console.log(person.name);
+				$people.append('<li><strong>Id: </strong>'+ person.ID + ', <strong>Name: </strong>' +person.name+ ', <strong>Desc: </strong>' +person.desc+ '</li>');
 			});
-			
-		},
-		error: function(xhr, desc, err) {
-			console.log(xhr);
-			console.log("Details: " + desc + "/nError: " + err);
+		} else {
+			console.log(response.xhr);
 		}
-	});
+	}
 
-	$.ajax({
-		url: 'php/functions.php',
-		type: 'post',
-		data: {'function':'setPeople'},
-		success: function(data, status) {
-			console.log(status);
-			console.log(data);
-			
-		},
-		error: function(xhr, desc, err) {
-			console.log(xhr);
-			console.log("Details: " + desc + "/nError: " + err);
+
+	var callbackTwo = function(response) {
+		if(response.status == 'success'){
+			console.log(response.data);
+			var person = response.data;
+			$people.append('<li><strong>Id: </strong>'+ person.ID + ', <strong>Name: </strong>' +person.name+ ', <strong>Desc: </strong>' +person.desc+ '</li>');
+		} else {
+			console.log(response.xhr);
 		}
-	});
+	}
+
+	var functionName = 'getPeople';
+	sendRequest('php/functions.php',
+		callbackOne,
+		functionName);
+
+	functionName = 'getPersonByID';
+	var params = {'ID' : 1};
+
+	sendRequest('php/functions.php',
+		callbackTwo,
+		functionName,
+		params);
 
 
 </script>

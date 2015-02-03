@@ -1,0 +1,40 @@
+Admin
+-adminNo (userNo)
+-fName
+-lName
+
+Student
+-studentNo (userNo)
+-fName
+-lName
+-groupNo
+
+User
+-userNo (auto inc - don't set via query)
+-password
+-type
+-userName
+
+Group
+-groupNo (auto inc - don't set via query)
+-name
+-assignedBy
+
+Report
+-reportNo (auto inc - don't set via query)
+-groupNo
+-title
+-body
+-reference
+-uploadedOn (curtime - don't set via query)
+
+Assessment
+-reportNo
+-grupNo
+-structureGrade
+-strengthGrade
+-formatGrade
+-qualityGrade
+-averageGrade
+-comment
+-assessedOn (curtime - don't set via query)

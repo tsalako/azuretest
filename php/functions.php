@@ -1,24 +1,26 @@
 <?php
 
-include 'includes/connection.php';
+include 'dbo/DB.php';
+include 'dbo/Person.php';
 header("content-type:application/json");
 
 if(isset($_POST['function'])){
+
+	$db = new DB();
 	
 	switch($_POST['function']){
 		case 'getPeople':
-			$query = "SELECT * FROM people";
-			$stmt = $db->prepare($query);
-			$stmt->execute();
+			$people = Person::getAllPeople($db);
 			$return = array();			
-			while($row = $stmt->fetch()){
-				array_push($return, $row/*array(
-						'ID' => $row['ID'],
-						'name' => $row['name'],
-						'desc' => $row['desc']
-					)*/);
+			foreach ($people as $person){
+				array_push($return, $person->getData());
 			}
 			echo json_encode($return);
+		break;
+		case 'getPersonByID':
+			$params = $_POST['params'];
+			$person = Person::getPersonFromID($db, $params['ID']);
+			echo json_encode($person->getData());
 		break;
 		case 'setPeople':
 			echo json_encode('we were set! I promise.');
