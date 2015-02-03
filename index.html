@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Javascript</title>
+		<title>Review Llama</title>
 		<link rel = "stylesheet" href="css/main.css">
 		
 		<!-- Latest compiled and minified CSS -->
@@ -12,15 +12,208 @@
 	</head>
 	<body>
 		<div id = "header">
-			<h1>Da Test</h1>
+			<h1>Review Llama</h1>
 		</div>
-		<div id = "content">
-			<h2>Da test body</h2>
-		</div>
+		<h5>Currently nothing actually works</h5>
 
-		<div class="darkBG">test text</div>
-		<ul id ="people"></ul>
-		<div id="footer" class = "darkBG col-sm-4 col-xs-8">Da footer</div>
+		<!-- USER ADD/EDIT -->
+		<div class = "upperMargin col-sm-12">
+		<h3>User Add/Edit</h3>
+		<form class="col-sm-4">
+			<div class="form-group">
+				<label for="userListU">User List</label>
+				<select class="form-control" id="userListU">
+				  <option>Add</option>
+				</select>
+			</div>
+			<div class="form-group">
+		    	<label for="usernameU">Username</label>
+		    	<input type="text" class="form-control" id="usernameU" placeholder="Enter username">
+		    </div>
+		    <div class="form-group">
+			    <label for="passwordU">Password</label>
+			    <input type="password" class="form-control" id="passwordU" placeholder="Password">
+			</div>
+			<div class="form-group">
+		    	<label for="fnameU">First Name</label>
+		    	<input type="text" class="form-control" id="fnameU" placeholder="Enter first name">
+		    </div>
+		    <div class="form-group">
+		    	<label for="lnameU">Last Name</label>
+		    	<input type="text" class="form-control" id="lnameU" placeholder="Enter last name">
+		    </div>
+		    <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	    </div>
+
+	    <!-- GROUP ADD/EDIT -->
+	    <div class = "upperMargin col-sm-12">
+		<h3 class = "upperMargin ">Group Add/Edit</h3>
+		<form class="col-sm-4">
+			<div class="form-group">
+				<label for="groupListG">Group List</label>
+				<select class="form-control" id="groupListG">
+				  <option>Add</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="adminListG">Admin List</label>
+				<select class="form-control" id="adminListG">
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="studentListG">Student List</label>
+				<select multiple class="form-control" id="studentListG">
+				</select>
+			</div>
+			<div class="form-group">
+		    	<label for="nameG">Name</label>
+		    	<input type="text" class="form-control" id="nameG" placeholder="Enter group name">
+		    </div>
+		    <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	    </div>
+
+	    <!-- REPORT ADD/EDIT -->
+	    <div class = "upperMargin col-sm-12">
+		<h3 class = "upperMargin ">Report Add/Edit</h3>
+		<form class="col-sm-4">
+			<div class="form-group">
+				<label for="reportListR">Report List</label>
+				<select class="form-control" id="reportListR">
+				  <option>Add</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="groupListR">Group List</label>
+				<select class="form-control" id="groupListR">
+				</select>
+			</div>
+			<div class="form-group">
+		    	<label for="titleR">Title</label>
+		    	<input type="text" class="form-control" id="titleR" placeholder="Enter title">
+		    </div>
+		    <div class="form-group">
+		    	<label for="bodyR">Body</label>
+		    	<textarea type="text" class="form-control" id="bodyR" placeholder="Enter body"></textarea>
+		    </div>
+		    <div class="form-group">
+		    	<label for="refR">References</label>
+		    	<input type="text" class="form-control" id="refR" placeholder="Enter references, seperated by commas">
+		    </div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	    </div>
+
+	    <!-- ASSESSMENT ADD/EDIT -->
+	    <div class = "upperMargin col-sm-12">
+		<h3 class = "upperMargin ">Assessment Add/Edit</h3>
+		<form class="col-sm-4">
+			<div class="form-group">
+				<label for="assessListA">Assessment List</label>
+				<select class="form-control" id="assessListA">
+				  <option>Add</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="reportListA">Report List</label>
+				<select class="form-control" id="reportListA">
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="groupListA">Group List</label>
+				<select class="form-control" id="groupListA">
+				</select>
+			</div>
+
+			<!-- Structure Select -->
+			<div class="form-group">
+				<label for="structSel">Structure Grade</label>
+				<label class="radio-inline">
+				  <input type="radio" name="structSel" id="structSel1" value="option1"> 1
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="structSel" id="structSel2" value="option2"> 2
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="structSel" id="structSel3" value="option3"> 3
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="structSel" id="structSel4" value="option4"> 4
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="structSel" id="structSel5" value="option5"> 5
+				</label>
+			</div>
+
+			<!-- Strength Select -->
+			<div class="form-group">
+				<label for="strtSel">Strength Grade</label>
+				<label class="radio-inline">
+				  <input type="radio" name="strSel" id="strSel1" value="option1"> 1
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="strSel" id="strSel2" value="option2"> 2
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="strSel" id="strSel3" value="option3"> 3
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="strSel" id="strSel4" value="option4"> 4
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="strSel" id="strSel5" value="option5"> 5
+				</label>
+			</div>
+
+			<!-- Format Select -->
+			<div class="form-group">
+				<label for="formSel">Format Grade</label>
+				<label class="radio-inline">
+				  <input type="radio" name="formSel" id="formSel1" value="option1"> 1
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="formSel" id="formSel2" value="option2"> 2
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="formSel" id="formSel3" value="option3"> 3
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="formSel" id="formSel4" value="option4"> 4
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="formSel" id="formSel5" value="option5"> 5
+				</label>
+			</div>
+
+			<!-- Quality Select -->
+			<div class="form-group">
+				<label for="qualSel">Quality Grade</label>
+				<label class="radio-inline">
+				  <input type="radio" name="qualSel" id="qualSel1" value="option1"> 1
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="qualSel" id="qualSel2" value="option2"> 2
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="qualSel" id="qualSel3" value="option3"> 3
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="qualSel" id="qualSel4" value="option4"> 4
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="qualSel" id="qualSel5" value="option5"> 5
+				</label>
+			</div>
+
+			<div class="form-group">
+		    	<label for="commentA">Comment</label>
+		    	<textarea type="text" class="form-control" id="commentA"></textarea>
+		    </div>
+		</form>
+	    </div>
+
+		<div class = "col-sm-4" id="footer">You've reached end of page.</div>
 
 
 
@@ -32,48 +225,6 @@
 </html>
 
 <script>
-	$(document).ready(function() {
-		$('#header h1').html('Looks like JQuery is a go??.'); 
-	});
-
-	var $people = $('#people');
-	
-	var callbackOne = function(response) {
-		if(response.status == 'success'){
-			console.log(response.data);
-			$.each(response.data, function(i, person) {
-				//console.log(person.name);
-				$people.append('<li><strong>Id: </strong>'+ person.ID + ', <strong>Name: </strong>' +person.name+ ', <strong>Desc: </strong>' +person.desc+ '</li>');
-			});
-		} else {
-			console.log(response.xhr);
-		}
-	}
-
-
-	var callbackTwo = function(response) {
-		if(response.status == 'success'){
-			console.log(response.data);
-			var person = response.data;
-			$people.append('<li><strong>Id: </strong>'+ person.ID + ', <strong>Name: </strong>' +person.name+ ', <strong>Desc: </strong>' +person.desc+ '</li>');
-		} else {
-			console.log(response.xhr);
-		}
-	}
-
-	var functionName = 'getPeople';
-	sendRequest('php/functions.php',
-		callbackOne,
-		functionName);
-
-	functionName = 'getPersonByID';
-	var params = {'ID' : 1};
-
-	sendRequest('php/functions.php',
-		callbackTwo,
-		functionName,
-		params);
-
 
 </script>
 
