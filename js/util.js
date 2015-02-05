@@ -11,3 +11,7 @@ function sendRequest (urlInput, callback, functionName, params) {
 		}
 	});
 }
+
+var basicCallback = function (responce) {
+	console.log(responce);
+}

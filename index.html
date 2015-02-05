@@ -14,14 +14,17 @@
 		<div id = "header">
 			<h1>Review Llama</h1>
 		</div>
-		<h5>Currently nothing actually works</h5>
+		<h5>User - Works</h5>
+		<h5>Group - N/A</h5>
+		<h5>Report - N/A</h5>
+		<h5>Assessment - N/A</h5>
 
 		<!-- USER ADD/EDIT -->
 		<div class = "upperMargin col-sm-12">
 		<h3>User Add/Edit</h3>
 		<form class="col-sm-4">
 			<div class="form-group">
-				<label for="userListU">User List</label>
+				<label for="userListU">User List (leave on Add to add or select from the list to edit)</label>
 				<select class="form-control" id="userListU">
 				  <option>Add</option>
 				</select>
@@ -42,7 +45,16 @@
 		    	<label for="lnameU">Last Name</label>
 		    	<input type="text" class="form-control" id="lnameU" placeholder="Enter last name">
 		    </div>
-		    <button type="submit" class="btn btn-default">Submit</button>
+		    <div class="form-group">
+				<label for="userSel">User Type</label>
+				<label class="radio-inline">
+				  <input type="radio" name="userSel" id="userSel1" value="student"> Student
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="userSel" id="userSel2" value="admin"> Admin
+				</label>
+			</div>
+		    <button type="button" class="btn btn-default" onclick="updateUser()">Submit</button>
 		</form>
 	    </div>
 
@@ -70,7 +82,7 @@
 		    	<label for="nameG">Name</label>
 		    	<input type="text" class="form-control" id="nameG" placeholder="Enter group name">
 		    </div>
-		    <button type="submit" class="btn btn-default">Submit</button>
+		    <button type="button" class="btn btn-default">Submit</button>
 		</form>
 	    </div>
 
@@ -101,7 +113,7 @@
 		    	<label for="refR">References</label>
 		    	<input type="text" class="form-control" id="refR" placeholder="Enter references, seperated by commas">
 		    </div>
-			<button type="submit" class="btn btn-default">Submit</button>
+			<button type="button" class="btn btn-default">Submit</button>
 		</form>
 	    </div>
 
@@ -211,7 +223,7 @@
 		    	<textarea type="text" class="form-control" id="commentA"></textarea>
 		    </div>
 
-		    <button type="submit" class="btn btn-default">Submit</button>
+		    <button type="button" class="btn btn-default">Submit</button>
 		</form>
 	    </div>
 
@@ -226,6 +238,130 @@
 	</body>
 </html>
 
+<!-- INITIAL LOAD SCRIPT -->
+<script>
+$( document ).ready(function() {
+ 	initialLoad();
+});
+
+var initialLoad = function () {
+	//user Init
+	sendRequest('php/UserService.php',
+			userInit,
+			'getAllUsers');
+
+	//group Init
+	//report Init
+	//assessment Init
+}
+</script>
+
+<!-- USER ADD/EDIT SCRIPT -->
+<script>
+
+var userTypeSel, users, userGlobal;
+$("input:radio[name=userSel]").click(function() {
+	userTypeSel = $(this).val();
+});
+
+$( "#userListU" ).change(function() {
+  //console.log($(this)[0].selectedIndex);
+  //console.log(users[$(this)[0].selectedIndex]);
+
+  if($(this).val() == 'Add'){
+  	$('#usernameU').val('');
+	$('#fnameU').val('');
+	$('#lnameU').val('');
+	$('#passwordU').val('');
+	
+	$("input:radio[id=userSel1]").prop('checked',false);
+	$("input:radio[id=userSel2]").prop('checked',false);
+
+	userTypeSel = '';
+
+  	$("input:radio[name=userSel]").attr('disabled',false);
+  } else {
+	userGlobal = users[$(this)[0].selectedIndex-1];
+	$('#usernameU').val(userGlobal.username);
+	$('#fnameU').val(userGlobal.fName);
+	$('#lnameU').val(userGlobal.lName);
+
+    if(userGlobal.isStudent){
+  	  $("input:radio[id=userSel1]").prop('checked',true);
+  	  userTypeSel = 'student';
+    } else if(userGlobal.isAdmin){
+  	  $("input:radio[id=userSel2]").prop('checked',true);
+  	  userTypeSel = 'admin';
+    }
+
+    $("input:radio[name=userSel]").attr('disabled',true);
+  }
+  
+});
+
+var updateUser = function () {
+	var params = {'username' : $('#usernameU').val(), 
+				'password' : $('#passwordU').val(),
+				'type' : userTypeSel,
+				'first' : $('#fnameU').val(),
+				'last' : $('#lnameU').val()};
+	var functionName;
+
+	if($('#userListU').val() == 'Add'){
+		functionName = 'addUser';
+	} else {
+		params['id'] = userGlobal.userNo;
+		functionName = 'editUser';
+	}
+	sendRequest('php/UserService.php',
+			initialLoad,
+			functionName,
+			params);
+
+	clearFields();
+}
+
+var clearFields = function () {
+	/*Clear Fields*/
+	$('#usernameU').val('');
+	$('#fnameU').val('');
+	$('#lnameU').val('');
+	$('#passwordU').val('');
+	$("input:radio[id=userSel1]").prop('checked',false);
+	$("input:radio[id=userSel2]").prop('checked',false);
+	userTypeSel = '';
+  	$("input:radio[name=userSel]").attr('disabled',false);
+  	$("#userListU option[value='temp']").remove();
+}
+
+var userInit = function (response) {
+	var $userList = $('#userListU');
+	users = [];
+	$.each(response.data, function(i, user) {
+				users.push(user);
+				$userList.append('<option value="temp">' + user.username + '</option>');
+			});
+	console.log(response.status);
+}
+
+</script>
+
+<!-- USER ADD/EDIT SCRIPT -->
+<script>
+
+</script>
+
+<!-- GROUP ADD/EDIT SCRIPT -->
+<script>
+
+</script>
+
+<!-- REPORT ADD/EDIT SCRIPT -->
+<script>
+
+</script>
+
+<!-- ASSESSMENT ADD/EDIT SCRIPT -->
 <script>
 
 </script>
