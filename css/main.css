@@ -1,7 +1,7 @@
-.darkBG {
+/*.darkBG {
 	background: #000;
 	color: #fff;
-}
+}*/
 
 .upperMargin {
 	margin-top: 2em;
@@ -14,4 +14,101 @@
 .smallUpperMargin div {
 	text-align: left;
 	font-weight: normal;
+}
+
+body#login  {
+    background-image: url("../media/Timelapse2.gif");
+    background-color: #cccccc;
+}
+
+.btn-success#login-btn {
+	color: #fff;
+	background-color: #4298B5;
+	border-color: #ADC4CC;
+}
+
+.btn-success.active#login-btn, 
+.btn-success.focus#login-btn, 
+.btn-success:active#login-btn, 
+.btn-success:focus#login-btn, 
+.btn-success:hover#login-btn, 
+.open>.dropdown-toggle.btn-success#login-btn {
+	color: #fff;
+	background-color: #4298B5;
+	border-color: #4298B5;
+}
+
+.panel-primary {
+	border-color: #4298B5;
+}
+
+.panel-primary>.panel-heading {
+	color: #fff;
+	background-color: #4298B5;
+	border-color: #4298B5;
+}
+
+.panel-green {
+	border-color: #92B06A;
+}
+
+.panel-green .panel-heading {
+	border-color: #92B06A;
+	color: #fff;
+	background-color: #92B06A;
+}
+
+.panel-yellow {
+	border-color: #E19D29;
+}
+
+.panel-yellow .panel-heading {
+	border-color: #E19D29;
+	color: #fff;
+	background-color: #E19D29;
+}
+
+.panel-red {
+	border-color: #DD5F32;
+}
+
+.panel-red .panel-heading {
+	border-color: #DD5F32;
+	color: #fff;
+	background-color: #DD5F32;
+}
+
+.panel-light-blue {
+	border-color: #ADC4CC;
+}
+
+.panel-light-blue .panel-heading {
+	border-color: #ADC4CC;
+	color: #fff;
+	background-color: #ADC4CC;
+}
+
+.panel-light-blue a {
+	color: #ADC4CC;
+	text-decoration: none;
+}
+
+.panel-black {
+	border-color: #696969;
+}
+
+.panel-black .panel-heading {
+	border-color: #696969;
+	color: #fff;
+	background-color: #696969;
+}
+
+.panel-black a {
+	color: #696969;
+	text-decoration: none;
+}
+
+a {
+	color: #4298B5;
+	text-decoration: none;
 }
