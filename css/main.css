@@ -112,3 +112,92 @@ a {
 	color: #4298B5;
 	text-decoration: none;
 }
+
+/*** TOP BOTTOM PANELS FOR ASSESSMENTS ***/
+.top-panel {
+	background-color: #fff;
+	border: 1px solid transparent;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+	box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.bottom-panel {
+	margin-bottom: 20px;
+	background-color: #fff;
+	border: 1px solid transparent;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+	box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+/*** CHANGE COLOR OF DIV ****/
+.blue-div {
+	border-color: #4298B5;
+	color: #fff;
+	background-color: #4298B5;
+}
+
+.blue-border {
+	border-color: #4298B5;
+	color: #4298B5;
+}
+
+.light-blue-div {
+	border-color: #ADC4CC;
+	color: #fff;
+	background-color: #ADC4CC;
+}
+
+.light-blue-border {
+	border-color: #ADC4CC;
+	color: #ADC4CC;
+}
+
+.green-div {
+	border-color: #92B06A;
+	color: #fff;
+	background-color: #92B06A;
+}
+
+.green-border {
+	border-color: #92B06A;
+	color: #92B06A;
+}
+
+.yellow-div {
+	border-color: #E19D29;
+	color: #fff;
+	background-color: #E19D29;
+}
+
+.yellow-border {
+	border-color: #E19D29;
+	color: #E19D29;
+}
+
+.red-div {
+	border-color: #DD5F32;
+	color: #fff;
+	background-color: #DD5F32;
+}
+
+.red-border {
+	border-color: #DD5F32;
+	color: #DD5F32;
+}
+
+.black-div {
+	border-color: #696969;
+	color: #fff;
+	background-color: #696969;
+}
+
+.black-border {
+	border-color: #696969;
+	color: #696969;
+}
+
+/*** END CHANGE COLOR OF DIV ****/
