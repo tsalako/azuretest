@@ -201,3 +201,7 @@ a {
 }
 
 /*** END CHANGE COLOR OF DIV ****/
+
+.full-report, .full-assessment {
+	display: none;
+}

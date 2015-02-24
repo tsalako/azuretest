@@ -109,15 +109,18 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
-                <div class="row">
+                <div class="row report-panel">
                     <div class="col-lg-12">
                         <div class="panel red-border">
-                                <div class="panel-heading">
+                                <div class="panel-heading show-more">
                                     <span class="pull-left">REPORT TITLE</span>
-                                    <span class="pull-right"><i class="fa fa-minus"></i></span>
+                                    <span class="pull-right"><i class="fa fa-plus"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="panel-body red-div">
+                                <div class="panel-body red-div sub-report">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                </div>
+                                <div class="panel-body red-div full-report">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                 </div>
                                 <div class="panel-footer">
@@ -130,29 +133,68 @@
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="row">
+                <div class="row assess-panel">
                     <div class="col-lg-12">
                         <div class="top-panel red-border">
-                                <div class="panel-heading">
+                                <div class="panel-heading show-more">
                                     <span class="pull-left">REPORT AND EDIT REVIEW</span>
-                                    <span class="pull-right"><i class="fa fa-minus"></i></span>
+                                    <span class="pull-right"><i class="fa fa-plus"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="panel-body red-div">
+                                <div class="panel-body red-div sub-report">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                </div>
+                                <div class="panel-body red-div full-report">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                 </div>
                         </div>
                         <div class="bottom-panel green-border">
                                 <div class="panel-body green-div">
-                                    <p>
-                                      <label for="amount">Donation amount ($50 increments):</label>
-                                      <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                                    </p>
-                                     
-                                    <div id="slider"></div>
+                                    <div class="row" id="structureGrade">
+                                        <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
+                                            <p>
+                                              <label class="col-lg-5" for="rank">Structure Rank:</label>
+                                              <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
+                                    </div>
+                                    <div class="row" id="strengthGrade">
+                                        <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
+                                            <p>
+                                              <label class="col-lg-5" for="rank">Strength Rank:</label>
+                                              <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
+                                    </div>
+                                    <div class="row" id="formatGrade">
+                                        <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
+                                            <p>
+                                              <label class="col-lg-5" for="rank">Format Rank:</label>
+                                              <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
+                                    </div>
+                                    <div class="row" id="qualityGrade">
+                                        <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
+                                            <p>
+                                              <label class="col-lg-5" for="rank">Quality Rank:</label>
+                                              <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-8 col-lg-offset-2">
+                                                <label class="col-lg-5">Comments:</label>
+                                                <textarea class="form-control" rows="10"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <span class="pull-left">REPORT AND EDIT REVIEW</span>
+                                    <span class="pull-left">Save Assessment</span>
                                     <span class="pull-right"><i class="fa fa-floppy-o"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
@@ -161,19 +203,22 @@
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="row">
+                <div class="row assessed-panel">
                     <div class="col-lg-12">
                         <div class="panel green-border">
-                                <div class="panel-heading">
+                                <div class="panel-heading show-more">
                                     <span class="pull-left">REPORT TILTLE</span>
                                     <span class="pull-right"><i class="fa fa-plus"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="panel-body green-div">
+                                <div class="panel-body green-div sub-assessment">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                </div>
+                                <div class="panel-body green-div full-assessment">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                 </div>
                                 <div class="panel-footer">
-                                    <span class="pull-left">OVERALL GRADE</span>
+                                    <span class="pull-left">Overall Grade: 1</span>
                                     <span class="pull-right"><i class="fa fa-exchange"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
@@ -182,24 +227,30 @@
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="row">
+                <div class="row report-assess-panel">
                     <div class="col-lg-12">
                         <div class="top-panel red-border">
-                                <div class="panel-heading">
+                                <div class="panel-heading show-more">
                                     <span class="pull-left">REPORT TITLE</span>
                                     <span class="pull-right"><i class="fa fa-plus"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="panel-body red-div">
+                                <div class="panel-body red-div sub-report">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                </div>
+                                <div class="panel-body red-div full-report">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                 </div>
                         </div>
                         <div class="bottom-panel green-border">
-                                <div class="panel-body green-div">
+                                <div class="panel-body green-div sub-assessment">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                </div>
+                                <div class="panel-body green-div full-assessment">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                 </div>
                                 <div class="panel-footer">
-                                    <span class="pull-left">OVERALL GRADE</span>
+                                    <span class="pull-left">Overal Grade: 4.5</span>
                                     <span class="pull-right"><i class="fa fa-exchange"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
@@ -237,16 +288,40 @@
 //assessement
 //view report and assessment
 $(function() {
-    $( "#slider" ).slider({
-      value:100,
-      min: 0,
-      max: 500,
-      step: 50,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.value );
-      }
+    var sliders = ["#structureGrade","#strengthGrade","#formatGrade","#qualityGrade"];
+    $.each(sliders, function(i, sliderID) {
+        $( sliderID + " #slider" ).slider({
+          value:1,
+          min: 1,
+          max: 5,
+          step: .5,
+          slide: function( event, ui ) {
+            $( sliderID + " #rank" ).val( ui.value );
+          }
+        });
+        $( sliderID + " #rank" ).val($( sliderID + " #slider" ).slider( "value" ) );
     });
-    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+
+    for(var i = 0; i < 15; i++){
+        $(".report-panel .full-report, .assess-panel .full-report,.assessed-panel .full-assessment,.report-assess-panel .full-report,.report-assess-panel .full-assessment").append("<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>");
+    }
+    
+
+    $(".show-more").click(function(){ //might be a better way to do this.
+       if($(this).find("i").hasClass("fa-plus")){
+            $(this).parent().parent().find(".sub-report").slideUp();
+            $(this).parent().parent().find(".full-report").slideDown();
+            $(this).parent().parent().find(".sub-assessment").slideUp();
+            $(this).parent().parent().find(".full-assessment").slideDown();
+            $(this).find("i").removeClass("fa-plus").addClass("fa-minus");
+       } else {
+            $(this).parent().parent().find(".sub-report").slideDown();
+            $(this).parent().parent().find(".full-report").slideUp();
+            $(this).parent().parent().find(".sub-assessment").slideDown();
+            $(this).parent().parent().find(".full-assessment").slideUp();
+            $(this).find("i").removeClass("fa-minus").addClass("fa-plus");
+       }
+    });
 });
 
 </script>
