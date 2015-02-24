@@ -211,6 +211,9 @@ a {
 
 /*** END CHANGE COLOR OF DIV ****/
 
+/*** ASSESSMENT DIV VIEW HIDE/SHOW 
+Might have to do in js because this is static
+***/
 .full-report, .full-assessment {
 	display: none;
 }
