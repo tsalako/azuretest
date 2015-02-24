@@ -396,16 +396,16 @@ function changePanel($divToChange, newType, data){
 
 var showMore = function(){
     if($(this).find("i").hasClass("fa-plus")){
-        $(this).parent().parent().find(".sub-report").slideUp();
-        $(this).parent().parent().find(".full-report").slideDown();
-        $(this).parent().parent().find(".sub-assessment").slideUp();
-        $(this).parent().parent().find(".full-assessment").slideDown();
+        $(this).parent().parent().find(".sub-report").hide();
+        $(this).parent().parent().find(".full-report").show();
+        $(this).parent().parent().find(".sub-assessment").hide();
+        $(this).parent().parent().find(".full-assessment").show();
         $(this).find("i").removeClass("fa-plus").addClass("fa-minus");
    } else {
-        $(this).parent().parent().find(".sub-report").slideDown();
-        $(this).parent().parent().find(".full-report").slideUp();
-        $(this).parent().parent().find(".sub-assessment").slideDown();
-        $(this).parent().parent().find(".full-assessment").slideUp();
+        $(this).parent().parent().find(".sub-report").show();
+        $(this).parent().parent().find(".full-report").hide();
+        $(this).parent().parent().find(".sub-assessment").show();
+        $(this).parent().parent().find(".full-assessment").hide();
         $(this).find("i").removeClass("fa-minus").addClass("fa-plus");
    }
 }
