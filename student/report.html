@@ -134,7 +134,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label>File input</label>
-                                            <input type="file">
+                                            <div>
+                                            <button class="btn btn-primary btn-outline">
+                                                <label class="upload"><span><i class="fa fa-upload "><input id="fileUploaded" type="file"></i></span></label>
+                                            </button>      
+                                            <p id="fileName">No File Selected<p>
+                                            </div>                                      
                                         </div>
                                         <div class="form-group">
                                             <label>References</label>
@@ -180,5 +185,27 @@
     <script src="../js/sb-admin-2.js"></script>
 
 </body>
+
+<script>
+$(function() {
+    $("#fileUploaded").change(function() {
+
+        //console.log(document.getElementById('fileUploaded').files[0]);
+        var file = document.getElementById('fileUploaded').files[0];
+        //console.log(file.name);
+        $("#fileName").text(file.name);
+        
+        if(file) {
+            var reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function (e) {
+                console.log(e.target.result);
+            }
+        }
+    });
+});
+
+
+</script>
 
 </html>
