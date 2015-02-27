@@ -2,8 +2,6 @@
 
 include 'dbo/DB.php';
 include 'dbo/User.php';
-include 'dbo/Student.php';
-include 'dbo/Admin.php';
 include 'dbo/Group.php';
 header("content-type:application/json");
 

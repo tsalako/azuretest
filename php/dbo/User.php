@@ -6,7 +6,7 @@ class User{
 	function __construct($user){
 		$this->data['userNo'] = $user['userNo'];
 		$this->data['username'] = $user['userName'];
-		$this->data['password'] = $user['password']; /*encode or something*/
+		$this->data['password'] = isset($user['password']) ? $user['password'] : null;
 		$this->data['fName'] = $user['fName'];
 		$this->data['lName'] = $user['lName'];
 		$this->data['isAdmin'] = $user['type'] == 'admin';
@@ -72,7 +72,6 @@ class User{
 		$stmt = $db->prepare($queryUsers);
 		$stmt->execute();
 		while($row =  $stmt->fetch()){
-			$row['password'] = '';
 			array_push($users, new User($row));
 		}
 
