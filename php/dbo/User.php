@@ -20,41 +20,11 @@ class User{
 	public static function addUser($db, $username, $password, $type, $first, $last){
 		$password = sha1($password);
 		$queryInsert = "INSERT INTO 
-							user (`userNo`, `password`, `type`, `userName`) 
+							user (`userNo`, `password`, `type`, `userName`,fName,lName) 
 					  	VALUES 
-					  		(NULL, '".$password."', '".$type."', '".$username."')
+					  		(NULL, '".$password."', '".$type."', '".$username."','".$first."','".$last."')
 					  	";
 		$db->exec($queryInsert);
-
-		$queryNumber = "SELECT 
-							U.userNo 
-						  FROM 
-						  	user U
-						  WHERE
-						  	U.password = '".$password."'
-						  AND
-						  	U.type = '".$type."'
-						  AND
-						  	U.userName = '".$username."'
-						  ";
-		$stmt = $db->prepare($queryNumber);
-		$stmt->execute();
-		$number = $stmt->fetch()['userNo'];
-
-		if($type == 'admin'){
-			$query = "INSERT INTO
-							admin (`adminNo`, `fName`, `lName`)
-						VALUES
-							('".$number."','".$first."','".$last."')
-					";
-		} else {
-			$query = "INSERT INTO
-							student (`studentNo`, `fName`, `lName`, `groupNo`)
-						VALUES
-							('".$number."','".$first."','".$last."', NULL)
-					";
-		}
-		$db->exec($query);
 	}
 
 	public static function editUser($db, $id, $username, $password, $type, $first, $last){
@@ -65,7 +35,9 @@ class User{
 						SET
 							password = '".$password."',
 							type = '".$type."',
-							username = '".$username."'
+							username = '".$username."',
+							fName = '".$first."',
+							lName = '".$last."'
 						WHERE
 							userNo = '".$id."'
 						";
@@ -74,73 +46,30 @@ class User{
 							user
 						SET
 							type = '".$type."',
-							username = '".$username."'
+							username = '".$username."',
+							fName = '".$first."',
+							lName = '".$last."'
 						WHERE
 							userNo = '".$id."'
 						";
 		}
 		$db->exec($queryUpdate);
-
-		if($type == 'admin'){
-			$query = "UPDATE
-							admin
-						SET
-							fName = '".$first."',
-							lName = '".$last."'
-						WHERE
-							adminNo = '".$id."'
-						";
-		} else {
-			$query = "UPDATE
-							student
-						SET
-							fName = '".$first."',
-							lName = '".$last."'
-						WHERE
-							studentNo = '".$id."'
-						";
-		}
-		$db->exec($query);	
 	}
 
 	public static function getAllUsers($db){
 		$users = array();
 
-		$queryAdmin = "SELECT 
+		$queryUsers = "SELECT 
 						U.userNo, 
 						U.userName, 
 						U.type, 
-						A.fName, 
-						A.lName 
+						U.fName, 
+						U.lName 
 					FROM 
-						user U, 
-						admin A 
-					WHERE 
-						U.userNo = A.adminNo
+						user U
 					";
 
-		$stmt = $db->prepare($queryAdmin);
-		$stmt->execute();
-		while($row =  $stmt->fetch()){
-			$row['password'] = '';
-			array_push($users, new User($row));
-		}
-
-		$queryStudent = "SELECT 
-						U.userNo, 
-						U.userName, 
-						U.type, 
-						S.fName, 
-						S.lName 
-					FROM 
-						user U, 
-						student S
-					WHERE 
-						U.userNo = S.studentNo
-					";
-
-
-		$stmt = $db->prepare($queryStudent);
+		$stmt = $db->prepare($queryUsers);
 		$stmt->execute();
 		while($row =  $stmt->fetch()){
 			$row['password'] = '';
