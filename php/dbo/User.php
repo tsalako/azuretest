@@ -78,6 +78,10 @@ class User{
 		return $users;
 	}
 
+	public static function getSessionUser($db) {
+		
+	}
+
 }
 
 ?>
