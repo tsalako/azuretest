@@ -37,6 +37,16 @@
 
 </head>
 
+<style>
+    ul {
+        list-style-type: none;
+        padding-left:5px;
+    }
+    ul,ol {
+        margin-bottom: 0px;
+    }
+</style>
+
 <body>
 
     <div id="wrapper">
@@ -115,6 +125,50 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-10 col-md-4 right">
+                        <!-- <div class="col-lg-2 col-md-4 '+offset+'">
+                            <div class="panel '+color+'-border">
+                                '<div >
+                                    <label>Cool Name</label>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="'+color+'-div">
+                                    <ul id="group'+(i+1)+'" class="connectedSortable">
+                                        <li class="item'+count+'">NUM '+(count++)+'</li>
+                                        <li class="item'+count+'">NUM '+(count++)+'</li>
+                                        <li class="item'+count+'">NUM '+(count++)+'</li>
+                                    </ul>
+                                </div>
+                                <div >
+                                    <p>Group '+(i+1)+'</p>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="col-lg-2 col-md-4 left">
+                        <div class="panel text-center">
+                            <div class="panel">
+                                <label>Drag/drop to edit!</label>
+                                <button type="scramble" class="btn btn-default">Scramble!!!</button>
+                            </div>
+                            <div class="panel">
+                                <label>Upload List</label>
+                                <div>
+                                    <button class="btn btn-default">
+                                        <label class="upload"><span><i class="fa fa-upload "><input id="fileUploaded" type="file"></i></span></label>
+                                    </button>      
+                                    <p id="fileName">No file chosen<p>
+                                </div>
+                            </div>    
+                            <div class="panel">
+                                <button type="save" class="btn btn-default">Save</button>  
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -135,7 +189,118 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../js/sb-admin-2.js"></script>
-
 </body>
+
+<script>
+$(function() {
+
+
+    var userList = [];
+    for(var i = 0; i < 60; i++){
+        userList.push("NUM " + (i+1));
+    }
+
+    var colors = ["blue", "green", "yellow", "red"];
+    var count = 0;
+    for(var i = 0; i < 20; i++){
+        var offset = (i%5==0 ) ? "col-lg-offset-1" : "";
+        var color = colors[Math.floor(i/5)];
+        if(i%5==0){
+            $(".container-fluid .right")
+            .append('<div class="row inner-row"></div>');
+        }
+
+        $(".container-fluid .right .inner-row").last()
+            .append('<div class="col-lg-2 col-md-4 '+offset+'">'+
+                        '<div class="panel '+color+'-border">'+
+                            '<div >'+
+                                '<label>Cool Name</label>'+
+                                '<div class="clearfix"></div>'+
+                            '</div>'+
+                            '<div class="'+color+'-div">'+
+                                '<ul id="group'+(i+1)+'" class="connectedSortable">'+
+                                    '<li class="item'+count+'">'+userList[count++]+'</li>'+
+                                    '<li class="item'+count+'">'+userList[count++]+'</li>'+
+                                    '<li class="item'+count+'">'+userList[count++]+'</li>'+
+                                '</ul>'+
+                            '</div>'+
+                            '<div >'+
+                                '<p>Group '+(i+1)+'</p>'+
+                                '<div class="clearfix"></div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>');
+    }
+
+    $( ".connectedSortable" ).sortable({
+        connectWith: ".connectedSortable",
+        remove: function(event, ui) {
+                if(ui.item.index() != 0){
+                    $(".black-border").removeClass("black-border");
+
+                    var $currentItem = $(ui.item);
+                    var $itemToSwap = $(ui.item).closest("ul").find("li:nth-child("+ui.item.index()+")");
+                    console.log($itemToSwap);
+
+                    var temp = $currentItem.text();
+                    $currentItem.text($itemToSwap.text()).addClass("black-border");
+                    $itemToSwap.text(temp).addClass("black-border");
+
+                    window.onbeforeunload = function(){ return 'You have unsaved data.' }
+                }
+                $(this).sortable('cancel');
+        },
+        placeholder: "ui-state-highlight",
+        helper: function(event, ui) {
+            $(ui).width($(ui).width());
+            $(ui).height($(ui).height());
+            ui.children().each(function() {
+                $(this).width($(this).width());
+            });
+            return ui;
+        }
+    }).disableSelection();
+
+    $("#fileUploaded").change(function() {
+        var file = document.getElementById('fileUploaded').files[0];
+        $("#fileName").text(file.name);
+        
+        if(file) {
+            var reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function (e) {
+                userList = e.target.result.split("\n");
+                if(userList.length == 60){
+                    for(var i = 0; i < userList.length; i++){
+                        userList[i] = userList[i].trim();
+                    }
+                    displayListElements(userList);
+                    console.log(userList);
+                } else {
+                    alert("There was a problem loading the file. Ensure the file has exactly 60 usernames (one name per line).");
+                }
+                
+            }
+        }
+    });
+
+    $("button[type=scramble]").click(function() {
+        userList.sort(function() { return 0.5 - Math.random() });
+        displayListElements(userList);
+    });
+
+    $("button[type=save]").click(function() {
+        window.onbeforeunload = null;
+    })
+
+});
+
+var displayListElements = function(list){
+    $(".black-border").removeClass("black-border");
+    $.each(list, function(i , element) {
+        $(".item"+i+"").text(element);
+    });
+}
+</script>
 
 </html>

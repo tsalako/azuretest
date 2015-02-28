@@ -3,10 +3,35 @@
 <head>
   <meta charset="utf-8">
   <title>jQuery UI Droppable - Simple photo manager</title>
+  <link rel="shortcut icon" href="media/kuzco_cursed.png">
+  
+  <!-- Bootstrap Core CSS -->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-  <link rel = "stylesheet" href="css/main.css">
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- MetisMenu CSS -->
+  <link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="css/sb-admin-2.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <link href="css/main.css" rel="stylesheet">
+
+  <!-- jQuery -->
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="js/sb-admin-2.js"></script>
   <style>
   #gallery { float: left; width: 65%; min-height: 12em; }
   .gallery.custom-state-active { background: #eee; }
@@ -321,37 +346,126 @@
 <body>
  
 <div id="fullContainer">
-<p>Made this because it definitely would have been to hard to explain this idea. Though I ended up explaining the other half of it in this text.</p>
-<p>Just drag stuff the groups 1-20 into those bigger boxes. You can now compare two groups and drag members between each group. The groups slider is kept up to date as you drag in the bigger boxes. If you do not have three people in each group, it will not let you change groups, but as soon as you do you're good to go. I was thinking of adding couple buttons as well: switch view button and a random assign button. </p>
-</p> The switch view button would change the left box to a list of students, clear all the grouping in the slider and allow you to move users to the right box (being their group) once the right box has three people, the box is then sent to the slider and the next empty box is presented (hope that makes sense). I didn't implement it because it would be qutie a bit of work, but definitely do able. Then of course if they press "switch view" again, it will take them back to this view. </p>
-<p> The "random assign" button would be for if at any point the admin gets lazy he can random assign and groupings will be made for them and presented in the slider (the bigger boxes will be empty).</p>
-<p>Also on top of the bigger boxes there can be search bars where you can search by text and it will display the group which the text is found in.</p>
-<p>This obviously could look better.</p>
-<p>Where I got inspiration/code <a href="http://jqueryui.com/droppable/#photo-manager">Drop w/ event</a> <a href="http://jqueryui.com/slider/#side-scroll">Scroll w/ div</a> <a href="http://jqueryui.com/sortable/#connect-lists">Sorting</a> </p>
-<div class="scroll-pane ui-widget ui-widget-header ui-corner-all">
-  <div class="scroll-content">
+  <p>Made this because it definitely would have been to hard to explain this idea. Though I ended up explaining the other half of it in this text.</p>
+  <p>Just drag stuff the groups 1-20 into those bigger boxes. You can now compare two groups and drag members between each group. The groups slider is kept up to date as you drag in the bigger boxes. If you do not have three people in each group, it will not let you change groups, but as soon as you do you're good to go. I was thinking of adding couple buttons as well: switch view button and a random assign button. </p>
+  </p> The switch view button would change the left box to a list of students, clear all the grouping in the slider and allow you to move users to the right box (being their group) once the right box has three people, the box is then sent to the slider and the next empty box is presented (hope that makes sense). I didn't implement it because it would be qutie a bit of work, but definitely do able. Then of course if they press "switch view" again, it will take them back to this view. </p>
+  <p> The "random assign" button would be for if at any point the admin gets lazy he can random assign and groupings will be made for them and presented in the slider (the bigger boxes will be empty).</p>
+  <p>Also on top of the bigger boxes there can be search bars where you can search by text and it will display the group which the text is found in.</p>
+  <p>This obviously could look better.</p>
+  <p>Where I got inspiration/code <a href="http://jqueryui.com/droppable/#photo-manager">Drop w/ event</a> <a href="http://jqueryui.com/slider/#side-scroll">Scroll w/ div</a> <a href="http://jqueryui.com/sortable/#connect-lists">Sorting</a> </p>
+  <div class="scroll-pane ui-widget ui-widget-header ui-corner-all">
+    <div class="scroll-content">
+    </div>
+    <div class="scroll-bar-wrap ui-widget-content ui-corner-bottom">
+      <div class="scroll-bar"></div>
+    </div>
   </div>
-  <div class="scroll-bar-wrap ui-widget-content ui-corner-bottom">
-    <div class="scroll-bar"></div>
+
+  <div class="ui-widget ui-helper-clearfix">
+    <div class ="row">
+      <div id="trash1" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="trash2" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable2" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group3" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group4" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group5" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group6" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group7" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group8" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group9" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group10" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group11" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group12" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group13" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group14" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group15" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group16" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group17" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group18" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group19" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+      <div id="group20" class="upperMargin ui-widget-content ui-state-default">
+        <div class="ui-widget-header title">No Group Selected</div>
+        <ul id="sortable1" class="connectedSortable">
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="ui-widget ui-helper-clearfix">
- 
-<div id="trash1" class="upperMargin ui-widget-content ui-state-default">
-  <div class="ui-widget-header title">No Group Selected</div>
-  <ul id="sortable1" class="connectedSortable">
-  </ul>
-</div>
-<div id="trash2" class="upperMargin ui-widget-content ui-state-default">
-  <div class="ui-widget-header title">No Group Selected</div>
-  <ul id="sortable2" class="connectedSortable">
-  </ul>
-</div>
- 
-</div>
- 
-</div>
- 
 </body>
 </html>
