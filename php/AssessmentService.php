@@ -57,7 +57,6 @@ if(isset($_POST['function'])){
 				$params['averageGrade'], $params['comment']);
 
 			echo json_encode('successfully editted');
-			//$reportNo, $groupNo, $structureGrade, $strengthGrade, $formatGrade, $qualityGrade,$averageGrade, $comment
 		break;
 		case 'assignAssessment':
 			$params = $_POST['params'];

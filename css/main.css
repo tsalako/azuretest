@@ -4,7 +4,7 @@ light-blue - #5bc0de
 red - #d9534f
 yellow - #f0ad4e
 green - #5cb85c
-black/gray - #999999
+grey/gray - #999999
 ***********************/
 
 /*.darkBG {
@@ -102,17 +102,17 @@ body#login  {
 	text-decoration: none;
 }
 
-.panel-black {
+.panel-grey {
 	border-color: #999999;
 }
 
-.panel-black .panel-heading {
+.panel-grey .panel-heading {
 	border-color: #999999;
 	color: #fff;
 	background-color: #999999;
 }
 
-.panel-black a {
+.panel-grey a {
 	color: #999999;
 	text-decoration: none;
 }
@@ -198,15 +198,26 @@ a {
 	color: #d9534f;
 }
 
-.black-div {
+.grey-div {
 	border-color: #999999;
 	color: #fff;
 	background-color: #999999;
 }
 
-.black-border {
+.grey-border {
 	border-color: #999999;
 	color: #999999;
+}
+
+.black-div {
+	border-color: #000;
+	color: #fff;
+	background-color: #000;
+}
+
+.black-border {
+	border-color: #000;
+	color: #000;
 }
 
 /*** END CHANGE COLOR OF DIV ****/

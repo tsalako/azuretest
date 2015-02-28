@@ -4,7 +4,6 @@ class Report{
 	private $data = array();
 
 	function __construct($report){
-		$this->data['reportNo'] = $report['reportNo'];
 		$this->data['groupNo'] = $report['groupNo'];
 		$this->data['title'] = $report['title'];
 		$this->data['body'] = $report['body'];

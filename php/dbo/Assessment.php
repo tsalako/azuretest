@@ -51,6 +51,9 @@ class Assessment{
 				 	A.assessedOn IS NULL
 				 AND
 				 	A.groupNo = '".$groupNo."'
+				 ORDER BY
+				 	R.uploadedOn
+				 DESC
 				 ";
 		$stmt = $db->prepare($query);
 		$stmt->execute();
@@ -99,6 +102,9 @@ class Assessment{
 				 	A.assessedOn IS NOT NULL
 				 AND
 				 	A.groupNo = '".$groupNo."'
+				 ORDER BY
+				 	A.assessedOn
+				 DESC
 				 ";
 
 		$stmt = $db->prepare($query);
@@ -138,6 +144,9 @@ class Assessment{
 				 	A.reportNo = '".$reportNo."'
 				 AND
 				 	A.assessedOn IS NOT NULL
+				 ORDER BY
+				 	A.assessedOn
+				 DESC
 				 ";
 
 		$stmt = $db->prepare($query);
@@ -175,6 +184,9 @@ class Assessment{
 				 	A.reportNo = R.groupNo
 				 AND
 				 	A.assessedOn IS NOT NULL
+				 ORDER BY
+				 	A.assessedOn
+				 DESC
 				 ";
 
 		$stmt = $db->prepare($query);
