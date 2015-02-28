@@ -13,14 +13,16 @@ class Assessment{
 		$this->data['averageGrade'] = $assessment['averageGrade'];
 		$this->data['comment'] = $assessment['comment'];
 		$this->data['assessedOn'] = date_create($assessment['assessedOn'],timezone_open(" Europe/London"));
-		$this->data['report'] = $assessment['report'];
+		$this->data['report'] = isset($assessment['report']) ? $assessment['report'] : null;
 	}
 
 	public function getData(){
-		return $this->data;
+		$returnData = $this->data;
+		$returnData['report'] = $this->data['report'] != null ? $this->data['report']->getData() : null;
+		return $returnData;
 	}
 
-	public static function getUndoneAssessments($db, $groupNo) {
+	public static function getUndoneAssessmentsByGroupNo($db, $groupNo) {
 		//get all groupNo where report exists so where reportNo matches with a report in the report table
 		$assessments = array();
 
@@ -28,10 +30,10 @@ class Assessment{
 					A.reportNo,
 					A.groupNo,
 					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
+					A.strengthGrade,
+					A.formatGrade,
+					A.qualityGrade,
+					A.averageGrade,
 					A.comment,
 					A.assessedOn,
 
@@ -68,17 +70,17 @@ class Assessment{
 		return $assessments;
 	}
 
-	public static function getDoneAssessments($db, $groupNo) {
+	public static function getDoneAssessmentsByGroupNo($db, $groupNo) {
 		$assessments = array();
 
 		$query = "SELECT
 					A.reportNo,
 					A.groupNo,
 					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
+					A.strengthGrade,
+					A.formatGrade,
+					A.qualityGrade,
+					A.averageGrade,
 					A.comment,
 					A.assessedOn,
 
@@ -96,7 +98,7 @@ class Assessment{
 				 AND
 				 	A.assessedOn IS NOT NULL
 				 AND
-				 	A.groupNo = '".$groupNo"'
+				 	A.groupNo = '".$groupNo."'
 				 ";
 
 		$stmt = $db->prepare($query);
@@ -112,6 +114,85 @@ class Assessment{
 
 			$row['report'] = new Report($report);
 			array_push($assessments, new Assessment($row));
+		}
+
+		return $assessments;
+	}
+
+	public static function getDoneAssessmentsByReportNo($db, $reportNo) {
+		$assessments = array();
+
+		$query = "SELECT
+					A.reportNo,
+					A.groupNo,
+					A.structureGrade,
+					A.strengthGrade,
+					A.formatGrade,
+					A.qualityGrade,
+					A.averageGrade,
+					A.comment,
+					A.assessedOn
+				 FROM 
+				 	assessment A
+				 WHERE
+				 	A.reportNo = '".$reportNo."'
+				 AND
+				 	A.assessedOn IS NOT NULL
+				 ";
+
+		$stmt = $db->prepare($query);
+		$stmt->execute();
+		while($row =  $stmt->fetch()){
+			array_push($assessments, new Assessment($row));
+		}
+
+		return $assessments;
+	}
+
+	public static function getAllAssessments($db) {
+		$assessments = array();
+
+		$query = "SELECT
+					A.reportNo,
+					A.groupNo,
+					A.structureGrade,
+					A.strengthGrade,
+					A.formatGrade,
+					A.qualityGrade,
+					A.averageGrade,
+					A.comment,
+					A.assessedOn,
+
+					R.groupNo AS assessedReportNo,
+					R.title,
+					R.body,
+					R.reference,
+					R.uploadedOn
+				 FROM 
+				 	assessment A,
+				 	report R
+				 WHERE
+				 	A.reportNo = R.groupNo
+				 AND
+				 	A.assessedOn IS NOT NULL
+				 ";
+
+		$stmt = $db->prepare($query);
+		$stmt->execute();
+		while($row =  $stmt->fetch()){
+			$report = array();
+			$report['reportNo'] = $row['reportNo'];
+			$report['groupNo'] = $row['assessedReportNo'];
+			$report['title'] = $row['title'];
+			$report['body'] = $row['body'];
+			$report['reference'] = $row['reference'];
+			$report['uploadedOn'] = $row['uploadedOn'];
+
+			$row['report'] = new Report($report);
+			array_push($assessments, new Assessment($row));
+		}
+
+		return $assessments;
 	}
 
 	public static function setAssessment($db, $reportNo, $groupNo, 
@@ -138,56 +219,11 @@ class Assessment{
 
 	}
 
-	public static function getAllAssessments($db) {
-		$assessments = array();
-
-		$query = "SELECT
-					A.reportNo,
-					A.groupNo,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.structureGrade,
-					A.comment,
-					A.assessedOn,
-					R.reportNo AS assessedReportNo
-					R.title,
-					R.body,
-					R.reference,
-					R.uploadedOn
-				 FROM 
-				 	assessment A,
-				 	report R
-				 WHERE
-				 	A.reportNo = R.reportNo
-				 AND
-				 	A.assessedOn != NULL
-				 ";
-
-		$stmt = $db->prepare($query);
-		$stmt->execute();
-		while($row =  $stmt->fetch()){
-			$report = array();
-			$report['reportNo'] = $row['reportNo'];
-			$report['groupNo'] = $row['assessedReportNo'];
-			$report['title'] = $row['title'];
-			$report['body'] = $row['body'];
-			$report['reference'] = $row['reference'];
-			$report['uploadedOn'] = $row['uploadedOn'];
-
-			$row['report'] = new Report($report);
-			array_push($assessments, new Assessment($row));
-		}
-
-		return $assessments;
-	}
-
 	public static function assignAssessment($db, $reportNo, $groupNo) {
 		$query = "INSERT INTO
 					assessment (`reportNo`,`groupNo`)
 				  VALUES
-				  	('".reportNo."','".groupNo."')
+				  	('".$reportNo."','".$groupNo."')
 				  ";
 	    $db->exec($query);
 	}
