@@ -328,15 +328,23 @@ var loadGroups = function(response) {
     });
 
     $("button[type=save]").click(function() {
-        if(RESET_PROGRAM && !PROGRAM_START){
-            if (confirm('Again. Are you sure? Saving now will reset the system.')) {
+        if(RESET_PROGRAM){
+            if(PROGRAM_START){
                 sendRequest('../php/UserService.php',
                     verifySave,
                     'createGroups',
                     {'groupList':listToGroupListObj(userList)});
             } else {
-                //alert('No save done');
+                if (confirm('Again. Are you sure? Saving now will reset the system.')) {
+                    sendRequest('../php/UserService.php',
+                        verifySave,
+                        'createGroups',
+                        {'groupList':listToGroupListObj(userList)});
+                } else {
+                    //alert('No save done');
+                }
             }
+            
         } else {
             sendRequest('../php/UserService.php',
                 verifySave,
@@ -351,6 +359,7 @@ function groupListObjtoList(groupList){
     var list = [];
     var groupNames = [];
     var PROGRAM_START = false;
+    console.log(groupList);
     if(groupList.length == 0){
         PROGRAM_START = true;
         for(var i = 0; i < 20; i++){
