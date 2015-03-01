@@ -32,6 +32,29 @@ if(isset($_POST['function'])){
 			User::editUser($db, $params['id'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
 			echo json_encode('successfully editted');
 		break;
+		case 'getAllGroups':
+			$groups = Group::getAllGroups($db);
+			$return = array();			
+			foreach ($groups as $group){
+				array_push($return, $group->getData());
+			}
+			echo json_encode($return);
+		break;
+		case 'getGroupByNo':
+			$params = $_POST['params'];
+			$group = Group::getGroupByNo($db, $params['groupNo']);
+			return json_encode($group->getData());
+		break;
+		case 'modifyGroups':
+			$params = $_POST['params'];
+			Group::modifyGroups($db, $params['groupList']);
+			echo json_encode('successfully modified');
+		break;
+		case 'createGroups':
+			$params = $_POST['params'];
+			Group::createGroups($db, $params['groupList']);
+			echo json_encode('successfully created');
+		break;
 		default:
 			echo "Error - No function called '".$_POST['function']."'";
 			exit();

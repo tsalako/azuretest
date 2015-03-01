@@ -161,7 +161,7 @@ This functions adds retrieved assessments to the undoneAssessments div.
 var populateUndoneAssessmentsDiv = function(response) {
     $.each(response.data, function(i, assessment) {
         var report = assessment.report;
-        var data = {groupNo: report.groupNo,
+        var data = {groupNo: convertGroupNo(report.groupNo),
                     title: report.title,
                     body: report.body +"<br /><br />References: "+report.reference,
                     structureGrade : null,
@@ -182,7 +182,7 @@ This functions adds retrieved assessments to the doneAssessments div.
 var populateDoneAssessmentsDiv = function(response) {
     $.each(response.data, function(i, assessment) {
         var report = assessment.report;
-        var data = {groupNo: report.groupNo,
+        var data = {groupNo: convertGroupNo(report.groupNo),
                     title: report.title,
                     body: report.body +"<br /><br />References: "+report.reference,
                     structureGrade : assessment.structureGrade,

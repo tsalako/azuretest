@@ -242,7 +242,7 @@ label span input {
     font-size: 50px;
     position: absolute;
     top: -2px;
-    left: -700px;
+    left: 0px;
     opacity: 0;
     filter: alpha(opacity = 0);
     -ms-filter: "alpha(opacity=0)";

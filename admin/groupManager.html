@@ -126,7 +126,7 @@
                 </div>
                 <!-- /.row -->
                 <div class="row">
-                    <div class="col-lg-10 col-md-4 right">
+                    <div class="col-lg-10 col-md-10 left">
                         <!-- <div class="col-lg-2 col-md-4 '+offset+'">
                             <div class="panel '+color+'-border">
                                 '<div >
@@ -147,7 +147,7 @@
                             </div>
                         </div> -->
                     </div>
-                    <div class="col-lg-2 col-md-4 left">
+                    <div class="col-lg-2 col-md-2 right">
                         <div class="panel text-center">
                             <div class="panel">
                                 <label>Drag/drop to edit!</label>
@@ -163,7 +163,7 @@
                                 </div>
                             </div>    
                             <div class="panel">
-                                <button type="save" class="btn btn-default">Save</button>  
+                                <button type="save" class="btn btn-default disabled">Save</button>  
                             </div> 
                         </div>
                     </div>
@@ -189,32 +189,41 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../js/sb-admin-2.js"></script>
+
+    <!-- Util Javascript -->
+    <script src = "../js/util.js"></script>
 </body>
 
 <script>
 $(function() {
+    sendRequest('../php/UserService.php',
+            loadGroups,
+            'getAllGroups');
+});
 
+var loadGroups = function(response) {
+    var RESET_PROGRAM = false;
 
-    var userList = [];
-    for(var i = 0; i < 60; i++){
-        userList.push("NUM " + (i+1));
-    }
+    var listObj = groupListObjtoList(response.data);
+    var userList = listObj.userList;
+    var groupNames = listObj.groupNames;
 
     var colors = ["blue", "green", "yellow", "red"];
     var count = 0;
     for(var i = 0; i < 20; i++){
+        var name = groupNames[i]==null ? "N/A" : groupNames[i];
         var offset = (i%5==0 ) ? "col-lg-offset-1" : "";
         var color = colors[Math.floor(i/5)];
         if(i%5==0){
-            $(".container-fluid .right")
+            $(".container-fluid .left")
             .append('<div class="row inner-row"></div>');
         }
 
-        $(".container-fluid .right .inner-row").last()
-            .append('<div class="col-lg-2 col-md-4 '+offset+'">'+
+        $(".container-fluid .left .inner-row").last()
+            .append('<div class="col-lg-2 col-md-2 '+offset+'">'+
                         '<div class="panel '+color+'-border">'+
                             '<div >'+
-                                '<label>Cool Name</label>'+
+                                '<label>'+name+'</label>'+
                                 '<div class="clearfix"></div>'+
                             '</div>'+
                             '<div class="'+color+'-div">'+
@@ -240,13 +249,13 @@ $(function() {
 
                     var $currentItem = $(ui.item);
                     var $itemToSwap = $(ui.item).closest("ul").find("li:nth-child("+ui.item.index()+")");
-                    console.log($itemToSwap);
 
                     var temp = $currentItem.text();
                     $currentItem.text($itemToSwap.text()).addClass("black-border");
                     $itemToSwap.text(temp).addClass("black-border");
 
                     window.onbeforeunload = function(){ return 'You have unsaved data.' }
+                    $("button[type=save]").removeClass("disabled");
                 }
                 $(this).sortable('cancel');
         },
@@ -262,26 +271,30 @@ $(function() {
     }).disableSelection();
 
     $("#fileUploaded").change(function() {
-        var file = document.getElementById('fileUploaded').files[0];
-        $("#fileName").text(file.name);
-        
-        if(file) {
-            var reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function (e) {
-                userList = e.target.result.split("\n");
-                if(userList.length == 60){
-                    for(var i = 0; i < userList.length; i++){
-                        userList[i] = userList[i].trim();
+        if (confirm('Are you sure you want to change the registration list? Doing so will reset the whole system.')) {
+            var file = document.getElementById('fileUploaded').files[0];
+            $("#fileName").text(file.name);
+            
+            if(file) {
+                var reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function (e) {
+                    userList = e.target.result.split("\n");
+                    if(userList.length == 60){
+                        for(var i = 0; i < userList.length; i++){
+                            userList[i] = userList[i].trim();
+                        }
+                        displayListElements(userList);
+                        RESET_PROGRAM = true;
+                    } else {
+                        alert("There was a problem loading the file. Ensure the file has exactly 60 usernames (one name per line).");
                     }
-                    displayListElements(userList);
-                    console.log(userList);
-                } else {
-                    alert("There was a problem loading the file. Ensure the file has exactly 60 usernames (one name per line).");
                 }
-                
             }
+        } else {
+            // Do nothing!
         }
+        
     });
 
     $("button[type=scramble]").click(function() {
@@ -290,17 +303,70 @@ $(function() {
     });
 
     $("button[type=save]").click(function() {
-        window.onbeforeunload = null;
-    })
+        if(RESET_PROGRAM){
+            if (confirm('Again. Are you sure? Saving now will reset the system.')) {
+                sendRequest('../php/UserService.php',
+                    verifySave,
+                    'createGroups',
+                    {'groupList':listToGroupListObj(userList)});
+            } else {
+                //alert('No save done');
+            }
+        } else {
+            sendRequest('../php/UserService.php',
+                verifySave,
+                'modifyGroups',
+                {'groupList':listToGroupListObj(userList)});
+        }
+        
+    });
+}
 
-});
+function groupListObjtoList(groupList){
+    var list = [];
+    var groupNames = [];
+    $.each(groupList, function(i, group) {
+        groupNames.push(group.name);
+        $.each(group.users, function(j, user) {
+            list.push(user.username);
+        });
+    });
+    return {'userList':list, 'groupNames': groupNames};
+}
+
+function listToGroupListObj(list){
+    var listCount = 0;
+    var groupList = [];
+    for(var i = 0; i < 20; i++){
+        var groupNo = Math.floor(listCount / 3) + 1;
+        var usersArray = [list[listCount++],
+                          list[listCount++],
+                          list[listCount++]];
+        var groupObj = {groupNo: revertGroupNo(groupNo),
+                        assignedBy: 1, //admin number
+                        usernames: usersArray};
+
+        groupList.push(groupObj);
+    }
+    return groupList;
+}
 
 var displayListElements = function(list){
     $(".black-border").removeClass("black-border");
+    $("button[type=save]").removeClass("disabled");
+    window.onbeforeunload = function(){ return 'You have unsaved data.' }
     $.each(list, function(i , element) {
         $(".item"+i+"").text(element);
     });
 }
+
+var verifySave = function(response){
+    $(".black-border").removeClass("black-border");
+    $("button[type=save]").addClass("disabled");
+    window.onbeforeunload = null;
+    alert(response.data);
+}
+
 </script>
 
 </html>
