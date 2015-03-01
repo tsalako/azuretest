@@ -212,7 +212,7 @@ var loadGroups = function(response) {
     var colors = ["blue", "green", "yellow", "red"];
     var count = 0;
     for(var i = 0; i < 20; i++){
-        var name = groupNames[i]==null ? "N/A" : groupNames[i];
+        var name = groupNames[i]==null ? "&nbsp" : groupNames[i];
         var offset = (i%5==0 ) ? "col-lg-offset-1" : "";
         var color = colors[Math.floor(i/5)];
         if(i%5==0){
@@ -356,7 +356,7 @@ function groupListObjtoList(groupList){
         for(var i = 0; i < 20; i++){
             groupNames.push(null);
             for(var j = 0; j < 3; j++){
-                list.push('N/A');
+                list.push('&nbsp');
             }
         }
     } else {
