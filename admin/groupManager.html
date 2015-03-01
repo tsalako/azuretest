@@ -207,6 +207,7 @@ var loadGroups = function(response) {
     var listObj = groupListObjtoList(response.data);
     var userList = listObj.userList;
     var groupNames = listObj.groupNames;
+    var PROGRAM_START = listObj.PROGRAM_START;
 
     var colors = ["blue", "green", "yellow", "red"];
     var count = 0;
@@ -271,29 +272,53 @@ var loadGroups = function(response) {
     }).disableSelection();
 
     $("#fileUploaded").change(function() {
-        if (confirm('Are you sure you want to change the registration list? Doing so will reset the whole system.')) {
+        //If it is the first time the program is run (no groups exist) dont prompt the user to see if they are sure.
+        if(PROGRAM_START){
             var file = document.getElementById('fileUploaded').files[0];
-            $("#fileName").text(file.name);
-            
-            if(file) {
-                var reader = new FileReader();
-                reader.readAsText(file);
-                reader.onload = function (e) {
-                    userList = e.target.result.split("\n");
-                    if(userList.length == 60){
-                        for(var i = 0; i < userList.length; i++){
-                            userList[i] = userList[i].trim();
+                $("#fileName").text(file.name);
+                
+                if(file) {
+                    var reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = function (e) {
+                        userList = e.target.result.split("\n");
+                        if(userList.length == 60){
+                            for(var i = 0; i < userList.length; i++){
+                                userList[i] = userList[i].trim();
+                            }
+                            displayListElements(userList);
+                            RESET_PROGRAM = true;
+                        } else {
+                            alert("There was a problem loading the file. Ensure the file has exactly 60 usernames (one name per line).");
                         }
-                        displayListElements(userList);
-                        RESET_PROGRAM = true;
-                    } else {
-                        alert("There was a problem loading the file. Ensure the file has exactly 60 usernames (one name per line).");
                     }
                 }
-            }
         } else {
-            // Do nothing!
+            if (confirm('Are you sure you want to change the registration list? Doing so will reset the whole system.')) {
+                var file = document.getElementById('fileUploaded').files[0];
+                $("#fileName").text(file.name);
+                
+                if(file) {
+                    var reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = function (e) {
+                        userList = e.target.result.split("\n");
+                        if(userList.length == 60){
+                            for(var i = 0; i < userList.length; i++){
+                                userList[i] = userList[i].trim();
+                            }
+                            displayListElements(userList);
+                            RESET_PROGRAM = true;
+                        } else {
+                            alert("There was a problem loading the file. Ensure the file has exactly 60 usernames (one name per line).");
+                        }
+                    }
+                }
+            } else {
+                // Do nothing!
+            }
         }
+        
         
     });
 
@@ -303,7 +328,7 @@ var loadGroups = function(response) {
     });
 
     $("button[type=save]").click(function() {
-        if(RESET_PROGRAM){
+        if(RESET_PROGRAM && !PROGRAM_START){
             if (confirm('Again. Are you sure? Saving now will reset the system.')) {
                 sendRequest('../php/UserService.php',
                     verifySave,
@@ -325,13 +350,25 @@ var loadGroups = function(response) {
 function groupListObjtoList(groupList){
     var list = [];
     var groupNames = [];
-    $.each(groupList, function(i, group) {
-        groupNames.push(group.name);
-        $.each(group.users, function(j, user) {
-            list.push(user.username);
+    var PROGRAM_START = false;
+    if(groupList.length == 0){
+        PROGRAM_START = true;
+        for(var i = 0; i < 20; i++){
+            groupNames.push(null);
+            for(var j = 0; j < 3; j++){
+                list.push('N/A');
+            }
+        }
+    } else {
+        $.each(groupList, function(i, group) {
+            groupNames.push(group.name);
+            $.each(group.users, function(j, user) {
+                list.push(user.username);
+            });
         });
-    });
-    return {'userList':list, 'groupNames': groupNames};
+    }
+
+    return {'userList':list, 'groupNames': groupNames, 'PROGRAM_START': PROGRAM_START};
 }
 
 function listToGroupListObj(list){
