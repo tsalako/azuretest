@@ -195,7 +195,7 @@ var populateDoneAssessmentsDiv = function(response) {
     });
     
     //Later used for the edit option.
-    //addSliders();
+    addSliders();
 }
 
 /*
@@ -363,15 +363,33 @@ function createPanel(type, data) {
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
-                            '<div class="panel-footer view-switch">'+
-                                '<span class="pull-left grade">Switch View</span>'+
-                                '<span class="pull-right"><i class="fa fa-exchange"></i></span>'+
-                                '<div class="clearfix"></div>'+
+                            '<div class="panel-footer view-edit-footer">'+
+                                '<div class="row">'+
+                                    '<div class="edit col-lg-6">'+
+                                        '<span class="pull-left"><i class="fa fa-edit"></i>&nbsp&nbspEdit</span>'+
+                                        '<span class="pull-right"></span>'+
+                                        '<div class="clearfix"></div>'+
+                                    '</div>'+
+                                    '<div class="view-switch col-lg-6">'+
+                                        '<span class="pull-left"></span>'+
+                                        '<span class="pull-right"><i class="fa fa-exchange"></i>&nbsp&nbspSwitch View</span>'+
+                                        '<div class="clearfix"></div>'+
+                                    '</div>'+
+                                '</div>'+
                             '</div>'+
-                            '<div class="panel-footer save">'+
-                                '<span class="pull-left">Save Assessment</span>'+
-                                '<span class="pull-right"><i class="fa fa-floppy-o"></i></span>'+
-                                '<div class="clearfix"></div>'+
+                            '<div class="panel-footer save-back-footer">'+
+                                '<div class="row">'+
+                                    '<div class="back col-lg-6">'+
+                                        '<span class="pull-left"><i class="fa fa-arrow-left"></i>&nbsp&nbspBack</span>'+
+                                        '<span class="pull-right"></span>'+
+                                        '<div class="clearfix"></div>'+
+                                    '</div>'+
+                                    '<div class="save col-lg-6">'+
+                                        '<span class="pull-left"></span>'+
+                                        '<span class="pull-right"><i class="fa fa-floppy-o"></i>&nbsp&nbspSave Assessment</span>'+
+                                        '<div class="clearfix"></div>'+
+                                    '</div>'+
+                                '</div>'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -382,18 +400,42 @@ function createPanel(type, data) {
     // SET ALL PANEL EVENTS (SWITCHING BETWEEN VIEWS)
     $(".container-fluid ."+type).last().find(".top-panel .panel-heading").click(showMore);
     $(".container-fluid ."+type).last().find(".top-panel .panel-footer").click(function(){
-        changePanel($(this).parent().parent().parent(), "assessing-panel", data);
+        changePanel($(this).parents().eq(2), "assessing-panel", data);
+        $('html, body').animate({
+            scrollTop: $(this).parents().eq(2).offset().top - 10
+        },350);
     });
     $(".container-fluid ."+type).last().find(".bottom-panel .panel-heading").click(showMore);
     $(".container-fluid ."+type).last().find(".bottom-panel .view-switch").click(function(){
-        if($(this).parent().parent().parent().hasClass("assessed-panel")){
-            changePanel($(this).parent().parent().parent(), "report-assess-panel", data);
+        if($(this).parents().eq(4).hasClass("assessed-panel")){
+            changePanel($(this).parents().eq(4), "report-assess-panel", data);
+            $('html, body').animate({
+                scrollTop: $(this).parents().eq(4).offset().top - 10
+            },350);
         } else {
-            changePanel($(this).parent().parent().parent(), "assessed-panel", data);
+            changePanel($(this).parents().eq(4), "assessed-panel", data);
+            $('html, body').animate({
+                scrollTop: $(this).parents().eq(4).offset().top - 10
+            },350);
         }
     });
+    $(".container-fluid ."+type).last().find(".bottom-panel .edit").click(function(){
+        changePanel($(this).parents().eq(4), "assessing-panel", data);
+        $('html, body').animate({
+            scrollTop: $(this).parents().eq(4).offset().top - 10
+        },350);
+    });
     $(".container-fluid ."+type).last().find(".bottom-panel .save").click(function(){
-        changePanel($(this).parent().parent().parent(), "assessed-panel", data);
+        changePanel($(this).parents().eq(4), "assessed-panel", data);
+        $('html, body').animate({
+            scrollTop: $(this).parents().eq(4).offset().top - 10
+        },350);
+    });
+    $(".container-fluid ."+type).last().find(".bottom-panel .back").click(function(){
+        changePanel($(this).parents().eq(4), "report-panel", data);
+        $('html, body').animate({
+            scrollTop: $(this).parents().eq(4).offset().top - 10
+        },350);
     });
 
     changePanel($(".container-fluid ."+type).last(), type, data);
@@ -406,7 +448,7 @@ necessary components, shows the necessary components, and does any special cases
 for instance the transition between "assessing" and "assessed" needs to update the database as well.
 */
 function changePanel($divToChange, newType, data){
-    //GET CURRENT CLASS REMOVE THE CLASS SO IT CAN BE CHANGED
+    //GET CURRENT CLASS/ REMOVE THE CLASS SO IT CAN BE CHANGED
     var currType = "";
     if($divToChange.hasClass("report-panel")){
         currType = "report-panel";
@@ -437,8 +479,8 @@ function changePanel($divToChange, newType, data){
     $divToChange.find(".bottom-panel .assessment-form").show();
     $divToChange.find(".bottom-panel .sub-assessment").show();
     $divToChange.find(".bottom-panel .full-assessment").hide();
-    $divToChange.find(".bottom-panel .view-switch").show();
-    $divToChange.find(".bottom-panel .save").show();
+    $divToChange.find(".bottom-panel .view-edit-footer").show();
+    $divToChange.find(".bottom-panel .save-back-footer").show();
 
     switch(newType) {
         case "report-panel":
@@ -456,13 +498,22 @@ function changePanel($divToChange, newType, data){
             $divToChange.find(".bottom-panel .panel-heading").hide();
             $divToChange.find(".bottom-panel .assessment-form").hide();
             $divToChange.find(".bottom-panel .sub-assessment").hide();
-            $divToChange.find(".bottom-panel .view-switch").hide();
-            $divToChange.find(".bottom-panel .save").hide();
+            $divToChange.find(".bottom-panel .view-edit-footer").hide();
+            $divToChange.find(".bottom-panel .save-back-footer").hide();
             $divToChange.find(".bottom-panel").hide();
             $divToChange.find(".top-panel").addClass("panel");
             break;
         case "assessing-panel":
-            resetSliders();
+            if(currType == "assessed-panel"){
+                setSliders($divToChange);
+                var comments = $divToChange.find(".bottom-panel .full-assessment p").html();
+                $divToChange.find(".bottom-panel textarea").val(comments);
+                
+            } else {
+                resetSliders();
+                $divToChange.find(".bottom-panel textarea").val("");
+            }
+            
 
             $divToChange.addClass("assessing-panel");
 
@@ -471,7 +522,7 @@ function changePanel($divToChange, newType, data){
             $divToChange.find(".bottom-panel .panel-heading").hide();
             $divToChange.find(".bottom-panel .sub-assessment").hide();
             $divToChange.find(".bottom-panel .panel-heading").hide();
-            $divToChange.find(".bottom-panel .view-switch").hide();
+            $divToChange.find(".bottom-panel .view-edit-footer").hide();
             break;
         case "assessed-panel":
             $divToChange.addClass("assessed-panel");
@@ -482,7 +533,7 @@ function changePanel($divToChange, newType, data){
             $divToChange.find(".top-panel").hide();
 
             $divToChange.find(".bottom-panel .assessment-form").hide();
-            $divToChange.find(".bottom-panel .save").hide();
+            $divToChange.find(".bottom-panel .save-back-footer").hide();
             $divToChange.find(".bottom-panel").addClass("panel");
 
             //If you're moving from the assessing panel, that means the data does not exist yet, so fill panel details.
@@ -508,7 +559,7 @@ function changePanel($divToChange, newType, data){
                 sendRequest('../php/AssessmentService.php',
                             basicCallback,
                             'setAssessment',
-                            {'reportNo' : data.groupNo,
+                            {'reportNo' : revertGroupNo(data.groupNo),
                             'groupNo' : 41,
                             'structureGrade': grades[0],
                             'strengthGrade' : grades[1],
@@ -537,12 +588,13 @@ function changePanel($divToChange, newType, data){
 
             $divToChange.find(".bottom-panel .panel-heading").hide();
             $divToChange.find(".bottom-panel .assessment-form").hide();
-            $divToChange.find(".bottom-panel .save").hide();
+            $divToChange.find(".bottom-panel .save-back-footer").hide();
             break;
         default:
             $divToChange.remove();
             break;
     }
+    
 }
 
 /*
@@ -553,15 +605,23 @@ var showMore = function(){
         $(this).parent().parent().find(".sub-report").hide();
         $(this).parent().parent().find(".full-report").show();
         $(this).parent().parent().find(".sub-assessment").hide();
-        $(this).parent().parent().find(".full-assessment").show();
+        if(!($(this).parents().hasClass("assessing-panel"))){
+            $(this).parent().parent().find(".full-assessment").show();
+        }
         $(this).find("i").removeClass("fa-plus").addClass("fa-minus");
    } else {
         $(this).parent().parent().find(".sub-report").show();
         $(this).parent().parent().find(".full-report").hide();
-        $(this).parent().parent().find(".sub-assessment").show();
+        if(!($(this).parents().hasClass("assessing-panel"))){
+            $(this).parent().parent().find(".sub-assessment").show();
+        }
         $(this).parent().parent().find(".full-assessment").hide();
         $(this).find("i").removeClass("fa-minus").addClass("fa-plus");
    }
+
+   $('html, body').animate({
+        scrollTop: $(this).offset().top - 10
+    },350);
 }
 
 /*
@@ -573,6 +633,8 @@ function assessmentFormHandler($divToChange, gradeIDs, values, title, groupNo, b
     $.each(gradeIDs, function(j, gradeID) {                    
         var $subAssessment = $divToChange.find(".sub-assessment "+gradeID+" .stars");
         var $fullAssessment = $divToChange.find(".full-assessment "+gradeID+" .stars");
+        $subAssessment.empty();
+        $fullAssessment.empty();
         for(var i = 1; i <= 5; i++){
             if(i <= values[j]){
                 $subAssessment.append('<i class="fa fa-star"></i>');
@@ -593,11 +655,17 @@ function assessmentFormHandler($divToChange, gradeIDs, values, title, groupNo, b
                 $subAssessment.append('<i class="fa fa-star-o"></i>');
                 $fullAssessment.append('<i class="fa fa-star-o"></i>');
             }
+        }
 
+        if(j == 4){
+                $subAssessment.append("<label>(" +values[j]+ ")</label>");
+                $fullAssessment.append("<label>(" +values[j]+ ")</label>");
+        } else {
+                $subAssessment.attr("value", values[j]);
+                $fullAssessment.attr("value", values[j]);
         }
     });
-    $divToChange.find(".sub-assessment #overallGrade .stars").append("<label>(" +values[4]+ ")</label>");
-    $divToChange.find(".full-assessment #overallGrade .stars").append("<label>(" +values[4]+ ")</label>");
+
 
     //Handles the text body details
     $divToChange.find(".top-panel .panel-heading .title").html(title +" - "+ groupNo);
@@ -639,6 +707,20 @@ function resetSliders(){
     var sliders = ["#structureGrade","#strengthGrade","#formatGrade","#qualityGrade"];
     $.each(sliders, function(i, sliderID) {
         $( ".assessment-form "+ sliderID + " #rank" ).val(1);
+        $( ".assessment-form "+ sliderID + " #slider" ).slider( "value", 1 );
+    });
+}
+
+
+/*
+
+*/
+function setSliders($divToChange){
+    var sliders = ["#structureGrade","#strengthGrade","#formatGrade","#qualityGrade"];
+    $.each(sliders, function(i, sliderID) {
+        var value = $divToChange.find(".full-assessment "+ sliderID + " .stars").attr('value');
+        $( ".assessment-form "+ sliderID + " #rank" ).val(value);
+        $( ".assessment-form "+ sliderID + " #slider" ).slider( "value", value );
     });
 }
 </script>
@@ -857,15 +939,33 @@ function resetSliders(){
                     </div>
                 </div>
             </div>
-            <div class="panel-footer view-switch">
-                <span class="pull-left grade">Switch View</span>
-                <span class="pull-right"><i class="fa fa-exchange"></i></span>
-                <div class="clearfix"></div>
+            <div class="panel-footer view-edit-footer">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <span class="pull-left">Edit&nbsp&nbsp<i class="fa fa-edit"></i></span>
+                        <span class="pull-right"></span>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="view-switch col-lg-6">
+                        <span class="pull-left"></span>
+                        <span class="pull-right">Switch View&nbsp&nbsp<i class="fa fa-exchange"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-footer save">
-                <span class="pull-left">Save Assessment</span>
-                <span class="pull-right"><i class="fa fa-floppy-o"></i></span>
-                <div class="clearfix"></div>
+            <div class="panel-footer save-back-footer">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <span class="pull-left">Back&nbsp&nbsp<i class="fa fa-arrow-left"></i></span>
+                        <span class="pull-right"></span>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="save col-lg-6">
+                        <span class="pull-left"></span>
+                        <span class="pull-right">Save Assessment&nbsp&nbsp<i class="fa fa-floppy-o"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

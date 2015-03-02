@@ -135,9 +135,9 @@
                                 </div>
                                 <div class="'+color+'-div">
                                     <ul id="group'+(i+1)+'" class="connectedSortable">
-                                        <li class="item'+count+'">NUM '+(count++)+'</li>
-                                        <li class="item'+count+'">NUM '+(count++)+'</li>
-                                        <li class="item'+count+'">NUM '+(count++)+'</li>
+                                        <li id="item'+count+'">NUM '+(count++)+'</li>
+                                        <li id="item'+count+'">NUM '+(count++)+'</li>
+                                        <li id="item'+count+'">NUM '+(count++)+'</li>
                                     </ul>
                                 </div>
                                 <div >
@@ -229,9 +229,9 @@ var loadGroups = function(response) {
                             '</div>'+
                             '<div class="'+color+'-div">'+
                                 '<ul id="group'+(i+1)+'" class="connectedSortable">'+
-                                    '<li class="item'+count+'">'+userList[count++]+'</li>'+
-                                    '<li class="item'+count+'">'+userList[count++]+'</li>'+
-                                    '<li class="item'+count+'">'+userList[count++]+'</li>'+
+                                    '<li id="item'+count+'">'+userList[count++]+'</li>'+
+                                    '<li id="item'+count+'">'+userList[count++]+'</li>'+
+                                    '<li id="item'+count+'">'+userList[count++]+'</li>'+
                                 '</ul>'+
                             '</div>'+
                             '<div >'+
@@ -248,12 +248,15 @@ var loadGroups = function(response) {
                 if(ui.item.index() != 0){
                     $(".black-border").removeClass("black-border");
 
-                    var $currentItem = $(ui.item);
-                    var $itemToSwap = $(ui.item).closest("ul").find("li:nth-child("+ui.item.index()+")");
+                    var $currentItem = $(ui.item).addClass("black-border");
+                    var $itemToSwap = $(ui.item).closest("ul").find("li:nth-child("+ui.item.index()+")").addClass("black-border");
 
-                    var temp = $currentItem.text();
-                    $currentItem.text($itemToSwap.text()).addClass("black-border");
-                    $itemToSwap.text(temp).addClass("black-border");
+                    userList[$itemToSwap.attr('id').charAt(4)] = $currentItem.text();
+                    userList[$currentItem.attr('id').charAt(4)] = $itemToSwap.text();
+
+                    $.each(userList, function(i , element) {
+                        $("#item"+i+"").text(element);
+                    });
 
                     window.onbeforeunload = function(){ return 'You have unsaved data.' }
                     $("button[type=save]").removeClass("disabled");
@@ -359,7 +362,6 @@ function groupListObjtoList(groupList){
     var list = [];
     var groupNames = [];
     var PROGRAM_START = false;
-    console.log(groupList);
     if(groupList.length == 0){
         PROGRAM_START = true;
         for(var i = 0; i < 20; i++){
@@ -402,7 +404,7 @@ var displayListElements = function(list){
     $("button[type=save]").removeClass("disabled");
     window.onbeforeunload = function(){ return 'You have unsaved data.' }
     $.each(list, function(i , element) {
-        $(".item"+i+"").text(element);
+        $("#item"+i+"").text(element);
     });
 }
 
