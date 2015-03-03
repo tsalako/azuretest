@@ -135,9 +135,9 @@
                                 </div>
                                 <div class="'+color+'-div">
                                     <ul id="group'+(i+1)+'" class="connectedSortable">
-                                        <li id="item'+count+'">NUM '+(count++)+'</li>
-                                        <li id="item'+count+'">NUM '+(count++)+'</li>
-                                        <li id="item'+count+'">NUM '+(count++)+'</li>
+                                        <li id="'+count+'">NUM '+(count++)+'</li>
+                                        <li id="'+count+'">NUM '+(count++)+'</li>
+                                        <li id="'+count+'">NUM '+(count++)+'</li>
                                     </ul>
                                 </div>
                                 <div >
@@ -229,9 +229,9 @@ var loadGroups = function(response) {
                             '</div>'+
                             '<div class="'+color+'-div">'+
                                 '<ul id="group'+(i+1)+'" class="connectedSortable">'+
-                                    '<li id="item'+count+'">'+userList[count++]+'</li>'+
-                                    '<li id="item'+count+'">'+userList[count++]+'</li>'+
-                                    '<li id="item'+count+'">'+userList[count++]+'</li>'+
+                                    '<li id="'+count+'">'+userList[count++]+'</li>'+
+                                    '<li id="'+count+'">'+userList[count++]+'</li>'+
+                                    '<li id="'+count+'">'+userList[count++]+'</li>'+
                                 '</ul>'+
                             '</div>'+
                             '<div >'+
@@ -251,11 +251,17 @@ var loadGroups = function(response) {
                     var $currentItem = $(ui.item).addClass("black-border");
                     var $itemToSwap = $(ui.item).closest("ul").find("li:nth-child("+ui.item.index()+")").addClass("black-border");
 
-                    userList[$itemToSwap.attr('id').charAt(4)] = $currentItem.text();
-                    userList[$currentItem.attr('id').charAt(4)] = $itemToSwap.text();
+                    console.log($itemToSwap.attr('id'));
+                    console.log($currentItem.attr('id'));
+                    console.log( userList[$itemToSwap.attr('id')]);
+                    console.log( userList[$currentItem.attr('id')]);
+                    userList[$itemToSwap.attr('id')] = $currentItem.text();
+                    userList[$currentItem.attr('id')] = $itemToSwap.text();
+                    console.log( userList[$itemToSwap.attr('id')]);
+                    console.log( userList[$currentItem.attr('id')]);
 
                     $.each(userList, function(i , element) {
-                        $("#item"+i+"").text(element);
+                        $("#"+i+"").text(element);
                     });
 
                     window.onbeforeunload = function(){ return 'You have unsaved data.' }
@@ -404,7 +410,7 @@ var displayListElements = function(list){
     $("button[type=save]").removeClass("disabled");
     window.onbeforeunload = function(){ return 'You have unsaved data.' }
     $.each(list, function(i , element) {
-        $("#item"+i+"").text(element);
+        $("#"+i+"").text(element);
     });
 }
 
