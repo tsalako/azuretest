@@ -17,11 +17,14 @@
 
 <?php
 	// 2. Perform database query
-	$query  = "SELECT * ";
-	$query .= "FROM report";
-	$result = mysqli_query($connection, $query);
+	
+	//Simple SELECT
+	
+	$selectQuery  = "SELECT * ";
+	$selectQuery .= "FROM report";
+	$selectResult = mysqli_query($connection, $selectQuery);
 	// Test if there was a query error
-	if (!$result) {
+	if (!$selectResult) {
 		die("Database query failed.");
 	}
 ?>
@@ -47,7 +50,7 @@
 		<!-- Communication with DB -->
 		<?php
     	// 3. Use returned data (if any)
-    		while($row = mysqli_fetch_assoc($result)) {
+    		while($row = mysqli_fetch_assoc($selectResult)) {
         		// output data from each row
         		
     			echo $row["groupNo"] . "<br />" . "<br />";
@@ -63,7 +66,7 @@
     	?>
     	<?php
     	// 4. Release returned data
-		  	mysqli_free_result($result);
+		  	mysqli_free_result($selectResult);
     	?>
 
 	</body>
