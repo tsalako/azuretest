@@ -19,11 +19,24 @@ if(isset($_POST['function'])){
 			User::addUser($db, $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
 			echo json_encode('successfully added');
 		break;
+		case 'getStudentDetails':
+			$params = $_POST['params'];
+			$student = User::getStudentDetails($db, $params['userNo']);
+			echo json_encode($student->getData());
+		break;
 		case 'getAllUsers':
 			$users = User::getAllUsers($db);
 			$return = array();			
 			foreach ($users as $user){
 				array_push($return, $user->getData());
+			}
+			echo json_encode($return);
+		break;
+		case 'getAllStudents':
+			$students = User::getAllStudents($db);
+			$return = array();			
+			foreach ($students as $student){
+				array_push($return, $student->getData());
 			}
 			echo json_encode($return);
 		break;

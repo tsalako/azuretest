@@ -12,6 +12,10 @@ grey/gray - #999999
 	color: #fff;
 }*/
 
+th, td {
+    text-align: center;
+}
+
 .upperMargin {
 	margin-top: 2em;
 }

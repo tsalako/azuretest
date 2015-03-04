@@ -59,9 +59,7 @@ class Group{
 
 	public static function modifyGroups($db, $groupList){
 		foreach ($groupList as $group){
-			foreach ($group['usernames'] as $username){
-				User::setUserGroupNo($db, $username, $group['groupNo']);
-			}
+			User::setUsersGroupNos($db, $group['usernames'][0],$group['usernames'][1],$group['usernames'][2], $group['groupNo']);
 		}
 	}
 

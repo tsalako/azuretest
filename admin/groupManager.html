@@ -91,7 +91,7 @@
                             <a href="dashboard.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="adminManager.html"><i class="fa fa-gavel fa-fw"></i> Admin Manager</a>
+                            <a href="studentManager.html"><i class="fa fa-male fa-fw"></i> Student Manager</a>
                         </li>
                         <li>
                             <a href="groupManager.html"><i class="fa fa-cogs fa-fw"></i> Group Manager</a>
@@ -251,14 +251,8 @@ var loadGroups = function(response) {
                     var $currentItem = $(ui.item).addClass("black-border");
                     var $itemToSwap = $(ui.item).closest("ul").find("li:nth-child("+ui.item.index()+")").addClass("black-border");
 
-                    console.log($itemToSwap.attr('id'));
-                    console.log($currentItem.attr('id'));
-                    console.log( userList[$itemToSwap.attr('id')]);
-                    console.log( userList[$currentItem.attr('id')]);
                     userList[$itemToSwap.attr('id')] = $currentItem.text();
                     userList[$currentItem.attr('id')] = $itemToSwap.text();
-                    console.log( userList[$itemToSwap.attr('id')]);
-                    console.log( userList[$currentItem.attr('id')]);
 
                     $.each(userList, function(i , element) {
                         $("#"+i+"").text(element);

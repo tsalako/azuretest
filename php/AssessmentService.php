@@ -36,10 +36,41 @@ if(isset($_POST['function'])){
 		case 'getDoneAssessmentsByReportNo':
 			$params = $_POST['params'];
 			$assessments = Assessment::getDoneAssessmentsByReportNo($db, $params['reportNo']);
-			$return = array();			
+			$return['assessments'] = array();			
 			foreach ($assessments as $assessment){
-				array_push($return, $assessment->getData());
+				array_push($return['assessments'], $assessment->getData());
 			}
+
+			$query = "SELECT 
+						z.rank, 
+						z.reportNo, 
+						z.avg 
+					FROM 
+						(SELECT 
+							@rowno:=@rowno+1 as rank, 
+							x.reportNo, 
+							x.avg 
+						FROM 
+							(SELECT 
+								reportNo, 
+								AVG(averageGrade) as avg 
+							FROM 
+								assessment 
+							GROUP BY 
+								reportNo 
+							ORDER BY 
+								avg 
+							DESC) x,
+						(SELECT @rowno:=0) r) z 
+					WHERE 
+						z.reportNo = '{$params['reportNo']}'
+					";
+			$stmt = $db->prepare($query);
+			$stmt->execute();
+			$row =  $stmt->fetch();
+			
+			$return['rank'] = $row['rank'];
+			$return['overallAvg'] = $row['avg'];
 			echo json_encode($return);
 		break;
 		case 'getAllAssessments':

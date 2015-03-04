@@ -12,6 +12,10 @@ class User{
 		$this->data['groupNo'] = isset($user['groupNo']) ? $user['groupNo'] : null;
 		$this->data['isAdmin'] = $user['type'] == 'admin';
 		$this->data['isStudent'] = $user['type'] == 'student';
+
+		$this->data['report'] = isset($user['report']) ? $user['report'] : null;
+		$this->data['assessments'] = isset($user['assessments']) ? $user['assessments'] : null;
+		
 	}
 
 	public function getData(){
@@ -77,6 +81,17 @@ class User{
 		$db->exec($queryUpdate);
 	}
 
+	public static function setUsersGroupNos($db, $username1, $username2, $username3, $groupNo){
+		$queryUpdate = "UPDATE 
+							user
+						SET
+							groupNo = '".$groupNo."'
+						WHERE
+							username IN ('".$username1."','".$username2."','".$username3."')
+						";
+		$db->exec($queryUpdate);
+	}
+
 	public static function getUserByUsername($db, $username){
 		$queryUser = "SELECT 
 						U.userNo, 
@@ -121,6 +136,31 @@ class User{
 		return $users;	
 	}
 
+	public static function getAllStudents($db){
+		$students = array();
+
+		$queryStudents = "SELECT 
+						U.userNo, 
+						U.userName, 
+						U.type, 
+						U.fName, 
+						U.lName,
+						U.groupNo 
+					FROM 
+						user U
+					WHERE
+						U.type = 'student'
+					";
+
+		$stmt = $db->prepare($queryStudents);
+		$stmt->execute();
+		while($row =  $stmt->fetch()){
+			array_push($students, new User($row));
+		}
+
+		return $students;
+	}
+
 	public static function getAllUsers($db){
 		$users = array();
 
@@ -150,6 +190,10 @@ class User{
 				  WHERE type = 'student'
 						";
 		$db->exec($query);
+	}
+
+	public static function getStudentDetails($db, $user) {
+
 	}
 
 	public static function getSessionUser($db) {

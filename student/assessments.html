@@ -146,12 +146,12 @@ $(function() {
     sendRequest('../php/AssessmentService.php',
             populateUndoneAssessmentsDiv,
             'getUndoneAssessmentsByGroupNo',
-            {'groupNo' : 41});
+            {'groupNo' : 71});
 
    sendRequest('../php/AssessmentService.php',
             populateDoneAssessmentsDiv,
             'getDoneAssessmentsByGroupNo',
-            {'groupNo' : 41});
+            {'groupNo' : 71});
 });
 
 /*
@@ -560,7 +560,7 @@ function changePanel($divToChange, newType, data){
                             basicCallback,
                             'setAssessment',
                             {'reportNo' : revertGroupNo(data.groupNo),
-                            'groupNo' : 41,
+                            'groupNo' : 71,
                             'structureGrade': grades[0],
                             'strengthGrade' : grades[1],
                             'formatGrade' : grades[2],
