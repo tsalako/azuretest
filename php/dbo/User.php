@@ -11,11 +11,7 @@ class User{
 		$this->data['lName'] = $user['lName'];
 		$this->data['groupNo'] = isset($user['groupNo']) ? $user['groupNo'] : null;
 		$this->data['isAdmin'] = $user['type'] == 'admin';
-		$this->data['isStudent'] = $user['type'] == 'student';
-
-		$this->data['report'] = isset($user['report']) ? $user['report'] : null;
-		$this->data['assessments'] = isset($user['assessments']) ? $user['assessments'] : null;
-		
+		$this->data['isStudent'] = $user['type'] == 'student';		
 	}
 
 	public function getData(){
@@ -92,7 +88,7 @@ class User{
 		$db->exec($queryUpdate);
 	}
 
-	public static function getUserByUsername($db, $username){
+	public static function getUserByUserNo($db, $userNo){
 		$queryUser = "SELECT 
 						U.userNo, 
 						U.userName, 
@@ -103,12 +99,12 @@ class User{
 					FROM 
 						user U
 					WHERE
-						U.userName = '".$username."'
+						U.userNo = '".$userNo."'
 					";
 
 		$stmt = $db->prepare($queryUser);
 		$stmt->execute();
-		return $stmt->fetch();
+		return new User($stmt->fetch());
 	}
 
 	public static function getUsersByGroupNo($db, $groupNo){
@@ -190,10 +186,6 @@ class User{
 				  WHERE type = 'student'
 						";
 		$db->exec($query);
-	}
-
-	public static function getStudentDetails($db, $user) {
-
 	}
 
 	public static function getSessionUser($db) {

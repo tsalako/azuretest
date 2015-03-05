@@ -45,8 +45,8 @@ if(isset($_POST['function'])){
 						z.rank, 
 						z.reportNo, 
 						z.avg 
-					FROM 
-						(SELECT 
+					FROM (
+						SELECT 
 							@rowno:=@rowno+1 as rank, 
 							x.reportNo, 
 							x.avg 
@@ -61,9 +61,10 @@ if(isset($_POST['function'])){
 							ORDER BY 
 								avg 
 							DESC) x,
-						(SELECT @rowno:=0) r) z 
+							(SELECT @rowno:=0) r
+						) z 
 					WHERE 
-						z.reportNo = '{$params['reportNo']}'
+						z.reportNo = '{$return['student']['groupNo']}'
 					";
 			$stmt = $db->prepare($query);
 			$stmt->execute();

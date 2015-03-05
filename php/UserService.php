@@ -3,6 +3,8 @@
 include 'dbo/DB.php';
 include 'dbo/User.php';
 include 'dbo/Group.php';
+include 'dbo/Assessment.php';
+include 'dbo/Report.php';
 header("content-type:application/json");
 
 /* 
@@ -20,9 +22,61 @@ if(isset($_POST['function'])){
 			echo json_encode('successfully added');
 		break;
 		case 'getStudentDetails':
+			$return = array();
+			
+
 			$params = $_POST['params'];
-			$student = User::getStudentDetails($db, $params['userNo']);
-			echo json_encode($student->getData());
+			$student = User::getUserByUserNo($db, $params['userNo']);
+			$return['student'] = $student->getData();
+
+			$report = Report::getReportByGroupNo($db, $return['student']['groupNo']);
+			$return['report'] = $report->getData();
+
+			$authorAssessments = Assessment::getDoneAssessmentsByReportNo($db,$return['student']['groupNo']);
+			$return['authorAssessments'] = array();
+			foreach ($authorAssessments as $assessment){
+				array_push($return['authorAssessments'], $assessment->getData());
+			}
+			
+			$assessorAssessments = Assessment::getDoneAssessmentsByGroupNo($db,$return['student']['groupNo']);
+			$return['assessorAssessments'] = array();
+			foreach ($assessorAssessments as $assessment){
+				array_push($return['assessorAssessments'], $assessment->getData());
+			}
+
+			$query = "SELECT 
+						z.rank, 
+						z.reportNo, 
+						z.avg 
+					FROM (
+						SELECT 
+							@rowno:=@rowno+1 as rank, 
+							x.reportNo, 
+							x.avg 
+						FROM 
+							(SELECT 
+								reportNo, 
+								AVG(averageGrade) as avg 
+							FROM 
+								assessment 
+							GROUP BY 
+								reportNo 
+							ORDER BY 
+								avg 
+							DESC) x,
+							(SELECT @rowno:=0) r
+						) z 
+					WHERE 
+						z.reportNo = '{$return['student']['groupNo']}'
+					";
+			$stmt = $db->prepare($query);
+			$stmt->execute();
+			$row =  $stmt->fetch();
+			
+			$return['rank'] = $row['rank'];
+			$return['overallAvg'] = $row['avg'];
+
+			echo json_encode($return);
 		break;
 		case 'getAllUsers':
 			$users = User::getAllUsers($db);
