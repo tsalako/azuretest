@@ -115,6 +115,10 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
+                <div class="row reports">
+                </div>
+                <!-- /.row -->
+
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -141,4 +145,315 @@
 
 </body>
 
+<script>
+$(function() {
+    sendRequest('../php/ReportService.php',
+            populateReportsDiv,
+            'getAllReports');
+});
+
+
+var populateReportsDiv = function(response) {
+    $.each(response.data, function(i, report) {
+        var groupNo = convertGroupNo(report.groupNo);
+        var assignmentList = report.assignedGroupsList;
+        $('.reports')
+            .append('<div class="row" id="group'+groupNo+'">'+
+                        '<div class="col-lg-12">'+
+                            '<div class="top-panel green-border">'+
+                                    '<div class="panel-heading show-more">'+
+                                        '<span class="pull-left title"></span>'+
+                                        '<span class="pull-right"><i class="fa fa-plus"></i></span>'+
+                                        '<div class="clearfix"></div>'+
+                                    '</div>'+
+                                    '<div class="panel-body green-div sub-report">'+
+                                        '<p></p>'+
+                                    '</div>'+
+                                    '<div class="panel-body green-div full-report">'+
+                                        '<p></p>'+
+                                    '</div>'+
+                            '</div>'+
+                            '<div class="bottom-panel blue-border">'+
+                                '<div class="panel-body blue-div report-form">'+
+                                    '<form>'+
+                                      '<div class="form-group form-inline row">'+
+                                        '<label class="col-lg-offset-1 col-lg-2">'+
+                                          '<input id="1" type="checkbox"> Group 1'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="2" type="checkbox"> Group 2'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="3" type="checkbox"> Group 3'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="4" type="checkbox"> Group 4'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="5" type="checkbox"> Group 5'+
+                                        '</label>'+
+                                      '</div>'+
+                                      '<div class="form-group form-inline row">'+
+                                        '<label class="col-lg-offset-1 col-lg-2">'+
+                                          '<input id="6" type="checkbox"> Group 6'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="7" type="checkbox"> Group 7'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="8" type="checkbox"> Group 8'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="9" type="checkbox"> Group 9'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="10" type="checkbox"> Group 10'+
+                                        '</label>'+
+                                      '</div>'+
+                                      '<div class="form-group form-inline row">'+
+                                        '<label class="col-lg-offset-1 col-lg-2">'+
+                                          '<input id="11" type="checkbox"> Group 11'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="12" type="checkbox"> Group 12'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="13" type="checkbox"> Group 13'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="14" type="checkbox"> Group 14'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="15" type="checkbox"> Group 15'+
+                                        '</label>'+
+                                      '</div>'+
+                                      '<div class="form-group form-inline row">'+
+                                        '<label class="col-lg-offset-1 col-lg-2">'+
+                                          '<input id="16" type="checkbox"> Group 16'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="17" type="checkbox"> Group 17'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="18" type="checkbox"> Group 18'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="19" type="checkbox"> Group 19'+
+                                        '</label>'+
+                                        '<label class="col-lg-2">'+
+                                          '<input id="20" type="checkbox"> Group 20'+
+                                        '</label>'+
+                                      '</div>'+
+                                    '</form>'+
+                                '</div>'+
+                                '<div class="panel-body blue-div report-view">'+
+                                    '<p></p>'+
+                                '</div>'+
+                                '<div class="panel-footer save-assign-footer">'+
+                                    '<div class="row">'+
+                                       '<div class="col-lg-6 back">'+
+                                            '<span class="pull-left"><i class="fa fa-arrow-left"></i>&nbsp&nbspRevert Changes</span>'+
+                                            '<span class="pull-right"></span>'+
+                                            '<div class="clearfix"></div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-6 save">'+
+                                            '<span class="pull-left"></span>'+
+                                            '<span class="pull-right"><i class="fa fa-save">&nbsp&nbspSave Assignments</i></span>'+
+                                            '<div class="clearfix"></div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="panel-footer edit-assign-footer">'+
+                                    '<div class="row">'+
+                                        '<div class="col-lg-12 edit">'+
+                                            '<span class="pull-left">Assign Groups To Assess</span>'+
+                                            '<span class="pull-right"><i class="fa fa-arrow-right"></i></span>'+
+                                            '<div class="clearfix"></div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<!-- /.col-lg-12 -->'+
+                    '</div>'+
+                    '<!-- /.row -->');
+
+        $('#group' + groupNo + ' .title').text(report.title + ' - ' + groupNo);
+        $('#group' + groupNo + ' .sub-report').text(report.body.substring(0,450));
+        $('#group' + groupNo + ' .full-report').text(report.body);
+
+        $('#group' + groupNo + ' .report-form').hide();
+        $('#group' + groupNo + ' .save-assign-footer').hide();
+
+        var assignmentText = 'Groups Assigned:  ';
+        $.each(assignmentList, function(j, curGroupNo) {
+            if(curGroupNo != ''){
+                assignmentText += convertGroupNo(curGroupNo) + ', ';
+                $('#group' + groupNo + ' #'+convertGroupNo(curGroupNo)).prop('checked', true);
+            }
+        });
+        $('#group' + groupNo + ' .report-view p').text(assignmentText.substring(0, assignmentText.length-2));
+
+        $('#group' + groupNo + ' .show-more').click(function() {
+            if($(this).find("i").hasClass("fa-plus")){
+                $(this).parent().parent().find(".sub-report").hide();
+                $(this).parent().parent().find(".full-report").show();
+                $(this).find("i").removeClass("fa-plus").addClass("fa-minus");
+           } else {
+                $(this).parent().parent().find(".sub-report").show();
+                $(this).parent().parent().find(".full-report").hide();
+                $(this).find("i").removeClass("fa-minus").addClass("fa-plus");
+           }
+
+           $('html, body').animate({
+                scrollTop: $(this).offset().top - 10
+            },350);
+        });
+
+        $('#group' + groupNo + ' .back').click(function() {
+            $('#group' + groupNo + ' .edit-assign-footer').show();
+            $('#group' + groupNo + ' .save-assign-footer').hide();
+            $('#group' + groupNo + ' .report-view').show();
+            $('#group' + groupNo + ' .report-form').hide();
+        });
+
+        $('#group' + groupNo + ' .save').click(function() {
+            $('#group' + groupNo + ' .edit-assign-footer').show();
+            $('#group' + groupNo + ' .save-assign-footer').hide();
+            $('#group' + groupNo + ' .report-view').show();
+            $('#group' + groupNo + ' .report-form').hide();
+        });
+
+        $('#group' + groupNo + ' .edit').click(function() {
+            $('#group' + groupNo + ' .edit-assign-footer').hide();
+            $('#group' + groupNo + ' .save-assign-footer').show();
+            $('#group' + groupNo + ' .report-view').hide();
+            $('#group' + groupNo + ' .report-form').show();
+        });
+    });
+}
+
+
+</script>
+
+<script>
+/*<div class="row">
+    <div class="col-lg-12">
+        <div class="top-panel red-border">
+                <div class="panel-heading show-more">
+                    <span class="pull-left title"></span>
+                    <span class="pull-right"><i class="fa fa-plus"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-body red-div sub-report">
+                    <p></p>
+                </div>
+                <div class="panel-body red-div full-report">
+                    <p></p>
+                </div>
+        </div>
+        <div class="bottom-panel green-border">
+            <div class="panel-body green-div report-form">
+                <form>
+                  <div class="form-group form-inline row">
+                    <label class="col-lg-offset-1 col-lg-2">
+                      <input id="1" type="checkbox"> Group 1
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="2" type="checkbox"> Group 2
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="3" type="checkbox"> Group 3
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="4" type="checkbox"> Group 4
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="5" type="checkbox"> Group 5
+                    </label>
+                  </div>
+                  <div class="form-group form-inline row">
+                    <label class="col-lg-offset-1 col-lg-2">
+                      <input id="6" type="checkbox"> Group 6
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="7" type="checkbox"> Group 7
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="8" type="checkbox"> Group 8
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="9" type="checkbox"> Group 9
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="10" type="checkbox"> Group 10
+                    </label>
+                  </div>
+                  <div class="form-group form-inline row">
+                    <label class="col-lg-offset-1 col-lg-2">
+                      <input id="11" type="checkbox"> Group 11
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="12" type="checkbox"> Group 12
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="13" type="checkbox"> Group 13
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="14" type="checkbox"> Group 14
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="15" type="checkbox"> Group 15
+                    </label>
+                  </div>
+                  <div class="form-group form-inline row">
+                    <label class="col-lg-offset-1 col-lg-2">
+                      <input id="16" type="checkbox"> Group 16
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="17" type="checkbox"> Group 17
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="18" type="checkbox"> Group 18
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="19" type="checkbox"> Group 19
+                    </label>
+                    <label class="col-lg-2">
+                      <input id="20" type="checkbox"> Group 20
+                    </label>
+                  </div>
+                </form>
+            </div>
+            <div class="panel-body green-div report-view">
+            </div>
+            <div class="panel-footer save-assign-footer">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <span class="pull-left"><i class="fa fa-arrow-left"></i>&nbsp&nbspRevert Changes</span>
+                        <span class="pull-right"></span>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <span class="pull-left"></span>
+                        <span class="pull-right"><i class="fa fa-save">&nbsp&nbspSave Assignments</i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer edit-assign-footer">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span class="pull-left">Assign Groups To Assess</span>
+                        <span class="pull-right"><i class="fa fa-arrow-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->*/
+</script>
 </html>

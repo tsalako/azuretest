@@ -64,7 +64,7 @@ if(isset($_POST['function'])){
 							(SELECT @rowno:=0) r
 						) z 
 					WHERE 
-						z.reportNo = '{$return['student']['groupNo']}'
+						z.reportNo = '{$params['reportNo']}'
 					";
 			$stmt = $db->prepare($query);
 			$stmt->execute();
