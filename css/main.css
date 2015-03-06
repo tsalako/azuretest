@@ -12,6 +12,11 @@ grey/gray - #999999
 	color: #fff;
 }*/
 
+.bigger-h1 {
+    font-size:100px;
+    margin-top:35%;
+}
+
 th, td {
     text-align: center;
 }

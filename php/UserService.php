@@ -44,37 +44,9 @@ if(isset($_POST['function'])){
 				array_push($return['assessorAssessments'], $assessment->getData());
 			}
 
-			$query = "SELECT 
-						z.rank, 
-						z.reportNo, 
-						z.avg 
-					FROM (
-						SELECT 
-							@rowno:=@rowno+1 as rank, 
-							x.reportNo, 
-							x.avg 
-						FROM 
-							(SELECT 
-								reportNo, 
-								AVG(averageGrade) as avg 
-							FROM 
-								assessment 
-							GROUP BY 
-								reportNo 
-							ORDER BY 
-								avg 
-							DESC) x,
-							(SELECT @rowno:=0) r
-						) z 
-					WHERE 
-						z.reportNo = '{$return['student']['groupNo']}'
-					";
-			$stmt = $db->prepare($query);
-			$stmt->execute();
-			$row =  $stmt->fetch();
-			
-			$return['rank'] = $row['rank'];
-			$return['overallAvg'] = $row['avg'];
+			$stats = Group::getGroupStats($db, $return['student']['groupNo']);
+			$return['rank'] = $stats['rank'];
+			$return['overallAvg'] = $stats['avg'];
 
 			echo json_encode($return);
 		break;

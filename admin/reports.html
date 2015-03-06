@@ -159,7 +159,10 @@ var populateReportsDiv = function(response) {
         var assignmentList = report.assignedGroupsList;
         $('.reports')
             .append('<div class="row" id="group'+groupNo+'">'+
-                        '<div class="col-lg-12">'+
+                        '<div class="col-lg-2">'+
+                            '<h1 class="text-muted text-center bigger-h1">'+groupNo+'<h1>'+
+                        '</div>'+
+                        '<div class="col-lg-10">'+
                             '<div class="top-panel green-border">'+
                                     '<div class="panel-heading show-more">'+
                                         '<span class="pull-left title"></span>'+
@@ -252,7 +255,7 @@ var populateReportsDiv = function(response) {
                                 '<div class="panel-footer save-assign-footer">'+
                                     '<div class="row">'+
                                        '<div class="col-lg-6 back">'+
-                                            '<span class="pull-left"><i class="fa fa-arrow-left"></i>&nbsp&nbspRevert Changes</span>'+
+                                            '<span class="pull-left"><i class="fa fa-arrow-left"></i>&nbsp&nbspBack</span>'+
                                             '<span class="pull-right"></span>'+
                                             '<div class="clearfix"></div>'+
                                         '</div>'+
@@ -278,7 +281,7 @@ var populateReportsDiv = function(response) {
                     '</div>'+
                     '<!-- /.row -->');
 
-        $('#group' + groupNo + ' .title').text(report.title + ' - ' + groupNo);
+        $('#group' + groupNo + ' .title').text(report.title);
         $('#group' + groupNo + ' .sub-report').text(report.body.substring(0,450));
         $('#group' + groupNo + ' .full-report').text(report.body);
 
@@ -289,9 +292,10 @@ var populateReportsDiv = function(response) {
         $.each(assignmentList, function(j, curGroupNo) {
             if(curGroupNo != ''){
                 assignmentText += convertGroupNo(curGroupNo) + ', ';
-                $('#group' + groupNo + ' #'+convertGroupNo(curGroupNo)).prop('checked', true);
+                $('#group' + groupNo + ' #'+convertGroupNo(curGroupNo)).prop('checked', true).attr('disabled', true);
             }
         });
+        $('#group' + groupNo + ' #'+groupNo).attr('disabled', true);
         $('#group' + groupNo + ' .report-view p').text(assignmentText.substring(0, assignmentText.length-2));
 
         $('#group' + groupNo + ' .show-more').click(function() {
@@ -318,6 +322,23 @@ var populateReportsDiv = function(response) {
         });
 
         $('#group' + groupNo + ' .save').click(function() {
+            var newAssignmentList = [];
+            var viewText = $('#group' + groupNo + ' .report-view p').text().length == 0 ? "" : ", ";
+            $('#group'+groupNo+' input[type=checkbox]').each(function(i, checkbox) {
+                if($(checkbox).is(":checked") && !$(checkbox).is(":disabled")){
+                    $(checkbox).attr('disabled', true);
+                    newAssignmentList.push(revertGroupNo($(checkbox).attr('id')));
+                    viewText += $(checkbox).attr('id') + ', ';
+                }
+            });
+            viewText = $('#group' + groupNo + ' .report-view p').text() + viewText.substring(0, viewText.length-2); 
+            $('#group' + groupNo + ' .report-view p').text(viewText);
+
+            sendRequest('../php/AssessmentService.php',
+                basicCallback,
+                'setNewAssignments',
+                {'groupNo': revertGroupNo(groupNo), 'newAssignmentList': newAssignmentList});
+
             $('#group' + groupNo + ' .edit-assign-footer').show();
             $('#group' + groupNo + ' .save-assign-footer').hide();
             $('#group' + groupNo + ' .report-view').show();
@@ -338,7 +359,10 @@ var populateReportsDiv = function(response) {
 
 <script>
 /*<div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-2">
+        <h1 class="text-muted"><h1>
+    </div>
+    <div class="col-lg-10">
         <div class="top-panel red-border">
                 <div class="panel-heading show-more">
                     <span class="pull-left title"></span>

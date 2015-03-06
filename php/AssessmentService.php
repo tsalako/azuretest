@@ -3,6 +3,7 @@
 include 'dbo/DB.php';
 include 'dbo/Assessment.php';
 include 'dbo/Report.php';
+include 'dbo/Group.php';
 header("content-type:application/json");
 
 /*
@@ -15,6 +16,13 @@ if(isset($_POST['function'])){
 	$db = new DB();
 	
 	switch($_POST['function']){
+		case 'setNewAssignments':
+			$params = $_POST['params'];
+			foreach ($params['newAssignmentList'] as $groupAssignedTo){
+				Assessment::assignAssessment($db, $params['groupNo'], $groupAssignedTo);
+			}
+			echo json_encode('successfully assigned');
+		break;
 		case 'getUndoneAssessmentsByGroupNo':
 			$params = $_POST['params'];
 			$assessments = Assessment::getUndoneAssessmentsByGroupNo($db, $params['groupNo']);
@@ -41,37 +49,9 @@ if(isset($_POST['function'])){
 				array_push($return['assessments'], $assessment->getData());
 			}
 
-			$query = "SELECT 
-						z.rank, 
-						z.reportNo, 
-						z.avg 
-					FROM (
-						SELECT 
-							@rowno:=@rowno+1 as rank, 
-							x.reportNo, 
-							x.avg 
-						FROM 
-							(SELECT 
-								reportNo, 
-								AVG(averageGrade) as avg 
-							FROM 
-								assessment 
-							GROUP BY 
-								reportNo 
-							ORDER BY 
-								avg 
-							DESC) x,
-							(SELECT @rowno:=0) r
-						) z 
-					WHERE 
-						z.reportNo = '{$params['reportNo']}'
-					";
-			$stmt = $db->prepare($query);
-			$stmt->execute();
-			$row =  $stmt->fetch();
-			
-			$return['rank'] = $row['rank'];
-			$return['overallAvg'] = $row['avg'];
+			$stats = Group::getGroupStats($db, $params['reportNo']);
+			$return['rank'] = $stats['rank'];
+			$return['overallAvg'] = $stats['avg'];
 			echo json_encode($return);
 		break;
 		case 'getAllAssessments':

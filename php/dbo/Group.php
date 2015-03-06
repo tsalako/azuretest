@@ -81,11 +81,39 @@ class Group{
 			}
 		}
 	}
-	//getAllGroups
-	//getGroupByNo
-	//createGroups
-	//modifyGroups
 
+	public static function getGroupStats($db, $groupNo) {
+		$query = "SELECT 
+						z.rank, 
+						z.reportNo, 
+						z.avg 
+					FROM (
+						SELECT 
+							@rowno:=@rowno+1 as rank, 
+							x.reportNo, 
+							x.avg 
+						FROM 
+							(SELECT 
+								reportNo, 
+								AVG(averageGrade) as avg 
+							FROM 
+								assessment 
+							GROUP BY 
+								reportNo 
+							ORDER BY 
+								avg 
+							DESC) x,
+							(SELECT @rowno:=0) r
+						) z 
+					WHERE 
+						z.reportNo = '{$groupNo}'
+					";
+			$stmt = $db->prepare($query);
+			$stmt->execute();
+
+			//returns object with avg, rank, and reportNo fields (see use example in UserService.php)
+			return $stmt->fetch();
+	}
 
 }
 

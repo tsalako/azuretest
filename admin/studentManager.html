@@ -305,9 +305,6 @@ var populateStudentAutocomplete = function(response){
     $( "#userAutocomplete" ).autocomplete({
       source: usernames,
       select: function( event, ui ) {
-        //console.log(ui.item.value);
-        //console.log(ui.item.label);
-        //console.log(ui.item.userNo);
         sendRequest('../php/UserService.php',
             loadForm,
             'getStudentDetails',
@@ -317,7 +314,6 @@ var populateStudentAutocomplete = function(response){
 }
 
 var loadForm = function(response) {
-    console.log(response.data);
     var data = response.data;
     var student = data.student;
     var report = data.report;
