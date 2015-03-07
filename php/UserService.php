@@ -16,6 +16,74 @@ if(isset($_POST['function'])){
 	$db = new DB();
 	
 	switch($_POST['function']){
+		case 'getStudentDashboard':
+			$return = array();
+			$params = $_POST['params'];
+			
+			$queryUploaded = "SELECT EXISTS (
+								SELECT 
+									* 
+								FROM 
+									report 
+								WHERE 
+									groupNo = '{$params['groupNo']}'
+								) as isUploaded
+							";
+			$stmt = $db->prepare($queryUploaded);
+			$stmt->execute();
+			$return['isUploaded'] = $stmt->fetch()['isUploaded'];
+
+			$queryNewAssessments = "SELECT 
+										COUNT(*) as newAssessmentCount
+									FROM 
+										assessment 
+									WHERE 
+										groupNo = '{$params['groupNo']}' 
+									AND 
+										assessedOn IS NULL
+									";
+			$stmt = $db->prepare($queryNewAssessments);
+			$stmt->execute();
+			$return['newAssessmentCount'] = $stmt->fetch()['newAssessmentCount'];
+			
+			echo json_encode($return);
+		break;
+		case 'getAdminDashboard':
+			$return = array();
+
+			$query = "SELECT 
+						COUNT(*) AS doneReports 
+					FROM 
+						report 
+					WHERE 
+						uploadedOn IS NOT NULL
+					";
+			$stmt = $db->prepare($query);
+			$stmt->execute();
+			$return['doneReports'] = $stmt->fetch()['doneReports'];
+			
+			$query = "SELECT 
+						COUNT(*) AS doneAssessments 
+					FROM 
+						assessment 
+					WHERE 
+						assessedOn IS NOT NULL
+					";
+			$stmt = $db->prepare($query);
+			$stmt->execute();
+			$return['doneAssessments'] = $stmt->fetch()['doneAssessments'];
+			
+			$query = "SELECT 
+						COUNT(*) AS totalAssessments 
+					FROM 
+						assessment
+					";
+			$stmt = $db->prepare($query);
+			$stmt->execute();
+			$return['totalAssessments'] = $stmt->fetch()['totalAssessments'];
+
+			echo json_encode($return);
+		break;
 		case 'addUser':
 			$params = $_POST['params'];
 			User::addUser($db, $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);

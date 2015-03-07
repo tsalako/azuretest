@@ -323,7 +323,7 @@ var populateReportsDiv = function(response) {
 
         $('#group' + groupNo + ' .save').click(function() {
             var newAssignmentList = [];
-            var viewText = $('#group' + groupNo + ' .report-view p').text().length == 0 ? "" : ", ";
+            var viewText = $('#group' + groupNo + ' .report-view p').text() == "Groups Assigned:" ? "  " : ", ";
             $('#group'+groupNo+' input[type=checkbox]').each(function(i, checkbox) {
                 if($(checkbox).is(":checked") && !$(checkbox).is(":disabled")){
                     $(checkbox).attr('disabled', true);

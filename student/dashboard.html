@@ -118,8 +118,8 @@
                                         <i class="fa fa-file fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><i class="fa fa-check"></i></div>
-                                        <div>Report Uploaded!</div>
+                                        <div class="huge"><i class="fa report-icon"></i></div>
+                                        <div class="report-text"></div>
                                     </div>
                                 </div>
                             </div>
@@ -140,8 +140,8 @@
                                         <i class="fa fa-edit fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">4</div>
-                                        <div>New Assessments!</div>
+                                        <div class="huge assessment-no"></div>
+                                        <div class="assessment-text"></div>
                                     </div>
                                 </div>
                             </div>
@@ -225,5 +225,34 @@
     <script src = "../js/util.js"></script>
 
 </body>
+
+<script>
+$(function() {
+    //console.log('here');
+    sendRequest('../php/UserService.php',
+            loadDashValues,
+            'getStudentDashboard',
+            {'groupNo' : 41});
+});
+
+var loadDashValues = function(response) {
+    var data = response.data;
+    if(data.isUploaded == 0){
+        $('.report-text').text('Missing Report!');
+        $('.report-icon').addClass('fa-close');
+    } else {
+        $('.report-text').text('Report Uploaded!');
+        $('.report-icon').addClass('fa-check');
+    }
+
+    if(data.newAssessmentCount == 0){
+        $('.assessment-no').append('<i class="fa fa-check"></i>');
+        $('.assessment-text').text('Assessments Complete!');
+    } else {
+        $('.assessment-no').text(data.newAssessmentCount);
+        $('.assessment-text').text('New Assessments!')
+    }
+}
+</script>
 
 </html>

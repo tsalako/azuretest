@@ -168,7 +168,7 @@
                                         <i class="fa fa-file fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">17/20</div>
+                                        <div class="huge report-stat"></div>
                                         <div>Reports completed!</div>
                                     </div>
                                 </div>
@@ -190,7 +190,7 @@
                                         <i class="fa fa-edit fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">6/45</i></div>
+                                        <div class="huge assessment-stat"></i></div>
                                         <div>Assessments written!</div>
                                     </div>
                                 </div>
@@ -276,4 +276,18 @@
 
 </body>
 
+<script>
+$(function() {
+    sendRequest('../php/UserService.php',
+            loadDashValues,
+            'getAdminDashboard');
+});
+
+var loadDashValues = function(response) {
+    var data = response.data;
+    $('.report-stat').text(data.doneReports + '/20');
+    $('.assessment-stat').text(data.doneAssessments +'/'+data.totalAssessments);
+}
+
+</script>
 </html>
