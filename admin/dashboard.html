@@ -168,7 +168,7 @@
                                         <i class="fa fa-file fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge report-stat"></div>
+                                        <div class="huge report-stat"><i class="fa fa-asterisk fa-spin pull-right"></i></div>
                                         <div>Reports completed!</div>
                                     </div>
                                 </div>
@@ -190,7 +190,7 @@
                                         <i class="fa fa-edit fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge assessment-stat"></i></div>
+                                        <div class="huge assessment-stat"><i class="fa fa-asterisk fa-spin pull-right"></i></div>
                                         <div>Assessments written!</div>
                                     </div>
                                 </div>
@@ -287,6 +287,7 @@ var loadDashValues = function(response) {
     var data = response.data;
     $('.report-stat').text(data.doneReports + '/20');
     $('.assessment-stat').text(data.doneAssessments +'/'+data.totalAssessments);
+    $('.fa-asterisk').hide();
 }
 
 </script>

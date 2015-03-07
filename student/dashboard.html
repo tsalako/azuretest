@@ -118,7 +118,7 @@
                                         <i class="fa fa-file fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><i class="fa report-icon"></i></div>
+                                        <div class="huge"><i class="fa report-icon"></i><i class="fa fa-asterisk fa-spin pull-right"></i></div>
                                         <div class="report-text"></div>
                                     </div>
                                 </div>
@@ -140,7 +140,7 @@
                                         <i class="fa fa-edit fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge assessment-no"></div>
+                                        <div class="huge assessment-no"><i class="fa fa-asterisk fa-spin pull-right"></i></div>
                                         <div class="assessment-text"></div>
                                     </div>
                                 </div>
@@ -228,7 +228,6 @@
 
 <script>
 $(function() {
-    //console.log('here');
     sendRequest('../php/UserService.php',
             loadDashValues,
             'getStudentDashboard',
@@ -252,6 +251,7 @@ var loadDashValues = function(response) {
         $('.assessment-no').text(data.newAssessmentCount);
         $('.assessment-text').text('New Assessments!')
     }
+    $('.fa-asterisk').hide();
 }
 </script>
 

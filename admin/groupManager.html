@@ -120,7 +120,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Group Manager</h1>
+                        <h1 class="page-header">Group Manager
+                            <i class="fa fa-asterisk fa-spin pull-right"></i>
+                        </h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -333,12 +335,14 @@ var loadGroups = function(response) {
     $("button[type=save]").click(function() {
         if(RESET_PROGRAM){
             if(PROGRAM_START){
+                $('.fa-asterisk').show();
                 sendRequest('../php/UserService.php',
                     verifySave,
                     'createGroups',
                     {'groupList':listToGroupListObj(userList)});
             } else {
                 if (confirm('Again. Are you sure? Saving now will reset the system.')) {
+                    $('.fa-asterisk').show();
                     sendRequest('../php/UserService.php',
                         verifySave,
                         'createGroups',
@@ -349,6 +353,7 @@ var loadGroups = function(response) {
             }
             
         } else {
+            $('.fa-asterisk').show();
             sendRequest('../php/UserService.php',
                 verifySave,
                 'modifyGroups',
@@ -356,6 +361,8 @@ var loadGroups = function(response) {
         }
         
     });
+
+    $('.fa-asterisk').hide();
 }
 
 function groupListObjtoList(groupList){
@@ -412,7 +419,8 @@ var verifySave = function(response){
     $(".black-border").removeClass("black-border");
     $("button[type=save]").addClass("disabled");
     window.onbeforeunload = null;
-    alert(response.data);
+    $('.fa-asterisk').hide();
+    //alert(response.data);
 }
 
 </script>

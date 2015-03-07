@@ -134,6 +134,7 @@ p {
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 Student details for:
+                                <i class="fa fa-asterisk fa-spin"></i>
                                 <label class="username"></label>
                             </div>
                             <div class="panel-body">
@@ -291,6 +292,7 @@ p {
 <script>
 
 $(function() {
+    $('.fa-asterisk').hide();
     sendRequest('../php/UserService.php',
             populateStudentAutocomplete,
             'getAllStudents');
@@ -305,6 +307,8 @@ var populateStudentAutocomplete = function(response){
     $( "#userAutocomplete" ).autocomplete({
       source: usernames,
       select: function( event, ui ) {
+        $('.fa-asterisk').show();
+        $('.username').text('');
         sendRequest('../php/UserService.php',
             loadForm,
             'getStudentDetails',
@@ -320,7 +324,7 @@ var loadForm = function(response) {
     var authorAssessments = data.authorAssessments;
     var assessorAssessments = data.assessorAssessments;
 
-    $('.username').text(student.username);
+    
     $('#first').text(student.fName == null ? 'N/A' : student.fName);
     $('#last').text(student.lName == null ? '' : student.lName);
     $('#groupNo').text(convertGroupNo(student.groupNo));
@@ -340,6 +344,10 @@ var loadForm = function(response) {
 
     loadTable('author-table',authorAssessments);
     loadTable('assessor-table',assessorAssessments);
+
+    $('.username').text(student.username);
+    $('.fa-asterisk').hide();
+
 }
 
 var loadTable = function(tableName, rowDataList){
