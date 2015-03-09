@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Review Llama</title>
+		<link rel = "stylesheet" href="css/main.css">
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	</head>
+	<body>
+		<div id = "header">
+			<h1>Review Llama - Slowly breaking it down</h1>
+		</div>
+
+		<!-- USER ADD/EDIT -->
+		<!--
+		<div class = "upperMargin col-sm-12">
+		<h3>User Add/Edit</h3>
+		<form class="col-sm-4">
+			<div class="form-group">
+				<label for="userListU">User List (leave on Add to add or select from the list to edit)</label>
+				<select class="form-control" id="userListU">
+				  <option>Add</option>
+				</select>
+			</div>
+			<div class="form-group">
+		    	<label for="usernameU">Username</label>
+		    	<input type="text" class="form-control" id="usernameU" placeholder="Enter username">
+		    </div>
+		    <div class="form-group">
+			    <label for="passwordU">Password</label>
+			    <input type="password" class="form-control" id="passwordU" placeholder="Password">
+			</div>
+			<div class="form-group">
+		    	<label for="fnameU">First Name</label>
+		    	<input type="text" class="form-control" id="fnameU" placeholder="Enter first name">
+		    </div>
+		    <div class="form-group">
+		    	<label for="lnameU">Last Name</label>
+		    	<input type="text" class="form-control" id="lnameU" placeholder="Enter last name">
+		    </div>
+		    <div class="form-group">
+				<label for="userSel">User Type</label>
+				<label class="radio-inline">
+				  <input type="radio" name="userSel" id="userSel1" value="student"> Student
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="userSel" id="userSel2" value="admin"> Admin
+				</label>
+			</div>
+		    <button type="button" class="btn btn-default" onclick="updateReport()">Submit</button>
+		</form>
+	    </div>
+		-->
+
+	    
+
+	    <!-- REPORT ADD/EDIT -->
+	    <div class = "upperMargin col-sm-12">
+		<h3 class = "upperMargin ">Report Add/Edit</h3>
+		<form class="col-sm-4">
+			<div class="form-group">
+				<label for="reportListR">Report List</label>
+				<select class="form-control" id="reportListR">
+				  <option>Add</option>
+				</select>
+			</div>
+			<div class="form-group">
+		    	<label for="titleR">Title</label>
+		    	<input type="text" class="form-control" id="titleR" placeholder="Enter title">
+		    </div>
+		    <div class="form-group">
+		    	<label for="bodyR">Body</label>
+		    	<textarea type="text" class="form-control" id="bodyR" placeholder="Enter body"></textarea>
+		    </div>
+		    <div class="form-group">
+		    	<label for="refR">References</label>
+		    	<input type="text" class="form-control" id="refR" placeholder="Enter references, seperated by commas">
+		    </div>
+			<button type="button" class="btn btn-default" onclick="updateReport()">Submit</button>
+		</form>
+	    </div>    
+
+		<div class = "col-sm-4" id="footer">You've reached end of page.</div>
+
+
+
+		<!-- SCRIPTS -->
+		<script src = "js/jquery-2.1.3.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<script src = "js/util.js"></script>
+	</body>
+</html>
+
+<!-- INITIAL LOAD SCRIPT -->
+<script>
+$( document ).ready(function() {
+ 	initialLoad();
+});
+
+var initialLoad = function () {
+	//user Init
+	sendRequest('php/ReportService.php',
+			reportInit,
+			'getAllReports');
+
+	//group Init
+	//report Init
+	//assessment Init
+}
+</script>
+
+<!-- USER ADD/EDIT SCRIPT -->
+<script>
+
+var reports, reportGlobal;
+
+$( "#reportListR" ).change(function() {
+  //console.log($(this)[0].selectedIndex);
+  //console.log(users[$(this)[0].selectedIndex]);
+
+  if($(this).val() == 'Add'){
+  	$('#titleR').val('');
+	$('#bodyR').val('');
+	$('#refR').val('');
+	
+  } else {
+	reportGlobal = reports[$(this)[0].selectedIndex-1];
+	$('#titleR').val(reportGlobal.title);
+	$('#bodyR').val(reportGlobal.body);
+	$('#refR').val(reportGlobal.reference);
+  }
+  
+});
+
+var updateReport = function () {
+	var params = {'title' : $('#titleR').val(), 
+				'body' : $('#bodyR').val(),
+				'reference' : $('#refR').val()};
+	var functionName;
+
+	if($('#reportListR').val() == 'Add'){
+		functionName = 'addReport';
+	} else {
+		params['id'] = reportGlobal.groupNo;
+		functionName = 'editReport';
+	}
+	sendRequest('php/ReportService.php',
+			initialLoad,
+			functionName,
+			params);
+
+	clearFields();
+}
+
+var clearFields = function () {
+	/*Clear Fields*/
+	$('#titleR').val('');
+	$('#bodyR').val('');
+	$('#refR').val('');
+  	$("#reportListR option[value='temp']").remove();
+}
+
+var reportInit = function (response) {
+	var $reportList = $('#reportListR');
+	reports = [];
+	$.each(response.data, function(i, report) {
+				reports.push(report);
+				$reportList.append('<option value="temp">' + report.groupNo + '</option>');
+			});
+	console.log(response.status);
+}
+
+</script>
+

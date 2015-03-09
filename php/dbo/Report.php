@@ -15,6 +15,29 @@ class Report{
 	public function getData(){
 		return $this->data;
 	}
+	
+	public static function addReport($db, $groupNo, $title, $body, $reference){
+		$queryInsert = "INSERT INTO 
+							report (`groupNo`,`title`, `body`, `reference`) 
+					  	VALUES 
+					  		(NULL, '".$title."', '".$body."', '".$reference."')
+					  	";
+		$db->exec($queryInsert);
+	}
+	
+	public static function editReport($db, $groupNo, $title, $body, $reference){
+		$queryUpdate = "UPDATE 
+							report
+						SET
+							title = '".$title."',
+							body = '".$body."',
+							reference = '".$reference."'
+						WHERE
+							groupNo = '".$groupNo."'
+						";
+		
+		$db->exec($queryUpdate);
+	}
 
 	public static function getReportByGroupNo($db, $groupNo) {
 		$query = "SELECT
