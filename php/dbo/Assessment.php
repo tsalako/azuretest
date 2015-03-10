@@ -226,7 +226,7 @@ class Assessment{
 					AND
 						reportNo = '".$reportNo."'
 						";
-		$db->exec($query);
+		return $db->exec($query);
 
 
 	}
@@ -237,7 +237,7 @@ class Assessment{
 				  VALUES
 				  	('".$reportNo."','".$groupNo."')
 				  ";
-	    $db->exec($query);
+	    return $db->exec($query);
 	}
 
 }

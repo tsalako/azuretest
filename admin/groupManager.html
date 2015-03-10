@@ -197,6 +197,9 @@
 </body>
 
 <script>
+var RESET_PROGRAM = false;
+var PROGRAM_START = false;
+
 $(function() {
     sendRequest('../php/UserService.php',
             loadGroups,
@@ -204,12 +207,10 @@ $(function() {
 });
 
 var loadGroups = function(response) {
-    var RESET_PROGRAM = false;
-
     var listObj = groupListObjtoList(response.data);
     var userList = listObj.userList;
     var groupNames = listObj.groupNames;
-    var PROGRAM_START = listObj.PROGRAM_START;
+    PROGRAM_START = listObj.PROGRAM_START;
 
     var colors = ["blue", "green", "yellow", "red"];
     var count = 0;
@@ -418,6 +419,8 @@ var displayListElements = function(list){
 var verifySave = function(response){
     $(".black-border").removeClass("black-border");
     $("button[type=save]").addClass("disabled");
+    PROGRAM_START = false;
+    RESET_PROGRAM = false;
     window.onbeforeunload = null;
     $('.fa-asterisk').hide();
     //alert(response.data);

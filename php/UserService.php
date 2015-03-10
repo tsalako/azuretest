@@ -14,6 +14,8 @@ header("content-type:application/json");
 if(isset($_POST['function'])){
 
 	$db = new DB();
+
+	
 	
 	switch($_POST['function']){
 		case 'getStudentDashboard':
@@ -86,8 +88,8 @@ if(isset($_POST['function'])){
 		break;
 		case 'addUser':
 			$params = $_POST['params'];
-			User::addUser($db, $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
-			echo json_encode('successfully added');
+			$errorBool = User::addUser($db, $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
+			echo $errorBool ? json_encode('successfully added') : die("failed add");
 		break;
 		case 'getStudentDetails':
 			$return = array();
@@ -136,8 +138,9 @@ if(isset($_POST['function'])){
 		break;
 		case 'editUser':
 			$params = $_POST['params'];
-			User::editUser($db, $params['id'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
-			echo json_encode('successfully editted');
+			$errorBool = User::editUser($db, $params['id'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
+			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
+			
 		break;
 		case 'getAllGroups':
 			$groups = Group::getAllGroups($db);
@@ -150,26 +153,26 @@ if(isset($_POST['function'])){
 		case 'getGroupByNo':
 			$params = $_POST['params'];
 			$group = Group::getGroupByNo($db, $params['groupNo']);
-			return json_encode($group->getData());
+			echo json_encode($group->getData());
 		break;
 		case 'modifyGroups':
 			$params = $_POST['params'];
-			Group::modifyGroups($db, $params['groupList']);
-			echo json_encode('successfully modified');
+			$errorBool = Group::modifyGroups($db, $params['groupList']);
+			echo $errorBool ? json_encode('successfully modified') : die("failed modify");
 		break;
 		case 'createGroups':
 			$params = $_POST['params'];
-			Group::createGroups($db, $params['groupList']);
-			echo json_encode('successfully created');
+			$errorBool = Group::createGroups($db, $params['groupList']);
+			echo $errorBool ? json_encode('successfully created') : die("failed creation");
 		break;
 		default:
-			echo "Error - No function called '".$_POST['function']."'";
+			echo die("Error - No function called '".$_POST['function']."'");
 			exit();
 		break;
 	}
 	exit();
 }else{
-	echo "Bad parameters";
+	echo die("Bad parameters");
 	exit();
 }
 

@@ -7,14 +7,15 @@ header("content-type:application/json");
 
 if(isset($_POST['function'])){
 	$db = new DB();
+
 	
 	switch($_POST['function']){
 
 
 		case 'addReport':
 			$params = $_POST['params'];
-			Report::addReport($db, $params['title'], $params['body'], $params['reference']);
-			echo json_encode('Successfully added');
+			$errorBool = Report::addReport($db, $params['title'], $params['body'], $params['reference']);
+			echo $errorBool ? json_encode('Successfully added') : die("failed add");
 		break;
 
 
@@ -30,19 +31,19 @@ if(isset($_POST['function'])){
 		
 		case 'editReport':
 			$params = $_POST['params'];
-			Report::editReport($db, $params['id'], $params['title'], $params['body'], $params['reference']);
-			echo json_encode('successfully editted');
+			$errorBool = Report::editReport($db, $params['id'], $params['title'], $params['body'], $params['reference']);
+			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 		break;
 
 
 		default:
-			echo "Error - No function called '".$_POST['function']."'";
+			echo die("Error - No function called '".$_POST['function']."'");
 			exit();
 		break;
 	}
 	exit();
 }else{
-	echo "Bad parameters";
+	echo die("Bad parameters");
 	exit();
 }
 

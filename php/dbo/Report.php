@@ -22,7 +22,7 @@ class Report{
 					  	VALUES 
 					  		(NULL, '".$title."', '".$body."', '".$reference."')
 					  	";
-		$db->exec($queryInsert);
+		return $db->exec($queryInsert);
 	}
 	
 	public static function editReport($db, $groupNo, $title, $body, $reference){
@@ -36,7 +36,7 @@ class Report{
 							groupNo = '".$groupNo."'
 						";
 		
-		$db->exec($queryUpdate);
+		return $db->exec($queryUpdate);
 	}
 
 	public static function getReportByGroupNo($db, $groupNo) {

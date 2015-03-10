@@ -24,7 +24,7 @@ class User{
 					  	VALUES 
 					  		(NULL, '".$type."', '".$username."', '".$groupNo."')
 					  	";
-		$db->exec($queryInsert);
+		return $db->exec($queryInsert);
 	}
 
 	public static function addUser($db, $username, $password, $type, $first, $last){
@@ -34,7 +34,7 @@ class User{
 					  	VALUES 
 					  		(NULL, '".$password."', '".$type."', '".$username."','".$first."','".$last."')
 					  	";
-		$db->exec($queryInsert);
+		return $db->exec($queryInsert);
 	}
 
 	public static function editUser($db, $userNo, $username, $password, $type, $first, $last){
@@ -63,7 +63,7 @@ class User{
 							userNo = '".$userNo."'
 						";
 		}
-		$db->exec($queryUpdate);
+		return $db->exec($queryUpdate);
 	}
 
 	public static function setUserGroupNo($db, $username, $groupNo){
@@ -74,7 +74,7 @@ class User{
 						WHERE
 							username = '".$username."'
 						";
-		$db->exec($queryUpdate);
+		return $db->exec($queryUpdate);
 	}
 
 	public static function setUsersGroupNos($db, $username1, $username2, $username3, $groupNo){
@@ -85,7 +85,7 @@ class User{
 						WHERE
 							username IN ('".$username1."','".$username2."','".$username3."')
 						";
-		$db->exec($queryUpdate);
+		return $db->exec($queryUpdate);
 	}
 
 	public static function getUserByUserNo($db, $userNo){
@@ -185,7 +185,7 @@ class User{
 					user 
 				  WHERE type = 'student'
 						";
-		$db->exec($query);
+		return $db->exec($query);
 	}
 
 	public static function getSessionUser($db) {

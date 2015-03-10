@@ -28,7 +28,7 @@ function sendRequest (urlInput, callback, functionName, params) {
 			callback({'data': data, 'status' : status});
 		},
 		error: function(xhr, desc, err) {
-			callback({'xhr': xhr, 'status': desc, 'error': err});
+			errorCallback({'xhr': xhr, 'status': desc, 'error': err});
 		}
 	});
 }
@@ -59,6 +59,10 @@ function revertGroupNo(convertedGroupNo){
 	   }
 	}
 	return null;
+}
+
+var errorCallback = function (response) {
+	alert("An error had occurred. Please reload the page. \n\nMessage: " + response.xhr.responseText);
 }
 
 var basicCallback = function (responce) {

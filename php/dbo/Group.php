@@ -58,28 +58,34 @@ class Group{
 	}
 
 	public static function modifyGroups($db, $groupList){
+		$errorBool = 1;
 		foreach ($groupList as $group){
-			User::setUsersGroupNos($db, $group['usernames'][0],$group['usernames'][1],$group['usernames'][2], $group['groupNo']);
+			$errorBool = $errorBool && User::setUsersGroupNos($db, $group['usernames'][0],$group['usernames'][1],$group['usernames'][2], $group['groupNo']);
 		}
+		return $errorBool;
 	}
 
 	public static function createGroups($db, $groupList){
+		$errorBool = 1;
+
 		//must truncate all tables with th exception of user where the admins will be preserved
 		$queryTruncGroup = "TRUNCATE groups";
 		$db->exec($queryTruncGroup);
 
-		User::deleteCurrentStudents($db);
+		$errorBool = $errorBool && User::deleteCurrentStudents($db);
 		foreach ($groupList as $group){
 			$queryInsert = "INSERT INTO 
 							groups (`groupNo`, `assignedBy`) 
 					  	VALUES 
 					  		('".$group['groupNo']."', '".$group['assignedBy']."')";
-	    	$db->exec($queryInsert);
+	    	$errorBool = $errorBool && $db->exec($queryInsert);
 
 			foreach ($group['usernames'] as $username){
-				User::addUserBasic($db, $username, $group['groupNo'], 'student');
+				$errorBool = $errorBool && User::addUserBasic($db, $username, $group['groupNo'], 'student');
 			}
 		}
+
+		return $errorBool;
 	}
 
 	public static function getGroupStats($db, $groupNo) {

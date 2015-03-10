@@ -14,14 +14,16 @@ Assessement.php constructor.
 
 if(isset($_POST['function'])){
 	$db = new DB();
+
 	
 	switch($_POST['function']){
 		case 'setNewAssignments':
+			$errorBool = 1;
 			$params = $_POST['params'];
 			foreach ($params['newAssignmentList'] as $groupAssignedTo){
-				Assessment::assignAssessment($db, $params['groupNo'], $groupAssignedTo);
+				$errorBool = $errorBool && Assessment::assignAssessment($db, $params['groupNo'], $groupAssignedTo);
 			}
-			echo json_encode('successfully assigned');
+			echo $errorBool ? json_encode('successfully assigned') : die("failed assignment");
 		break;
 		case 'getUndoneAssessmentsByGroupNo':
 			$params = $_POST['params'];
@@ -64,25 +66,25 @@ if(isset($_POST['function'])){
 		break;
 		case 'setAssessment':
 			$params = $_POST['params'];
-			Assessment::setAssessment($db, $params['reportNo'], $params['groupNo'], 
+			$errorBool = Assessment::setAssessment($db, $params['reportNo'], $params['groupNo'], 
 				$params['structureGrade'], $params['strengthGrade'], $params['formatGrade'], $params['qualityGrade'], 
 				$params['averageGrade'], $params['comment']);
 
-			echo json_encode('successfully editted');
+			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 		break;
 		case 'assignAssessment':
 			$params = $_POST['params'];
-			Assessment::assignAssessment($db, $params['reportNo'], $params['groupNo']);
-			echo json_encode('successfully assigned');
+			$errorBool = Assessment::assignAssessment($db, $params['reportNo'], $params['groupNo']);
+			echo $errorBool ? json_encode('successfully assigned') : die("failed assignment");
 		break;
 		default:
-			echo "Error - No function called '".$_POST['function']."'";
+			echo die("Error - No function called '".$_POST['function']."'");
 			exit();
 		break;
 	}
 	exit();
 }else{
-	echo "Bad parameters";
+	echo die("Bad parameters");
 	exit();
 }
 
