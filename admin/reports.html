@@ -296,7 +296,7 @@ var populateReportsDiv = function(response) {
 
         $('#group' + groupNo + ' .title').text(report.title);
         $('#group' + groupNo + ' .sub-report').text(report.body.substring(0,450));
-        $('#group' + groupNo + ' .full-report').text(report.body);
+        $('#group' + groupNo + ' .full-report').html(report.body +'<br /><br />'+report.reference);
 
         $('#group' + groupNo + ' .report-form').hide();
         $('#group' + groupNo + ' .save-assign-footer').hide();

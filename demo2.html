@@ -281,7 +281,7 @@ $( "#userListU" ).change(function() {
 
   	$("input:radio[name=userSel]").attr('disabled',false);
   } else {
-	userGlobal = users[$(this)[0].selectedIndex-1];
+	userGlobal = users[$(this).find('option:selected').index()-1];
 	$('#usernameU').val(userGlobal.username);
 	$('#fnameU').val(userGlobal.fName);
 	$('#lnameU').val(userGlobal.lName);
