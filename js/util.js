@@ -62,6 +62,7 @@ function revertGroupNo(convertedGroupNo){
 }
 
 var errorCallback = function (response) {
+	console.log(response);
 	alert("An error had occurred. Please reload the page. \n\nMessage: " + response.xhr.responseText);
 }
 

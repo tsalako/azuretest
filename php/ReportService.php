@@ -8,7 +8,6 @@ header("content-type:application/json");
 if(isset($_POST['function'])){
 	$db = new DB();
 
-	
 	switch($_POST['function']){
 
 

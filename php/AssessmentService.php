@@ -14,7 +14,6 @@ Assessement.php constructor.
 
 if(isset($_POST['function'])){
 	$db = new DB();
-
 	
 	switch($_POST['function']){
 		case 'setNewAssignments':

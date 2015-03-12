@@ -89,7 +89,8 @@ class Group{
 	}
 
 	public static function getGroupStats($db, $groupNo) {
-		$query = "SELECT 
+		$row = array();
+		$queryReport = "SELECT 
 						z.rank, 
 						z.reportNo, 
 						z.avg 
@@ -114,11 +115,77 @@ class Group{
 					WHERE 
 						z.reportNo = '{$groupNo}'
 					";
-			$stmt = $db->prepare($query);
+			$stmt = $db->prepare($queryReport);
 			$stmt->execute();
+			$result = $stmt->fetch();
+			if(!$result){
+				$row['avg'] = null;
+				$row['rank'] = null;
+			} else {
+				$row['avg'] = $result['avg'];
+				$row['rank'] = $result['rank'];
+			}
+
+			$querySubmittedDate = "SELECT 
+									uploadedOn
+								   FROM
+								   	 report
+								   WHERE
+								   	 groupNo = '{$groupNo}'
+									";
+			$stmt = $db->prepare($querySubmittedDate);
+			$stmt->execute();
+			$result = $stmt->fetch();
+			$row['uploadedOn'] = !$result ? null : $result['uploadedOn'];
+
+			//original query
+			/*
+				$queryAssessment = "SELECT (
+									SELECT COUNT( * )
+									FROM assessment
+									WHERE groupNo = '{$groupNo}'
+									) AS totalCount, (
+
+									SELECT COUNT( * )
+									FROM assessment
+									WHERE assessedOn IS NOT NULL
+									AND groupNo = '{$groupNo}'
+									) AS writtenCount
+									FROM assessment";
+			*/
+			$queryAssessment = "SELECT 
+									COUNT(*) as total, 
+									COUNT(assessedOn) as written 
+								FROM 
+									assessment 
+								WHERE groupNo = '{$groupNo}'
+								";
+			$stmt = $db->prepare($queryAssessment);
+			$stmt->execute();
+			$result = $stmt->fetch();
+			$row['written'] = $result['written'];
+			$row['total'] = $result['total'];
+
+			
 
 			//returns object with avg, rank, and reportNo fields (see use example in UserService.php)
-			return $stmt->fetch();
+			return $row;
+	}
+
+	public static function getAllGroupsStats($db) {
+		$groupStats = array();
+		$query = "SELECT 
+					groupNo,
+					name 
+				FROM groups";
+		$stmt = $db->prepare($query);
+		$stmt->execute();
+		while($row = $stmt->fetch()){
+			$groupStats[$row['groupNo']] = Group::getGroupStats($db, $row['groupNo']);
+			$groupStats[$row['groupNo']]['name'] = $row['name'];
+			$groupStats[$row['groupNo']]['groupNo'] = $row['groupNo'];
+		}
+		return $groupStats;
 	}
 
 }

@@ -15,9 +15,11 @@ if(isset($_POST['function'])){
 
 	$db = new DB();
 
-	
-	
 	switch($_POST['function']){
+		case 'getAllGroupStats':
+			$return = Group::getAllGroupsStats($db);
+			echo json_encode($return);
+		break;
 		case 'getStudentDashboard':
 			$return = array();
 			$params = $_POST['params'];
@@ -40,7 +42,7 @@ if(isset($_POST['function'])){
 									FROM 
 										assessment 
 									WHERE 
-										groupNo = '{$params['groupNo']}' 
+										groupNo = '{$params['groupNo']}'
 									AND 
 										assessedOn IS NULL
 									";
