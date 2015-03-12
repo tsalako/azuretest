@@ -10,6 +10,7 @@ class User{
 		$this->data['fName'] = $user['fName'];
 		$this->data['lName'] = $user['lName'];
 		$this->data['groupNo'] = isset($user['groupNo']) ? $user['groupNo'] : null;
+		$this->data['groupName'] = isset($user['groupName']) ? $user['groupName'] : null;
 		$this->data['isAdmin'] = $user['type'] == 'admin';
 		$this->data['isStudent'] = $user['type'] == 'student';		
 	}
@@ -66,6 +67,51 @@ class User{
 		return $db->exec($queryUpdate);
 	}
 
+	public static function editUserField($db, $userNo, $field, $data){
+		if($field == 'password') {
+			$currPass = sha1($data['currPass']);
+			$newPass = sha1($data['newPass']);
+			$queryUpdate = "UPDATE 
+							user
+						SET
+							password = '".$newPass."'
+						WHERE
+							userNo = '".$userNo."'
+						AND
+							password = '".$currPass."'
+						";
+		} else if($field == 'name') {
+			$queryUpdate = "UPDATE 
+							user
+						SET
+							fName = '".$data['fName']."',
+							lName = '".$data['lName']."'
+						WHERE
+							userNo = '".$userNo."'
+						";
+		} else if($field == 'groupName') {
+			$queryUpdate = "UPDATE 
+							user U, groups G
+						SET
+							G.name = '".$data."'
+						WHERE
+							U.userNo = '".$userNo."'
+						AND
+							U.groupNo = G.groupNo
+						";
+		} else {
+			$queryUpdate = "UPDATE 
+							user
+						SET
+							".$field." = '".$data."'
+						WHERE
+							userNo = '".$userNo."'";
+		}
+
+
+		return $db->exec($queryUpdate);
+	}
+
 	public static function setUserGroupNo($db, $username, $groupNo){
 		$queryUpdate = "UPDATE 
 							user
@@ -95,9 +141,14 @@ class User{
 						U.type, 
 						U.fName, 
 						U.lName,
-						U.groupNo
+						U.groupNo,
+						G.name as groupName
 					FROM 
 						user U
+					LEFT JOIN 
+						groups G 
+					ON 
+						U.groupNo = G.groupNo
 					WHERE
 						U.userNo = '".$userNo."'
 					";

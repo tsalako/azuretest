@@ -122,6 +122,11 @@ if(isset($_POST['function'])){
 
 			echo json_encode($return);
 		break;
+		case 'getUserByUserNo' :
+			$params = $_POST['params'];
+			$return = User::getUserByUserNo($db, $params['userNo']);
+			echo json_encode($return->getData());
+		break;
 		case 'getAllUsers':
 			$users = User::getAllUsers($db);
 			$return = array();			
@@ -140,7 +145,13 @@ if(isset($_POST['function'])){
 		break;
 		case 'editUser':
 			$params = $_POST['params'];
-			$errorBool = User::editUser($db, $params['id'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
+			$errorBool = User::editUser($db, $params['userNo'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
+			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
+			
+		break;
+		case 'editUserField':
+			$params = $_POST['params'];
+			$errorBool = User::editUserField($db, $params['userNo'], $params['type'], $params['data']);
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 			
 		break;

@@ -310,7 +310,7 @@ var updateUser = function () {
 	if($('#userListU').val() == 'Add'){
 		functionName = 'addUser';
 	} else {
-		params['id'] = userGlobal.userNo;
+		params['userNo'] = userGlobal.userNo;
 		functionName = 'editUser';
 	}
 	sendRequest('php/UserService.php',
