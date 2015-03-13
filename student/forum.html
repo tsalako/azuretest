@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Review Llama</title>
+
+    <link rel="shortcut icon" href="../media/kuzco_cursed.png">
+    
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="../css/main.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10 yellow-div bottom-panel">
+                <h1 class="col-lg-4">
+                    <a class="forum-nav" href="">Group Forum</a>
+                    <a class="home-nav" href="dashboard.html"><i class="fa fa-home"></i></a>
+                </h1>
+                <div class="col-lg-8 upperMargin form-inline">
+                    <input type="text" class="form-control" id="searchBox" placeholder="Search a topic">
+                    <button type="submit" class="btn btn-default ">Search</button>
+                </div>
+                
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10 thread-list panel">
+                <div class="row upperMargin"></div>
+                <div class="row thread">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Title
+                                <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <p>A Little Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+                <div class="row thread">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Title
+                                <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <p>A Little Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+                <div class="row thread">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Title
+                                <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <p>A Little Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+                <div class="row thread">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Title
+                                <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <p>A Little Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/sb-admin-2.js"></script>
+
+    <!-- Util Javascript -->
+    <script src = "../js/util.js"></script>
+
+</body>
+
+<script>
+$(function() {
+    $('.forum-nav').attr('href', 'forum.html?groupNo=5');
+
+    var groupNo = $.urlParam('groupNo');
+    var search = $.urlParam('search');
+    console.log(groupNo);
+    console.log(unescape(search));
+
+
+    $('.right').click(function(){
+        console.log($(this).parents().eq(3));
+        window.location.href = 'thread.html?threadNo=5';
+    });
+
+    $('button[type=submit]').click(function(){
+        var searchText = $('#searchBox').val().trim();
+        window.location.href = 'forum.html?groupNo=5&search=' + searchText;
+    });
+});
+</script>
+</html>

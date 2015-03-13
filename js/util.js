@@ -19,6 +19,19 @@ var convertMap = {1:1,
 				  181:19,
 				  191:20};
 
+/*
+Allow for easily parsing url parameters (forum.html, thread.html)
+*/
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
+
 function sendRequest (urlInput, callback, functionName, params) {
 	$.ajax({
 		url: urlInput,

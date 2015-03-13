@@ -12,6 +12,18 @@ grey/gray - #999999
 	color: #fff;
 }*/
 
+#searchBox {
+    width:80%;
+}
+
+.thread-list {
+    background: white;
+}
+
+.forum-nav, .forum-nav:hover, .home-nav, .home-nav:hover {
+    color: white;
+}
+
 #settings-table {
     border-top: 1px solid gray;
     border-bottom: 1px solid gray;
