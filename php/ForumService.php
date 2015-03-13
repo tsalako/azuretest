@@ -36,32 +36,33 @@ if(isset($_POST['function'])){
 		break;
 		case 'getPostListByThreadNo':
 			$params = $_POST['params'];
+			$return['thread'] = Thread::getThreadByThreadNo($db, $params['threadNo'])->getData();
+
 			$posts = Post::getPostListByThreadNo($db, $params['threadNo']);
-			$return = array();			
+			$return['posts'] = array();
 			foreach ($posts as $post){
-				array_push($return, $post->getData());
+				array_push($return['posts'], $post->getData());
 			}
 			echo json_encode($return);
 		break;
 		case 'startThread':
 			$params = $_POST['params'];
-			$errorBool = Thread::startThread($db, 
+			$thread = Thread::startThread($db, 
 				$params['groupNo'],
 				$params['creator'],
-				$params['lastEditor'],
+				$params['creatorName'],
 				$params['title'],
 				$params['description']);
-			echo $errorBool ? json_encode('thread started') : die("thread start fail");
+			echo json_encode($thread->getData());
 		break;
 		case 'addPost':
 			$params = $_POST['params'];
 			//update thread fields as well
-			$errorBool = Post::addPost($db,
-				 $params['groupNo'],
+			$post = Post::addPost($db,
 				 $params['threadNo'],
 				 $params['creator'],
 				 $params['comment']);
-			echo $errorBool ? json_encode('successfully posted') : die("failed post");
+			echo json_encode($post->getData());
 		break;
 		default:
 			echo die("Error - No function called '".$_POST['function']."'");

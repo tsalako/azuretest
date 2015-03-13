@@ -89,7 +89,7 @@
                             <a href="marks.html"><i class="fa fa-calculator fa-fw"></i> My Marks</a>
                         </li>
                         <li>
-                            <a href="forum.html"><i class="fa fa-users fa-fw"></i> Da Forum</a>
+                            <a href="#" class="forum-href"><i class="fa fa-users fa-fw"></i> Da Forum</a>
                         </li>
                     </ul>
                 </div>
@@ -192,6 +192,8 @@
 
 <script>
 $(function() {
+    $('.forum-href').attr('href', 'forum.html?groupNo=5');
+    
     $("#fileUploaded").change(function() {
 
         //console.log(document.getElementById('fileUploaded').files[0]);

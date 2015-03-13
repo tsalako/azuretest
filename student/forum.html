@@ -46,7 +46,7 @@
                     <a class="home-nav" href="dashboard.html"><i class="fa fa-home"></i></a>
                 </h1>
                 <div class="col-lg-8 upperMargin form-inline">
-                    <input type="text" class="form-control" id="searchBox" placeholder="Search a topic">
+                    <input type="text" class="form-control" id="searchBox" placeholder="Search a thread title or description">
                     <button type="submit" class="btn btn-default ">Search</button>
                 </div>
                 
@@ -61,13 +61,14 @@
                         <div class="col-lg-12">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
-                                    Group 5 (Bungalows) Forum
+                                    Group <label class="nobold-label" id="groupNo"></label> Forum
                                     <span class="pull-right add"><i class="fa fa-plus"></i></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- /.row -->
+                    <label class="results-string">Search Results for: '<em></em>'</label>
                 </div>
                 <!-- /.thread-header -->
                 <div class="thread-add">
@@ -106,80 +107,7 @@
                     </div>
                 </div>
                 <!-- /.thread-add -->
-                <div class="thread-list">
-                    <div class="row thread">
-                        <div class="col-lg-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    Title
-                                    <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
-                                </div>
-                                <div class="panel-body">
-                                    <p>A Little Description</p>
-                                </div>
-                                <div class="panel-footer">
-                                    ossalako
-                                    <span class="pull-right"><label>Created: </label> 3/12/2015 11:47:32, <label>Last Update: </label> 3/12/2015 11:47:32, <label>Posts: </label> 4</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                    <div class="row thread">
-                        <div class="col-lg-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    Title
-                                    <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
-                                </div>
-                                <div class="panel-body">
-                                    <p>A Little Description</p>
-                                </div>
-                                <div class="panel-footer">
-                                    creator username
-                                    <span class="pull-right"><label>Created: </label>date, <label>Last Update: </label>date, <label>Posts: </label> count</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                    <div class="row thread">
-                        <div class="col-lg-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    Title
-                                    <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
-                                </div>
-                                <div class="panel-body">
-                                    <p>A Little Description</p>
-                                </div>
-                                <div class="panel-footer">
-                                    creator username
-                                    <span class="pull-right"><label>Created: </label>date, <label>Last Update: </label>date, <label>Posts: </label> count</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                    <div class="row thread">
-                        <div class="col-lg-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    Title
-                                    <span class="pull-right right"><i class="fa fa-chevron-right"></i></span>
-                                </div>
-                                <div class="panel-body">
-                                    <p>A Little Description</p>
-                                </div>
-                                <div class="panel-footer">
-                                    creator username
-                                    <span class="pull-right"><label>Created: </label>date, <label>Last Update: </label>date, <label>Posts: </label> count</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
+                <div class="thread-list"></div>
                 <!-- /.thread-list -->
             </div>
             <!-- /.col-lg-12 -->
@@ -208,33 +136,38 @@
 
 <script>
 $(function() {
-    $('.thread-add').hide();
-    $('.forum-nav').attr('href', 'forum.html?groupNo=5');
-
-    var groupNo = $.urlParam('groupNo');
-    var search = unescape($.urlParam('search'));
-    console.log(groupNo);
-    console.log(search);
-
-    if(search == null){
-        sendRequest('../php/ForumService.php',
-            basicCallback,
-            'getThreadListByGroupNo',
-            {'groupNo' : 41});
-    } else {
-        sendRequest('../php/ForumService.php',
-            basicCallback,
-            'getSearchThreadList',
-            {'groupNo' : 41,
-             'searchString':search});
-    }
     
 
-    $('.right').click(function(){
-        console.log($(this).parents().eq(3));
-        window.location.href = 'thread.html?threadNo=5';
-    });
+    var creatorUserNo = 10351;
+    var creatorName = 'Hansolo'
+    var groupNo = $.urlParam('groupNo');
+    var search = $.urlParam('search');
+    var searchString = unescape(search).toLowerCase();
+    console.log(groupNo);
+    console.log(searchString);
 
+    $('.thread-add').hide();
+    $('.results-string').hide();
+    $('.forum-nav').attr('href', 'forum.html?groupNo='+groupNo);
+    $('#groupNo').text(groupNo);
+
+    if(search == null){
+        console.log('basic');
+        sendRequest('../php/ForumService.php',
+            populateThreadList,
+            'getThreadListByGroupNo',
+            {'groupNo' : revertGroupNo(groupNo)});
+    } else {
+        console.log('search');
+        $('.results-string em').text(searchString);
+        $('.results-string').show();
+        sendRequest('../php/ForumService.php',
+            populateThreadList,
+            'getSearchThreadList',
+            {'groupNo' : revertGroupNo(groupNo),
+             'searchString':searchString});
+    }
+    
     $('.add').click(function(){
         $('.thread-add').show();
         $('html, body').animate({
@@ -251,40 +184,14 @@ $(function() {
     $('.save').click(function(){
         //send
         sendRequest('../php/ForumService.php',
-            basicCallback,
+            addThread,
             'startThread',
-            {'groupNo' : 41,
-             'creator':10331,
-             'lastEditor':10331,
+            {'groupNo' : revertGroupNo(groupNo),
+             'creator': creatorUserNo,
+             'creatorName':creatorName,
              'title': $('.thread-title').val(),
              'description': $('.thread-desc').val()});
 
-        var date = new Date($.now()).toLocaleString();
-        console.log(date);
-        $('.thread-list').prepend('<div class="row thread">'+
-                        '<div class="col-lg-12">'+
-                            '<div class="panel panel-primary">'+
-                                '<div class="panel-heading">'+
-                                    $('.thread-title').val()+
-                                    '<span class="pull-right right"><i class="fa fa-chevron-right"></i></span>'+
-                                '</div>'+
-                                '<div class="panel-body">'+
-                                    '<p>'+$('.thread-desc').val()+'</p>'+
-                                '</div>'+
-                                '<div class="panel-footer">'+
-                                    'ossalako'+
-                                    '<span class="pull-right">'+
-                                        '<label>Created: </label> '+date+', '+
-                                        '<label>Last Update: </label> '+date+', '+
-                                        '<label>Posts: </label> 0</span>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<!-- /.row -->');
-
-        console.log($('.thread-desc').val());
-        console.log($('.thread-title').val());
         $('.thread-desc').val('');
         $('.thread-title').val('');
         $('.thread-add').hide();
@@ -293,16 +200,54 @@ $(function() {
                 scrollTop: $('.thread-list').offset().top - 10
             },350);
 
-        $('.right').click(function(){
-            console.log($(this).parents().eq(3));
-            window.location.href = 'thread.html?threadNo=5';
-        });
+        
     });
 
     $('button[type=submit]').click(function(){
         var searchText = $('#searchBox').val().trim();
-        window.location.href = 'forum.html?groupNo=5&search=' + searchText;
+        window.location.href = 'forum.html?groupNo='+groupNo+'&search=' + searchText;
     });
 });
+
+var addThread = function(response){
+    var threadObj = response.data;
+    console.log(threadObj);
+
+    var date = new Date(threadObj.createdOn.date).toLocaleString();
+    console.log(date);
+    $('.thread-list').prepend('<div class="row thread">'+
+                        '<div class="col-lg-12">'+
+                            '<div class="panel panel-primary">'+
+                                '<div class="panel-heading">'+
+                                    ''+threadObj.title+' - <em id="createName">'+threadObj.creatorName+'</em>'+
+                                    '<span class="pull-right right"><i class="fa fa-chevron-right"></i></span>'+
+                                '</div>'+
+                                '<div class="panel-body desc">'+
+                                    threadObj.description+
+                                '</div>'+
+                                '<div class="panel-footer">'+
+                                    '<label>Updated:</label>'+ 
+                                    '<label id="lastEditor" class="nobold-label"><em>&nbsp'+threadObj.lastEditor+'</em></label> - '+
+                                    '<label id="lastUpdate" class="nobold-label">'+date+'</label>'+
+                                    '<span class="pull-right"><label>Posts:</label> <span class="pull-right" id="postCount">&nbsp'+threadObj.postCount+'</span></span>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<!-- /.row -->');
+
+    $('.thread-list').children().eq(0).find('.right').click(function(){
+        console.log(threadObj.threadNo);
+        window.location.href = 'thread.html?threadNo='+threadObj.threadNo;
+    });
+}
+
+var populateThreadList = function(response){
+    var threadList = response.data;
+    $.each(threadList, function(i, threadObj){
+        addThread({'data':threadObj});
+    });
+}
+
 </script>
 </html>

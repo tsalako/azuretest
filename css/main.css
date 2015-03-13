@@ -12,6 +12,10 @@ grey/gray - #999999
 	color: #fff;
 }*/
 
+.nobold-label {
+	font-weight:normal;
+}
+
 #searchBox {
     width:80%;
 }
