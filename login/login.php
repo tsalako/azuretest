@@ -17,6 +17,18 @@
         .hero-unit { background-color: #fff; }
         .center { display: block; margin: 0 auto; }
     </style>
+    
+    
+    <script type="text/javascript">
+	<!--
+	function redirect() {
+	window.location = "register.php"
+
+	}
+	//-->
+	</script>
+
+
 </head>
 
 <body>
@@ -47,23 +59,23 @@
  
     <form action="login.php" method="post"> 
         
-    <form>
+    <form2>
 
 	<h2>Log In</h2>
-        <input type="text" class="text-field" name="userName" placeholder="Username" value="" /> 
+        <input type="text" class="text-field" name="userName" placeholder="Username" value="" required	 /> 
         
-        <input type="password" class="text-field" name="password" placeholder="Password" value="" /> 
+        <input type="password" class="text-field" name="password" placeholder="Password" value="" required /> 
         
         <input type="submit" class="submit" value="Login" /> 
-        
-        <input type="submit" class="submit1" value="Register" /> 
-        
-        <br>
-        <br>
-        <br><p> Forgot password? </p>
+    
         
         
-    </form>
+        
+    </form2>
+    
+    <br>
+    <br>
+	<a href="mailto:youremailaddress">Forgot Password?</a> 
 </div>
 
 

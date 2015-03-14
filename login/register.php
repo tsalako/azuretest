@@ -31,7 +31,7 @@
       <a class="brand">Wild Llama</a>
       <div class="nav-collapse">
         <ul class="nav pull-right">
-          <li><a href="index.php">About</a></li>
+          <li><a href="index.php">Home</a></li>
           <li><a href="register.php">Register</a></li>
           <li><a href="login.php">Login</a></li>
         </ul>
@@ -43,11 +43,11 @@
 <div class="text-field">
 
  
-  
+ 
    
     <form action="register.php" method="post"> 
-    <form>
-
+   
+  <form>
 	<h2>Register</h2>
         
         <input type="text" name="userName" class="text-field" placeholder="User Name" value="" /> 
@@ -59,6 +59,8 @@
         <input type="text" name="lName" class="text-field" placeholder="Last Name" value="" />
         
         <input type="submit" class="submit" value="Register" /> 
+        
+
     </form>
 </div>
 
