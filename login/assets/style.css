@@ -1,5 +1,5 @@
 body {
-	background-image: url("balloons.jpg") fixed 50% no-repeat white;
+	background-image: url(assets/balloons.jpg) fixed 50% no-repeat white;
 	font-family: Helvetica;
 }
 
@@ -35,7 +35,7 @@ nav a.focus {
 
 form {
 	width: 280px;
-	height: 260px;
+	height: 290px;
 	margin: 200px auto;
 	background: white;
 	border-radius: 3px;
@@ -45,7 +45,19 @@ form {
 }
 
 form.register{																				/* Register form height */
-	height: 360px;
+	height: 440px;
+}
+
+
+form2 {
+	width: 280px;
+	height: 400px;
+	margin: 200px auto;
+	background: white;
+	border-radius: 3px;
+	box-shadow: 0 0 10px rgba(0,0,0, .4); 
+	text-align: center;
+	padding-top: 1px;
 }
 
 form .text-field {																			/* Input fields; Username, Password etc. */

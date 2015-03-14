@@ -1,4 +1,72 @@
-<?php 
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <meta name="description" content="Bootstrap Tab + Fixed Sidebar Tutorial with HTML5 / CSS3 / JavaScript">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
+    <link href="assets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="assets/style.css" rel="stylesheet">
+    
+    
+    <style type="text/css">
+        body { background: url(assets/city.jpg); }
+        .hero-unit { background-color: #fff; }
+        .center { display: block; margin: 0 auto; }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top navbar-default">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand">Wild Llama</a>
+      <div class="nav-collapse">
+        <ul class="nav pull-right">
+          <li><a href="index.php">About</a></li>
+          <li><a href="register.php">Register</a></li>
+          <li><a href="login.php">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-field">
+
+ 
+   <form class="register">
+   
+    <form action="register.php" method="post"> 
+   
+
+	<h2>Register</h2>
+        
+        <input type="text" name="userName" class="text-field" placeholder="User Name" value="" /> 
+        
+        <input type="password" name="password" class="text-field" placeholder="Password" value="" /> 
+        
+        <input type="text" name="fName" class="text-field" placeholder="First Name" value="" />
+        
+        <input type="text" name="lName" class="text-field" placeholder="Last Name" value="" />
+        
+        <input type="submit" class="submit" value="Register" /> 
+    </form>
+</div>
+
+
+
+
+</body>
+</html><?php 
     require("config.php");
     if(!empty($_POST)) 
     { 
@@ -90,59 +158,3 @@
     } 
 ?>
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Login Page</title>
-    <meta name="description" content="Bootstrap Tab + Fixed Sidebar Tutorial with HTML5 / CSS3 / JavaScript">
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="assets/bootstrap.min.js"></script>
-    <link href="assets/bootstrap.min.css" rel="stylesheet" media="screen">
-    <style type="text/css">
-        body { background: url(assets/city.jpg); }
-        .hero-unit { background-color: #fff; }
-        .center { display: block; margin: 0 auto; }
-    </style>
-</head>
-
-<body>
-
-<div class="navbar navbar-fixed-top navbar-default">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand">Register - or some other cool title</a>
-      <div class="nav-collapse">
-        <ul class="nav pull-right">
-          <li><a href="index.php">Return Home</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container hero-unit">
-    <h1>Register</h1> <br /><br />
-    <form action="register.php" method="post"> 
-        <label>Username:</label> 
-        <input type="text" name="userName" value="" /> 
-        <label>Password:</label> 
-        <input type="password" name="password" value="" /> 
-        <label>First Name:</label> 
-        <input type="text" name="fName" value="" />
-        <label>Last Name:</label> 
-        <input type="text" name="lName" value="" />
-        
-        <br /><br />
-        <input type="submit" class="btn btn-info" value="Register" /> 
-    </form>
-</div>
-
-</body>
-</html>

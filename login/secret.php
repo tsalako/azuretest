@@ -18,7 +18,7 @@
     <script src="assets/bootstrap.min.js"></script>
     <link href="assets/bootstrap.min.css" rel="stylesheet" media="screen">
     <style type="text/css">
-        body { background: url(assets/white.jpg); }
+        body { background: url(assets/balloons.jpg); }
         .hero-unit { background-color: #fff; }
         .center { display: block; margin: 0 auto; }
     </style>
@@ -34,10 +34,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand">Some cool title</a>
+      <a class="brand">Wild Llama</a>
       <div class="nav-collapse">
         <ul class="nav pull-right">
+          <li><a href="index.php">About</a></li>
           <li><a href="register.php">Register</a></li>
+          <li><a href="login.php">Login</a></li>
           <li class="divider-vertical"></li>
           <li><a href="logout.php">Log Out</a></li>
         </ul>
