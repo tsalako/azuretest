@@ -43,10 +43,10 @@
 <div class="text-field">
 
  
-   <form class="register">
+  
    
     <form action="register.php" method="post"> 
-   
+    <form>
 
 	<h2>Register</h2>
         

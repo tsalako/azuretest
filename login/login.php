@@ -55,6 +55,14 @@
         <input type="password" class="text-field" name="password" placeholder="Password" value="" /> 
         
         <input type="submit" class="submit" value="Login" /> 
+        
+        <input type="submit" class="submit1" value="Register" /> 
+        
+        <br>
+        <br>
+        <br><p> Forgot password? </p>
+        
+        
     </form>
 </div>
 
