@@ -46,6 +46,18 @@ function sendRequest (urlInput, callback, functionName, params) {
 	});
 }
 
+function logoutUser() {
+	sendRequest('../php/UserService.php',
+                        logoutCallback,
+                        'logoutUser');
+	
+}
+
+var logoutCallback = function(response){
+	//window.location.href = "../login.html";
+	console.log(response);
+}
+
 /**
 Functions to keep the database data as hidden as possible, since our database
 does not increment by one for auto increment, we should conver/revert in order to

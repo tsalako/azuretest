@@ -6,7 +6,7 @@ class User{
 	function __construct($user){
 		$this->data['userNo'] = $user['userNo'];
 		$this->data['username'] = $user['userName'];
-		$this->data['password'] = isset($user['password']) ? $user['password'] : null;
+		//password and salt are omitted because they will never be returned
 		$this->data['fName'] = $user['fName'];
 		$this->data['lName'] = $user['lName'];
 		$this->data['groupNo'] = isset($user['groupNo']) ? $user['groupNo'] : null;
@@ -17,6 +17,102 @@ class User{
 
 	public function getData(){
 		return $this->data;
+	}
+
+	public static function loginUser($db, $username, $password) {
+		$login_ok = false; 
+
+		$queryUser = "SELECT 
+						U.userNo, 
+						U.userName, 
+						U.type, 
+						U.fName, 
+						U.lName,
+						U.groupNo,
+						U.password,
+						U.salt,
+						G.name as groupName
+					FROM 
+						user U
+					LEFT JOIN 
+						groups G 
+					ON 
+						U.groupNo = G.groupNo
+					WHERE
+						U.username = '".$username."'
+				";
+
+		$stmt = $db->prepare($queryUser); 
+        $stmt->execute(); 		
+        $row = $stmt->fetch(); 
+        if($row){ 
+            $check_password = hash('sha256', $password . $row['salt']); 
+            for($round = 0; $round < 65536; $round++){
+                $check_password = hash('sha256', $check_password . $row['salt']);
+            } 
+            if($check_password === $row['password']){
+                $login_ok = true;
+            } 
+        } 
+
+        if($login_ok){ 
+            unset($row['salt']); 
+            unset($row['password']); 
+            return new User($row);
+        } 
+        else{ 
+            return null;
+        } 
+	}
+
+	public static function registerStudent($db, $username, $password, $fName, $lName){
+		$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
+        $password = hash('sha256', $password . $salt); 
+        for($round = 0; $round < 65536; $round++){ 
+        		$password = hash('sha256', $password . $salt); 
+        } 
+        $queryUpdate = "UPDATE
+		        			user
+		        		  SET
+		        		  	password ='".$password."',
+		        		  	salt = '".$salt."',
+		        		  	fName = '".$fName."',
+		        		  	lName = '".$lName."'
+		        		  WHERE
+		        		  	username = '".$username."'
+		        		  AND
+		        		  	password IS NULL
+		        		  ";
+       $isEditted = $db->exec($queryUpdate);
+
+       if($isEditted == 0) {
+       		return null;
+       } else {
+       		$queryUser = "SELECT 
+						U.userNo, 
+						U.userName, 
+						U.type, 
+						U.fName, 
+						U.lName,
+						U.groupNo,
+						G.name as groupName
+					FROM 
+						user U
+					LEFT JOIN 
+						groups G 
+					ON 
+						U.groupNo = G.groupNo
+					WHERE
+						U.username = '".$username."'
+					AND
+						U.password = '".$password."'
+       					";
+
+       		$stmt = $db->prepare($queryUser);
+			$stmt->execute();
+			return new User($stmt->fetch());
+       }
+
 	}
 
 	public static function addUserBasic($db, $username, $groupNo, $type){
@@ -131,7 +227,10 @@ class User{
 						WHERE
 							username IN ('".$username1."','".$username2."','".$username3."')
 						";
-		return $db->exec($queryUpdate);
+
+		//doesnt necessarily need to up date (so always retun 1);
+		$db->exec($queryUpdate);
+		return 1;
 	}
 
 	public static function getUserByUserNo($db, $userNo){

@@ -7,15 +7,57 @@ include 'dbo/Assessment.php';
 include 'dbo/Report.php';
 header("content-type:application/json");
 
+
 /* 
  User service to handle requests that deal with users, admins, students, and groups. 
 */
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 if(isset($_POST['function'])){
 
 	$db = new DB();
 
 	switch($_POST['function']){
+		case 'logoutUser':
+			//session_start(); //joins session	
+			//echo json_decode($_SESSION['user']);		
+			session_destroy();
+		break;
+		case 'registerStudent':
+			$return = array();
+			$params = $_POST['params'];
+			$user = User::registerStudent($db, $params['username'], $params['password'],$params['fName'],$params['lName']);
+			if($user == null){
+				$return['isSuccess'] = false;
+				$return['errorMessage'] = '*Username not found. Cannot register.';
+			} else {
+				//session_start();
+				$user = $user->getData();
+				$return['isSuccess'] = true;
+				$return['user'] = $user;
+				$_SESSION['user'] = $user;
+			}
+			echo json_encode($return);
+		break;
+		case 'loginUser':
+			$return = array();
+			$params = $_POST['params'];
+			$user = User::loginUser($db, $params['username'], $params['password']);
+			if($user == null){
+				$return['isSuccess'] = false;
+				$return['errorMessage'] = '*Username not found. Cannot register.';
+			} else {
+				//session_start();
+				$user = $user->getData();
+				$return['isSuccess'] = true;
+				$return['user'] = $user;
+				$_SESSION['user'] = $user;
+			}
+			echo json_encode($return);
+		break;
 		case 'getAllGroupStats':
 			$return = Group::getAllGroupsStats($db);
 			echo json_encode($return);

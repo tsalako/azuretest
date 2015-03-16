@@ -12,6 +12,11 @@ Report needed since assessments have an attached report, see
 Assessement.php constructor.
 */
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+
 if(isset($_POST['function'])){
 	$db = new DB();
 	

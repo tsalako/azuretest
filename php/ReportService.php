@@ -5,6 +5,11 @@ include 'dbo/Report.php';
 include 'dbo/Group.php';
 header("content-type:application/json");
 
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 if(isset($_POST['function'])){
 	$db = new DB();
 

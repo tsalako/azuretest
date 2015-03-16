@@ -11,6 +11,11 @@ header("content-type:application/json");
  Forum service to handle requests that deal with thread and posts. 
 */
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+
 if(isset($_POST['function'])){
 
 	$db = new DB();

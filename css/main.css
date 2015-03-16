@@ -12,6 +12,16 @@ grey/gray - #999999
 	color: #fff;
 }*/
 
+.login-panel, .register-panel {
+	margin-top: 25%;
+	/*margin-left:15%;*/
+}
+
+.login-panel .title, .register-panel .title {
+	margin-top:-10px !important;
+	margin-bottom:20px !important;
+}
+
 .nobold-label {
 	font-weight:normal;
 }
@@ -61,11 +71,13 @@ th, td {
 }
 
 body#login  {
-    background-image: url("../media/Timelapse2.gif");
+    background-image: url("../media/balloons1.jpg");
     background-color: #cccccc;
+    background-size: 1920px 1080px;
+    background-repeat: no-repeat;
 }
 
-.btn-success#login-btn {
+.btn-success#login-btn, .btn-success#register-btn {
 	color: #fff;
 	background-color: #337ab7;
 	border-color: #5bc0de;

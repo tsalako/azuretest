@@ -37,39 +37,72 @@
 
 </head>
 
+<style>
+* {
+  -webkit-border-radius: 0 !important;
+     -moz-border-radius: 0 !important;
+          border-radius: 0 !important;
+}
+</style>
+
 <body id="login">
 
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
+
                 <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In (Select Student or Admin then login)</h3>
-                    </div>
+                    <h2 class="text-center" ><label class="text-primary nobold-label">REVIEW</label><label class="nobold-label">LLAMA</label></h2>
                     <div class="panel-body">
+                        <!-- <h2 class="title text-muted text-center"><small>Log In</small></h2> -->
+                        <p class="title text-danger text-center login-error"><small>*Incorrect username and/or password.</small></p>
                         <form role="form">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control disabled" placeholder="Username" name="username" type="username" autofocus disabled>
+                                    <input class="form-control" placeholder="Username" type="username" autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control disabled" placeholder="Password" name="password" type="password" value="" disabled>
+                                    <input class="form-control" placeholder="Password" type="password">
                                 </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="remember" type="checkbox" value="Remember Me" disabled>Remember Me
-                                    </label>
-                                </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="radio-inline">
                                       <input type="radio" name="userSel" id="userSel1" value="student"> Student
                                     </label>
                                     <label class="radio-inline">
                                       <input type="radio" name="userSel" id="userSel2" value="admin"> Admin
                                     </label>
-                                </div>
+                                </div> -->
                                 <!-- Change this to a button or input when using this as a form -->
                                 <a href="#" id="login-btn" class="btn btn-lg btn-success btn-block">Login</a>
+                                <p class="text-center upperMargin"><a href="#" id="switchToRegistration" class="text-center">Not registered?</a></p>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="register-panel panel panel-default">
+                    <h2 class="text-center" ><label class="text-primary nobold-label">REVIEW</label><label class="nobold-label">LLAMA</label></h2>
+                    <div class="panel-body">
+                        <!-- <h2 class="title text-muted text-center"><small>Register</small></h2> -->
+                        <p class="title text-danger text-center registration-error"><small></small></p>
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Username" name="username" type="username" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Retype password" name="retypepassword" type="password">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="First Name" type="fName" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Last Name" type="lName" autofocus>
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <a href="#" id="register-btn" class="btn btn-lg btn-success btn-block">Register</a>
+                                <p class="text-center upperMargin"><a href="#" id="switchToLogin">Already have an account?</a></p>
                             </fieldset>
                         </form>
                     </div>
@@ -98,21 +131,110 @@
 
 <script>
 $(function() {
-    var userTypeSel;
-    $("input:radio[name=userSel]").click(function() {
-        userTypeSel = $(this).val();
+    $('.login-error').hide();
+    $('.register-panel').hide();
+    $('.registration-error').hide();
+
+    var width = $( window ).width();
+    var height = $( window ).height();
+    var sizeString = width + 'px ' + height + 'px';
+    $('#login').css('background-size',sizeString);
+
+    $( window ).resize(function() {
+      width = $( window ).width();
+      height = $( window ).height();
+      sizeString = width + 'px ' + height + 'px';
+      $('#login').css('background-size',sizeString);
     });
 
+    /*var userTypeSel;
+    $("input:radio[name=userSel]").click(function() {
+        userTypeSel = $(this).val();
+    });*/
+
     $("#login-btn").click(function() {
-        $("input:radio[id=userSel1]").prop('checked',false);
+        console.log('clicked1');
+        /*$("input:radio[id=userSel1]").prop('checked',false);
         $("input:radio[id=userSel2]").prop('checked',false);
         if(userTypeSel == 'admin'){
             window.location.href = "admin/dashboard.html";
         } else if(userTypeSel == 'student') {
             window.location.href = "student/dashboard.html";
-        } 
+        } */
+        if($('.login-panel input').val().replace(/ /g,'') == ''){
+            reportLoginError({'data': {'errorMessage':'*Please fill the username and password fields.'}});
+        } else {
+            sendRequest('php/UserService.php',
+                        reportLoginError,
+                        'loginUser',
+                        {'username' : $('.login-panel input[type=username]').val(),
+                         'password' : $('.login-panel input[type=password]').val()});
+        }
+
+
+    });
+
+    $('#register-btn').click(function() {
+        console.log('clicked2');
+        if($('.register-panel input').val().replace(/ /g,'') == ''){
+            reportRegistrationError({'data': {'errorMessage':'*Please fill all fields.'}});
+        } else if($('.register-panel input[name=password]').val() != $('.register-panel input[name=retypepassword]').val()) {
+            reportRegistrationError({'data': {'errorMessage':'*Retyped password does not match.'}});
+        } else {
+            sendRequest('php/UserService.php',
+                        reportRegistrationError,
+                        'registerStudent',
+                        {'username' : $('.register-panel input[type=username]').val(),
+                         'password' : $('.register-panel input[name=password]').val(),
+                         'fName' : $('.register-panel input[type=fName]').val(),
+                         'lName' : $('.register-panel input[type=lName]').val()});
+        }
+    })
+
+    $('#switchToLogin').click(function() {
+        $('.register-panel').hide();
+        $('.login-panel').show();
+        $('.register-panel input').val('');
+        $('.registration-error').hide();
+    });
+
+    $('#switchToRegistration').click(function() {
+        $('.login-panel').hide();
+        $('.register-panel').show();
+        $('.login-panel input').val('');
+        $('.login-error').hide();
     });
 }); 
+
+var reportLoginError = function (response) {
+    console.log(response);
+    if(response.data.isSuccess){
+        if(response.data.user.isStudent){
+            window.location.href = "student/dashboard.html";
+        } else if(response.data.user.isAdmin){
+            window.location.href = "admin/dashboard.html";
+        }
+        
+    } else {
+        $('.login-error small').text(response.data.errorMessage);
+        $('.login-error').show();
+    }
+}
+
+var reportRegistrationError = function(response){
+    console.log(response);
+    if(response.data.isSuccess){
+        if(response.data.user.isStudent){
+            window.location.href = "student/dashboard.html";
+        } else if(response.data.user.isAdmin){
+            window.location.href = "admin/dashboard.html";
+        }
+        
+    } else {
+        $('.registration-error small').text(response.data.errorMessage);
+        $('.registration-error').show();
+    }
+};
 </script>
 
 </html>
