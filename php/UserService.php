@@ -22,9 +22,8 @@ if(isset($_POST['function'])){
 
 	switch($_POST['function']){
 		case 'logoutUser':
-			//session_start(); //joins session	
-			//echo json_decode($_SESSION['user']);		
 			session_destroy();
+			echo json_encode('logged out');
 		break;
 		case 'registerStudent':
 			$return = array();

@@ -33,17 +33,34 @@ $.urlParam = function(name){
 }
 
 function sendRequest (urlInput, callback, functionName, params) {
+	console.log(params);
+	params = escapeObject(params, true);
+	console.log(params);
+
 	$.ajax({
 		url: urlInput,
 		type: 'post',
 		data: {'function': functionName, 'params': params},
 		success: function(data, status) {
+			data = escapeObject(data, false);
 			callback({'data': data, 'status' : status});
 		},
 		error: function(xhr, desc, err) {
 			errorCallback({'xhr': xhr, 'status': desc, 'error': err});
 		}
 	});
+}
+
+function escapeObject (data, isEscape) {
+	for (var key in data) {
+	   var value = data[key];
+	   if(typeof(value) == 'string'){
+	   		data[key] = isEscape ? escape(value) : unescape(value);
+	   } else if (typeof(value) == 'object') {
+	   		data[key] = escapeObject(value, isEscape);
+	   }
+	}
+	return data;
 }
 
 function logoutUser() {
@@ -54,8 +71,7 @@ function logoutUser() {
 }
 
 var logoutCallback = function(response){
-	//window.location.href = "../login.html";
-	console.log(response);
+	window.location.href = "../login.html";
 }
 
 /**
