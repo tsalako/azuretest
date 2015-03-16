@@ -89,7 +89,7 @@
                             <a href="marks.html"><i class="fa fa-calculator fa-fw"></i> My Marks</a>
                         </li>
                         <li>
-                            <a href="#" class="forum-href"><i class="fa fa-users fa-fw"></i> Da Forum</a>
+                            <a href="forum.html"><i class="fa fa-users fa-fw"></i> Da Forum</a>
                         </li>
                     </ul>
                 </div>
@@ -201,12 +201,9 @@
 
 <script>
     $(document).ready(function() {
-        $('.forum-href').attr('href', 'forum.html?groupNo=5');
-        
         sendRequest('../php/AssessmentService.php',
             loadTable,
-            'getDoneAssessmentsByReportNo',
-            {'reportNo': 31});
+            'getDoneAssessmentsByReportNo');
     });
 
 var loadTable = function(response){
@@ -230,8 +227,10 @@ var loadTable = function(response){
         });
     });
 
-    $('#assessment-table #overallAvg').text((response.data.overallAvg));
-    $('#assessment-table #rank').text(response.data.rank+'/20');
+    var average = response.data.overallAvg == null ? 0 : response.data.overallAvg;
+    var rank = response.data.rank == null ? 20 : response.data.rank;
+    $('#assessment-table #overallAvg').text(average);
+    $('#assessment-table #rank').text(rank+'/20');
 
     $('#assessment-table').DataTable({
             responsive: true,

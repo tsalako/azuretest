@@ -147,20 +147,7 @@ $(function() {
       $('#login').css('background-size',sizeString);
     });
 
-    /*var userTypeSel;
-    $("input:radio[name=userSel]").click(function() {
-        userTypeSel = $(this).val();
-    });*/
-
     $("#login-btn").click(function() {
-        console.log('clicked1');
-        /*$("input:radio[id=userSel1]").prop('checked',false);
-        $("input:radio[id=userSel2]").prop('checked',false);
-        if(userTypeSel == 'admin'){
-            window.location.href = "admin/dashboard.html";
-        } else if(userTypeSel == 'student') {
-            window.location.href = "student/dashboard.html";
-        } */
         if($('.login-panel input').val().replace(/ /g,'') == ''){
             reportLoginError({'data': {'errorMessage':'*Please fill the username and password fields.'}});
         } else {
@@ -174,8 +161,13 @@ $(function() {
 
     });
 
+    $(".login-panel input").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#login-btn").click();
+        }
+    });
+
     $('#register-btn').click(function() {
-        console.log('clicked2');
         if($('.register-panel input').val().replace(/ /g,'') == ''){
             reportRegistrationError({'data': {'errorMessage':'*Please fill all fields.'}});
         } else if($('.register-panel input[name=password]').val() != $('.register-panel input[name=retypepassword]').val()) {
@@ -189,7 +181,13 @@ $(function() {
                          'fName' : $('.register-panel input[type=fName]').val(),
                          'lName' : $('.register-panel input[type=lName]').val()});
         }
-    })
+    });
+
+    $(".register-panel input").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#register-btn").click();
+        }
+    });
 
     $('#switchToLogin').click(function() {
         $('.register-panel').hide();
@@ -207,7 +205,6 @@ $(function() {
 }); 
 
 var reportLoginError = function (response) {
-    console.log(response);
     if(response.data.isSuccess){
         if(response.data.user.isStudent){
             window.location.href = "student/dashboard.html";
@@ -222,7 +219,6 @@ var reportLoginError = function (response) {
 }
 
 var reportRegistrationError = function(response){
-    console.log(response);
     if(response.data.isSuccess){
         if(response.data.user.isStudent){
             window.location.href = "student/dashboard.html";

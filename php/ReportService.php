@@ -10,13 +10,16 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if(isset($_POST['function'])){
+$validSession = isset($_SESSION['user']);
+
+if(isset($_POST['function']) && $validSession){
 	$db = new DB();
 
 	switch($_POST['function']){
 
 
 		case 'addReport':
+			//meriem make sure to change this to use the $_SESSION['user']['groupNo']
 			$params = $_POST['params'];
 			$errorBool = Report::addReport($db, $params['title'], $params['body'], $params['reference']);
 			echo $errorBool ? json_encode('Successfully added') : die("failed add");
@@ -34,6 +37,8 @@ if(isset($_POST['function'])){
 
 		
 		case 'editReport':
+			//meriem make sure to change this to use the $_SESSION['user']['groupNo']
+			//also we don't necessarily need to do the edit (not is report description)
 			$params = $_POST['params'];
 			$errorBool = Report::editReport($db, $params['id'], $params['title'], $params['body'], $params['reference']);
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
@@ -47,8 +52,13 @@ if(isset($_POST['function'])){
 	}
 	exit();
 }else{
-	echo die("Bad parameters");
-	exit();
+	if(!$validSession){
+		echo die("notLoggedIn");
+		exit();
+	} else {
+		echo die("Bad parameters");
+		exit();
+	}
 }
 
 ?>

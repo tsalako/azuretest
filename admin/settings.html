@@ -177,7 +177,7 @@
                             <tr class="password">
                                 <th height="53px">Password</th>
                                 <td>
-                                    <p class="text-muted">*********</p>
+                                    <p class="text-muted">I can't tell you that...</p>
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -237,11 +237,9 @@
 
 <script>
 $(function() {
-    var userNo = 81;
     sendRequest('../php/UserService.php',
             loadUserData,
-            'getUserByUserNo',
-            {'userNo': userNo});
+            'getUserByUserNo');
 
     $('.name-editting').hide();
     $('.username-editting').hide();
@@ -275,8 +273,7 @@ $(function() {
             fName + "  " +  lName
         );
 
-        var params = {'userNo': userNo,
-                     'type' : 'name',
+        var params = {'type' : 'name',
                      'data': {'fName': fName, 'lName': lName}};
 
         sendRequest('../php/UserService.php',
@@ -288,6 +285,12 @@ $(function() {
     $('.name-editting .cancel').click(function() {
         $('.name-editting').hide();
         $('.name').show();
+    });
+
+    $(".name-editting input").keyup(function(event){
+        if(event.keyCode == 13){
+            $(".name-editting .save").click();
+        }
     });
 
     //USERNAME EVENTS
@@ -304,8 +307,7 @@ $(function() {
         var username = $('.username-editting td').eq(0).find('input').val().replace(/ /g,'');
         $('.username td').eq(0).find('p').text(username);
 
-        var params = {'userNo': userNo,
-                     'type' : 'username',
+        var params = {'type' : 'username',
                      'data': username};
 
         sendRequest('../php/UserService.php',
@@ -319,6 +321,12 @@ $(function() {
         $('.username').show();
     });
 
+    $(".username-editting input").keyup(function(event){
+        if(event.keyCode == 13){
+            $(".username-editting .save").click();
+        }
+    });
+
     //PASSWORD EVENTS
     $('.password').click(function() {
         $('.password').hide();
@@ -326,40 +334,41 @@ $(function() {
     });
 
     $('.password-editting .save').click(function() {
-        $('.password-editting').hide();
-        $('.password').show();
- 
-        if($('.password-editting td').eq(1).find('input').val() == $('.password-editting td').eq(2).find('input').val()){
-            var params = {'userNo': userNo,
-             'type' : 'password',
-             'data': {'currPass': $('.password-editting td').eq(0).find('input').val(), 
-                      'newPass': $('.password-editting td').eq(1).find('input').val()}};
+        if($('.password-editting td').eq(1).find('input').val() == $('.password-editting td').eq(2).find('input').val() && $('.password-editting td').eq(1).find('input').val() != ''){
+            var params = {'currPass': $('.password-editting td').eq(0).find('input').val(), 
+                      'newPass': $('.password-editting td').eq(1).find('input').val()};
 
             sendRequest('../php/UserService.php',
-                basicCallback,
-                'editUserField',
+                passwordCallback,
+                'updatePassword',
                 params);
+
+            $('.password-editting td').eq(2).removeClass('has-error');
         } else {
-            alert('Match dem string dawg.');
+            //alert('Match dem string dawg.');
+            $('.password-editting td').eq(2).addClass('has-error');
         }
+    });
+
+    $('.password-editting .cancel').click(function() {
+        $('.password-editting td').eq(0).removeClass('has-error');
+        $('.password-editting td').eq(2).removeClass('has-error');
+        $('.password-editting').hide();
+        $('.password').show();
 
         $('.password-editting td').eq(0).find('input').val('');
         $('.password-editting td').eq(1).find('input').val('');
         $('.password-editting td').eq(2).find('input').val('');
     });
 
-    $('.password-editting .cancel').click(function() {
-        $('.password-editting').hide();
-        $('.password').show();
-
-        $('.password-editting td').eq(0).find('input').val('');
-        $('.password-editting td').eq(1).find('input').val('');
-        $('.password-editting td').eq(2).find('input').val('');
+    $(".password-editting input").keyup(function(event){
+        if(event.keyCode == 13){
+            $(".password-editting .save").click();
+        }
     });
 });
 
 var loadUserData = function(response){
-    console.log(response);
     var data = response.data;
     if(data.fName == null || data.lName == null){
         $('.name td').eq(0).find('p').text('--'); 
@@ -368,6 +377,19 @@ var loadUserData = function(response){
     }
     $('.username td').eq(0).find('p').text(data.username);
     $('.fa-asterisk').hide();
+}
+
+var passwordCallback = function(response) {
+    if(!response.data.isPasswordMatch){
+        $('.password-editting td').eq(0).addClass('has-error');
+    } else {
+        $('.password-editting').hide();
+        $('.password').show();
+        $('.password-editting td').eq(0).removeClass('has-error');
+        $('.password-editting td').eq(0).find('input').val('');
+        $('.password-editting td').eq(1).find('input').val('');
+        $('.password-editting td').eq(2).find('input').val('');
+    }
 }
 </script>
 

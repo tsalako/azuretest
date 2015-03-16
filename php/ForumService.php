@@ -15,28 +15,32 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$validSession = isset($_SESSION['user']);
 
-if(isset($_POST['function'])){
+if(isset($_POST['function']) && $validSession){
 
 	$db = new DB();
 
 	switch($_POST['function']){
 		case 'getThreadListByGroupNo':
-			$params = $_POST['params'];
-			$threads = Thread::getThreadListByGroupNo($db, $params['groupNo']);
-			$return = array();			
+			//remove params
+			$threads = Thread::getThreadListByGroupNo($db, $_SESSION['user']['groupNo']);
+			$return['threads'] = array();			
 			foreach ($threads as $thread){
-				array_push($return, $thread->getData());
+				array_push($return['threads'], $thread->getData());
 			}
+			$return['user'] = $_SESSION['user'];
 			echo json_encode($return);
 		break;
 		case 'getSearchThreadList':
+			//remove groupNo
 			$params = $_POST['params'];
-			$threads = Thread::getSearchThreadList($db, $params['groupNo'], $params['searchString']);
-			$return = array();			
+			$threads = Thread::getSearchThreadList($db, $_SESSION['user']['groupNo'], $params['searchString']);
+			$return['threads'] = array();			
 			foreach ($threads as $thread){
-				array_push($return, $thread->getData());
+				array_push($return['threads'], $thread->getData());
 			}
+			$return['user'] = $_SESSION['user'];
 			echo json_encode($return);
 		break;
 		case 'getPostListByThreadNo':
@@ -51,21 +55,22 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'startThread':
+			//remove groupNo, userNo, username
 			$params = $_POST['params'];
 			$thread = Thread::startThread($db, 
-				$params['groupNo'],
-				$params['creator'],
-				$params['creatorName'],
+				$_SESSION['user']['groupNo'],
+				$_SESSION['user']['userNo'],
+				$_SESSION['user']['username'],
 				$params['title'],
 				$params['description']);
 			echo json_encode($thread->getData());
 		break;
 		case 'addPost':
+			//remove creator
 			$params = $_POST['params'];
-			//update thread fields as well
 			$post = Post::addPost($db,
 				 $params['threadNo'],
-				 $params['creator'],
+				 $_SESSION['user']['userNo'],
 				 $params['comment']);
 			echo json_encode($post->getData());
 		break;
@@ -76,8 +81,13 @@ if(isset($_POST['function'])){
 	}
 	exit();
 }else{
-	echo die("Bad parameters");
-	exit();
+	if(!$validSession){
+		echo die("notLoggedIn");
+		exit();
+	} else {
+		echo die("Bad parameters");
+		exit();
+	}
 }
 
 ?>

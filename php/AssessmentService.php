@@ -16,8 +16,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$validSession = isset($_SESSION['user']);
 
-if(isset($_POST['function'])){
+if(isset($_POST['function']) && $validSession){
 	$db = new DB();
 	
 	switch($_POST['function']){
@@ -30,8 +31,8 @@ if(isset($_POST['function'])){
 			echo $errorBool ? json_encode('successfully assigned') : die("failed assignment");
 		break;
 		case 'getUndoneAssessmentsByGroupNo':
-			$params = $_POST['params'];
-			$assessments = Assessment::getUndoneAssessmentsByGroupNo($db, $params['groupNo']);
+			//remove params
+			$assessments = Assessment::getUndoneAssessmentsByGroupNo($db, $_SESSION['user']['groupNo']);
 			$return = array();			
 			foreach ($assessments as $assessment){
 				array_push($return, $assessment->getData());
@@ -39,8 +40,8 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'getDoneAssessmentsByGroupNo':
-			$params = $_POST['params'];
-			$assessments = Assessment::getDoneAssessmentsByGroupNo($db, $params['groupNo']);
+			//remove params
+			$assessments = Assessment::getDoneAssessmentsByGroupNo($db, $_SESSION['user']['groupNo']);
 			$return = array();			
 			foreach ($assessments as $assessment){
 				array_push($return, $assessment->getData());
@@ -48,14 +49,14 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'getDoneAssessmentsByReportNo':
-			$params = $_POST['params'];
-			$assessments = Assessment::getDoneAssessmentsByReportNo($db, $params['reportNo']);
+			//remove params
+			$assessments = Assessment::getDoneAssessmentsByReportNo($db, $_SESSION['user']['groupNo']);
 			$return['assessments'] = array();			
 			foreach ($assessments as $assessment){
 				array_push($return['assessments'], $assessment->getData());
 			}
 
-			$stats = Group::getGroupStats($db, $params['reportNo']);
+			$stats = Group::getGroupStats($db, $_SESSION['user']['groupNo']);
 			$return['rank'] = $stats['rank'];
 			$return['overallAvg'] = $stats['avg'];
 			echo json_encode($return);
@@ -69,8 +70,9 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'setAssessment':
+			//remove reportNo
 			$params = $_POST['params'];
-			$errorBool = Assessment::setAssessment($db, $params['reportNo'], $params['groupNo'], 
+			$errorBool = Assessment::setAssessment($db, $params['reportNo'], $_SESSION['user']['groupNo'], 
 				$params['structureGrade'], $params['strengthGrade'], $params['formatGrade'], $params['qualityGrade'], 
 				$params['averageGrade'], $params['comment']);
 
@@ -88,8 +90,13 @@ if(isset($_POST['function'])){
 	}
 	exit();
 }else{
-	echo die("Bad parameters");
-	exit();
+	if(!$validSession){
+		echo die("notLoggedIn");
+		exit();
+	} else {
+		echo die("Bad parameters");
+		exit();
+	}
 }
 
 

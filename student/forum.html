@@ -42,7 +42,7 @@
         <div class="row">
             <div class="col-lg-offset-1 col-lg-10 yellow-div bottom-panel">
                 <h1 class="col-lg-4">
-                    <a class="forum-nav" href="">Group Forum</a>
+                    <a class="forum-nav" href="forum.html">Group Forum</a>
                     <a class="home-nav" href="dashboard.html"><i class="fa fa-home"></i></a>
                 </h1>
                 <div class="col-lg-8 upperMargin form-inline">
@@ -137,35 +137,23 @@
 <script>
 $(function() {
     
-
-    var creatorUserNo = 10351;
-    var creatorName = 'Hansolo'
-    var groupNo = $.urlParam('groupNo');
     var search = $.urlParam('search');
     var searchString = unescape(search).toLowerCase();
-    console.log(groupNo);
-    console.log(searchString);
 
     $('.thread-add').hide();
     $('.results-string').hide();
-    $('.forum-nav').attr('href', 'forum.html?groupNo='+groupNo);
-    $('#groupNo').text(groupNo);
 
     if(search == null){
-        console.log('basic');
         sendRequest('../php/ForumService.php',
             populateThreadList,
-            'getThreadListByGroupNo',
-            {'groupNo' : revertGroupNo(groupNo)});
+            'getThreadListByGroupNo');
     } else {
-        console.log('search');
         $('.results-string em').text(searchString);
         $('.results-string').show();
         sendRequest('../php/ForumService.php',
             populateThreadList,
             'getSearchThreadList',
-            {'groupNo' : revertGroupNo(groupNo),
-             'searchString':searchString});
+            {'searchString':searchString});
     }
     
     $('.add').click(function(){
@@ -186,10 +174,7 @@ $(function() {
         sendRequest('../php/ForumService.php',
             addThread,
             'startThread',
-            {'groupNo' : revertGroupNo(groupNo),
-             'creator': creatorUserNo,
-             'creatorName':creatorName,
-             'title': $('.thread-title').val(),
+            {'title': $('.thread-title').val(),
              'description': $('.thread-desc').val()});
 
         $('.thread-desc').val('');
@@ -205,16 +190,14 @@ $(function() {
 
     $('button[type=submit]').click(function(){
         var searchText = $('#searchBox').val().trim();
-        window.location.href = 'forum.html?groupNo='+groupNo+'&search=' + searchText;
+        window.location.href = 'forum.html?&search=' + searchText;
     });
 });
 
 var addThread = function(response){
     var threadObj = response.data;
-    console.log(threadObj);
 
     var date = new Date(threadObj.createdOn.date).toLocaleString();
-    console.log(date);
     $('.thread-list').prepend('<div class="row thread">'+
                         '<div class="col-lg-12">'+
                             '<div class="panel panel-primary">'+
@@ -237,13 +220,16 @@ var addThread = function(response){
                     '<!-- /.row -->');
 
     $('.thread-list').children().eq(0).find('.right').click(function(){
-        console.log(threadObj.threadNo);
         window.location.href = 'thread.html?threadNo='+threadObj.threadNo;
     });
 }
 
 var populateThreadList = function(response){
-    var threadList = response.data;
+    var threadList = response.data.threads;
+    var user = response.data.user;
+
+    var groupName = user.groupName == null ? "" : ' (' +user.groupName+ ')';
+    $('#groupNo').text(convertGroupNo(user.groupNo) + groupName);
     $.each(threadList, function(i, threadObj){
         addThread({'data':threadObj});
     });

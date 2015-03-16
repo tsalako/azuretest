@@ -33,17 +33,12 @@ $.urlParam = function(name){
 }
 
 function sendRequest (urlInput, callback, functionName, params) {
-	console.log(params);
-	params = escapeObject(params, true);
-	console.log(params);
-
 	$.ajax({
 		url: urlInput,
 		type: 'post',
-		data: {'function': functionName, 'params': params},
+		data: {'function': functionName, 'params': escapeObject(params, true)},
 		success: function(data, status) {
-			data = escapeObject(data, false);
-			callback({'data': data, 'status' : status});
+			callback({'data': escapeObject(data, false), 'status' : status});
 		},
 		error: function(xhr, desc, err) {
 			errorCallback({'xhr': xhr, 'status': desc, 'error': err});
@@ -103,8 +98,15 @@ function revertGroupNo(convertedGroupNo){
 }
 
 var errorCallback = function (response) {
-	console.log(response);
-	alert("An error had occurred. Please reload the page. \n\nMessage: " + response.xhr.responseText);
+	if (response.xhr.responseText == 'notLoggedIn') {
+		window.location.href = "../login.html";
+		alert("Please login or register.");
+	}
+	else if(response.xhr.responseText != ''){
+		console.log(response);
+		alert("An error had occurred. Please reload the page. \n\nMessage: " + response.xhr.responseText);
+	}
+	
 }
 
 var basicCallback = function (responce) {

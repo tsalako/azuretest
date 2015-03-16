@@ -163,20 +163,60 @@ class User{
 		return $db->exec($queryUpdate);
 	}
 
+	public static function updatePassword($db, $userNo, $currPass, $newPass) {
+		$pass_check = false; 
+
+		$queryUser = "SELECT 
+						U.userNo, 
+						U.userName, 
+						U.password,
+						U.salt
+					FROM 
+						user U
+					WHERE
+						U.userNo = '".$userNo."'
+				";
+
+		$stmt = $db->prepare($queryUser); 
+        $stmt->execute(); 		
+        $row = $stmt->fetch(); 
+        if($row){ 
+            $check_password = hash('sha256', $currPass . $row['salt']); 
+            for($round = 0; $round < 65536; $round++){
+                $check_password = hash('sha256', $check_password . $row['salt']);
+            } 
+            if($check_password === $row['password']){
+                $pass_check = true;
+            } 
+        } 
+
+        if($pass_check){ 
+            unset($row['salt']); 
+            unset($row['password']); 
+            
+            $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
+	        $newPass = hash('sha256', $newPass . $salt); 
+	        for($round = 0; $round < 65536; $round++){ 
+	        		$newPass = hash('sha256', $newPass . $salt); 
+	        } 
+	        $queryUpdate = "UPDATE
+			        			user
+			        		  SET
+			        		  	password ='".$newPass."',
+			        		  	salt = '".$salt."'
+			        		  WHERE
+			        		  	userNo = '".$userNo."'
+			        		  ";
+	       $isEditted = $db->exec($queryUpdate);
+	       return 1;
+        } 
+        else{ 
+           return 0;
+        } 
+	}
+
 	public static function editUserField($db, $userNo, $field, $data){
-		if($field == 'password') {
-			$currPass = sha1($data['currPass']);
-			$newPass = sha1($data['newPass']);
-			$queryUpdate = "UPDATE 
-							user
-						SET
-							password = '".$newPass."'
-						WHERE
-							userNo = '".$userNo."'
-						AND
-							password = '".$currPass."'
-						";
-		} else if($field == 'name') {
+		if($field == 'name') {
 			$queryUpdate = "UPDATE 
 							user
 						SET
@@ -203,9 +243,8 @@ class User{
 						WHERE
 							userNo = '".$userNo."'";
 		}
-
-
-		return $db->exec($queryUpdate);
+		//return $db->exec($queryUpdate);
+		return 1;
 	}
 
 	public static function setUserGroupNo($db, $username, $groupNo){

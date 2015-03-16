@@ -89,7 +89,7 @@
                             <a href="marks.html"><i class="fa fa-calculator fa-fw"></i> My Marks</a>
                         </li>
                         <li>
-                            <a href="#" class="forum-href"><i class="fa fa-users fa-fw"></i> Da Forum</a>
+                            <a href="forum.html"><i class="fa fa-users fa-fw"></i> Da Forum</a>
                         </li>
                     </ul>
                 </div>
@@ -144,17 +144,13 @@
 
 <script>
 $(function() {
-    $('.forum-href').attr('href', 'forum.html?groupNo=5');
-
     sendRequest('../php/AssessmentService.php',
             populateUndoneAssessmentsDiv,
-            'getUndoneAssessmentsByGroupNo',
-            {'groupNo' : 41});
+            'getUndoneAssessmentsByGroupNo');
 
    sendRequest('../php/AssessmentService.php',
             populateDoneAssessmentsDiv,
-            'getDoneAssessmentsByGroupNo',
-            {'groupNo' : 41});
+            'getDoneAssessmentsByGroupNo');
 });
 
 /*
@@ -564,7 +560,6 @@ function changePanel($divToChange, newType, data){
                             basicCallback,
                             'setAssessment',
                             {'reportNo' : revertGroupNo(data.groupNo),
-                            'groupNo' : 41,
                             'structureGrade': grades[0],
                             'strengthGrade' : grades[1],
                             'formatGrade' : grades[2],

@@ -16,7 +16,11 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if(isset($_POST['function'])){
+$functionException = isset($_POST['function']) ? ($_POST['function'] == 'registerStudent' || $_POST['function'] == 'loginUser'): false;
+$validSession = isset($_SESSION['user']) || $functionException;
+//will fail and give the wrong error if isset($_POST['function']) is false
+
+if(isset($_POST['function']) && $validSession){
 
 	$db = new DB();
 
@@ -62,8 +66,8 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'getStudentDashboard':
+			//remove params completely
 			$return = array();
-			$params = $_POST['params'];
 			
 			$queryUploaded = "SELECT EXISTS (
 								SELECT 
@@ -71,7 +75,7 @@ if(isset($_POST['function'])){
 								FROM 
 									report 
 								WHERE 
-									groupNo = '{$params['groupNo']}'
+									groupNo = '{$_SESSION['user']['groupNo']}'
 								) as isUploaded
 							";
 			$stmt = $db->prepare($queryUploaded);
@@ -83,7 +87,7 @@ if(isset($_POST['function'])){
 									FROM 
 										assessment 
 									WHERE 
-										groupNo = '{$params['groupNo']}'
+										groupNo = '{$_SESSION['user']['groupNo']}'
 									AND 
 										assessedOn IS NULL
 									";
@@ -136,7 +140,6 @@ if(isset($_POST['function'])){
 		break;
 		case 'getStudentDetails':
 			$return = array();
-			
 
 			$params = $_POST['params'];
 			$student = User::getUserByUserNo($db, $params['userNo']);
@@ -164,11 +167,12 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'getUserByUserNo' :
-			$params = $_POST['params'];
-			$return = User::getUserByUserNo($db, $params['userNo']);
+			//remove params
+			$return = User::getUserByUserNo($db, $_SESSION['user']['userNo']);
 			echo json_encode($return->getData());
 		break;
 		case 'getAllUsers':
+			//remove function
 			$users = User::getAllUsers($db);
 			$return = array();			
 			foreach ($users as $user){
@@ -185,16 +189,26 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'editUser':
+			//remove function
 			$params = $_POST['params'];
 			$errorBool = User::editUser($db, $params['userNo'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 			
 		break;
 		case 'editUserField':
+			//remove userNo
 			$params = $_POST['params'];
-			$errorBool = User::editUserField($db, $params['userNo'], $params['type'], $params['data']);
+			$errorBool = User::editUserField($db, $_SESSION['user']['userNo'], $params['type'], $params['data']);
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 			
+		break;
+		case 'updatePassword':
+			//remove userNo
+			$params = $_POST['params'];
+			$errorBool = User::updatePassword($db, $_SESSION['user']['userNo'], $params['currPass'], $params['newPass']);
+			$return['isPasswordMatch'] = $errorBool ? true : false;
+			echo json_encode($return);
+
 		break;
 		case 'getAllGroups':
 			$groups = Group::getAllGroups($db);
@@ -205,6 +219,7 @@ if(isset($_POST['function'])){
 			echo json_encode($return);
 		break;
 		case 'getGroupByNo':
+			//remove function
 			$params = $_POST['params'];
 			$group = Group::getGroupByNo($db, $params['groupNo']);
 			echo json_encode($group->getData());
@@ -226,8 +241,14 @@ if(isset($_POST['function'])){
 	}
 	exit();
 }else{
-	echo die("Bad parameters");
-	exit();
+	if(!$validSession){
+		echo die("notLoggedIn");
+		exit();
+	} else {
+		echo die("Bad parameters");
+		exit();
+	}
+	
 }
 
 ?>
