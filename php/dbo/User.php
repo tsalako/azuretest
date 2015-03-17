@@ -243,6 +243,7 @@ class User{
 						WHERE
 							userNo = '".$userNo."'";
 		}
+		$db->exec($queryUpdate);
 		//return $db->exec($queryUpdate);
 		return 1;
 	}
