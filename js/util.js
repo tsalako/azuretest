@@ -44,6 +44,7 @@ function sendRequest (urlInput, callback, functionName, params) {
 			errorCallback({'xhr': xhr, 'status': desc, 'error': err});
 		}
 	});
+	console.log('sent');
 }
 
 function escapeObject (data, isEscape) {
@@ -101,6 +102,9 @@ var errorCallback = function (response) {
 	if (response.xhr.responseText == 'notLoggedIn') {
 		window.location.href = "../login.html";
 		alert("Please login or register.");
+	} else if(response.xhr.responseText == 'deniedAccess') {
+		alert("You dont have access to this page.");
+		logoutUser();
 	}
 	else if(response.xhr.responseText != ''){
 		console.log(response);

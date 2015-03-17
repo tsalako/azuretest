@@ -102,7 +102,7 @@ class Group{
 						FROM 
 							(SELECT 
 								reportNo, 
-								AVG(averageGrade) as avg 
+								AVG((structureGrade+formatGrade+strengthGrade+qualityGrade)/4) as avg 
 							FROM 
 								assessment 
 							GROUP BY 

@@ -27,6 +27,10 @@ if(isset($_POST['function']) && $validSession){
 
 
 		case 'getAllReports':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$reports = Report::getAllReports($db);
 			$return = array();			
 			foreach ($reports as $report){
@@ -38,7 +42,7 @@ if(isset($_POST['function']) && $validSession){
 		
 		case 'editReport':
 			//meriem make sure to change this to use the $_SESSION['user']['groupNo']
-			//also we don't necessarily need to do the edit (not is report description)
+			//also we don't necessarily need to do the edit (not in report description)
 			$params = $_POST['params'];
 			$errorBool = Report::editReport($db, $params['id'], $params['title'], $params['body'], $params['reference']);
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");

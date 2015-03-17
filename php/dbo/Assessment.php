@@ -33,7 +33,7 @@ class Assessment{
 					A.strengthGrade,
 					A.formatGrade,
 					A.qualityGrade,
-					A.averageGrade,
+					(A.structureGrade+A.formatGrade+A.strengthGrade+A.qualityGrade)/4 AS averageGrade,
 					A.comment,
 					A.assessedOn,
 
@@ -83,7 +83,7 @@ class Assessment{
 					A.strengthGrade,
 					A.formatGrade,
 					A.qualityGrade,
-					A.averageGrade,
+					(A.structureGrade+A.formatGrade+A.strengthGrade+A.qualityGrade)/4 AS averageGrade,
 					A.comment,
 					A.assessedOn,
 
@@ -135,7 +135,7 @@ class Assessment{
 					A.strengthGrade,
 					A.formatGrade,
 					A.qualityGrade,
-					A.averageGrade,
+					(A.structureGrade+A.formatGrade+A.strengthGrade+A.qualityGrade)/4 AS averageGrade,
 					A.comment,
 					A.assessedOn
 				 FROM 
@@ -168,7 +168,7 @@ class Assessment{
 					A.strengthGrade,
 					A.formatGrade,
 					A.qualityGrade,
-					A.averageGrade,
+					(A.structureGrade+A.formatGrade+A.strengthGrade+A.qualityGrade)/4 AS averageGrade,
 					A.comment,
 					A.assessedOn,
 
@@ -209,7 +209,7 @@ class Assessment{
 
 	public static function setAssessment($db, $reportNo, $groupNo, 
 		$structureGrade, $strengthGrade, $formatGrade, $qualityGrade,
-		$averageGrade, $comment) {
+		$comment) {
 
 		$query = "UPDATE 
 						assessment
@@ -218,7 +218,6 @@ class Assessment{
 						strengthGrade = '".$strengthGrade."',
 						formatGrade = '".$formatGrade."',
 						qualityGrade = '".$qualityGrade."',
-						averageGrade = '".$averageGrade."',
 						comment = '".$comment."',
 						assessedOn = CURRENT_TIMESTAMP
 					WHERE

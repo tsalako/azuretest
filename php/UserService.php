@@ -51,7 +51,7 @@ if(isset($_POST['function']) && $validSession){
 			$user = User::loginUser($db, $params['username'], $params['password']);
 			if($user == null){
 				$return['isSuccess'] = false;
-				$return['errorMessage'] = '*Username not found. Cannot register.';
+				$return['errorMessage'] = '*Username password combination not found.';
 			} else {
 				//session_start();
 				$user = $user->getData();
@@ -62,10 +62,17 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'getAllGroupStats':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$return = Group::getAllGroupsStats($db);
 			echo json_encode($return);
 		break;
 		case 'getStudentDashboard':
+			if(!$_SESSION['user']['isStudent']){
+				die('deniedAccess');
+			}
 			//remove params completely
 			$return = array();
 			
@@ -94,10 +101,15 @@ if(isset($_POST['function']) && $validSession){
 			$stmt = $db->prepare($queryNewAssessments);
 			$stmt->execute();
 			$return['newAssessmentCount'] = $stmt->fetch()['newAssessmentCount'];
+			$return['user'] = $_SESSION['user'];
 			
 			echo json_encode($return);
 		break;
 		case 'getAdminDashboard':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$return = array();
 
 			$query = "SELECT 
@@ -130,15 +142,21 @@ if(isset($_POST['function']) && $validSession){
 			$stmt = $db->prepare($query);
 			$stmt->execute();
 			$return['totalAssessments'] = $stmt->fetch()['totalAssessments'];
+			$return['user'] = $_SESSION['user'];
 
 			echo json_encode($return);
 		break;
 		case 'addUser':
+			//remove function
 			$params = $_POST['params'];
 			$errorBool = User::addUser($db, $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
 			echo $errorBool ? json_encode('successfully added') : die("failed add");
 		break;
 		case 'getStudentDetails':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$return = array();
 
 			$params = $_POST['params'];
@@ -181,6 +199,10 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'getAllStudents':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$students = User::getAllStudents($db);
 			$return = array();			
 			foreach ($students as $student){
@@ -211,6 +233,10 @@ if(isset($_POST['function']) && $validSession){
 
 		break;
 		case 'getAllGroups':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$groups = Group::getAllGroups($db);
 			$return = array();			
 			foreach ($groups as $group){
@@ -225,11 +251,19 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($group->getData());
 		break;
 		case 'modifyGroups':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$params = $_POST['params'];
 			$errorBool = Group::modifyGroups($db, $params['groupList']);
 			echo $errorBool ? json_encode('successfully modified') : die("failed modify");
 		break;
 		case 'createGroups':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$params = $_POST['params'];
 			$errorBool = Group::createGroups($db, $params['groupList']);
 			echo $errorBool ? json_encode('successfully created') : die("failed creation");

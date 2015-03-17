@@ -23,6 +23,10 @@ if(isset($_POST['function']) && $validSession){
 	
 	switch($_POST['function']){
 		case 'setNewAssignments':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$errorBool = 1;
 			$params = $_POST['params'];
 			foreach ($params['newAssignmentList'] as $groupAssignedTo){
@@ -31,6 +35,10 @@ if(isset($_POST['function']) && $validSession){
 			echo $errorBool ? json_encode('successfully assigned') : die("failed assignment");
 		break;
 		case 'getUndoneAssessmentsByGroupNo':
+			if(!$_SESSION['user']['isStudent']){
+				die('deniedAccess');
+			}
+
 			//remove params
 			$assessments = Assessment::getUndoneAssessmentsByGroupNo($db, $_SESSION['user']['groupNo']);
 			$return = array();			
@@ -40,6 +48,10 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'getDoneAssessmentsByGroupNo':
+			if(!$_SESSION['user']['isStudent']){
+				die('deniedAccess');
+			}
+
 			//remove params
 			$assessments = Assessment::getDoneAssessmentsByGroupNo($db, $_SESSION['user']['groupNo']);
 			$return = array();			
@@ -49,6 +61,10 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'getDoneAssessmentsByReportNo':
+			if(!$_SESSION['user']['isStudent']){
+				die('deniedAccess');
+			}
+
 			//remove params
 			$assessments = Assessment::getDoneAssessmentsByReportNo($db, $_SESSION['user']['groupNo']);
 			$return['assessments'] = array();			
@@ -62,6 +78,10 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'getAllAssessments':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+
 			$assessments = Assessment::getAllAssessments($db);
 			$return = array();			
 			foreach ($assessments as $assessment){
@@ -70,15 +90,20 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'setAssessment':
+			if(!$_SESSION['user']['isStudent']){
+				die('deniedAccess');
+			}
+
 			//remove reportNo
 			$params = $_POST['params'];
 			$errorBool = Assessment::setAssessment($db, $params['reportNo'], $_SESSION['user']['groupNo'], 
 				$params['structureGrade'], $params['strengthGrade'], $params['formatGrade'], $params['qualityGrade'], 
-				$params['averageGrade'], $params['comment']);
+				$params['comment']);
 
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 		break;
 		case 'assignAssessment':
+			//remove function
 			$params = $_POST['params'];
 			$errorBool = Assessment::assignAssessment($db, $params['reportNo'], $params['groupNo']);
 			echo $errorBool ? json_encode('successfully assigned') : die("failed assignment");
