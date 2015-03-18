@@ -22,6 +22,12 @@ if(isset($_POST['function']) && $validSession){
 
 
 		case 'addReport':
+			if(!$_SESSION['user']['isAdmin']){
+				die('deniedAccess');
+			}
+			//$groupNo = groupNo::getGroupNo($db, $params['groupNo']);
+			$group = Group::getGroupByNo($db, $params['groupNo']);
+			Group::createGroups($db, $params['groupList'], $_SESSION['user']['userNo']);
 			//meriem make sure to change this to use the $_SESSION['user']['groupNo']
 			$params = $_POST['params'];
 			$errorBool = Report::addReport($db, $params['title'], $params['body'], $params['reference']);

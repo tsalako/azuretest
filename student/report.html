@@ -125,18 +125,18 @@
                                     <form role="form">
                                         <div class="form-group">
                                             <label>Title</label>
-                                            <input class="form-control">
+                                            <input class="form-control titleR">
                                             <p class="help-block">Please use a meaningful and descriptive title.</p>
                                         </div>
                                         <div class="form-group">
                                             <label>Body</label>
-                                            <textarea class="form-control" placeholder="Type in your analysis in here..." rows="7"></textarea>
+                                            <textarea class="form-control bodyR" placeholder="Type in your analysis in here..." rows="7"></textarea>
                                             <p class="help-block">Or upload a text file below.</p>
                                         </div>
                                         <div class="form-group">
                                             <label>File input</label>
                                             <div>
-                                            <button class="btn btn-primary btn-outline">
+                                            <button class="btn btn-primary btn-outline fileInputR">
                                                 <label class="upload"><span><i class="fa fa-upload "><input id="fileUploaded" type="file"></i></span></label>
                                             </button>      
                                             <p id="fileName">No file chosen<p>
@@ -144,11 +144,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>References</label>
-                                            <textarea class="form-control" placeholder="Eg.     Contributors' names (Last edited date). Title of resource. Retrieved from http://Web address for OWL resource." rows="4"></textarea>
+                                            <textarea class="form-control refR" placeholder="Eg.     Contributors' names (Last edited date). Title of resource. Retrieved from http://Web address for OWL resource." rows="4"></textarea>
                                         </div>
 
-                                        <button type="submit" class="btn btn-default">Submit Button</button>
-                                        <button type="reset" class="btn btn-default">Reset Button</button>
+                                        <button type="submit" class="btn btn-default" onclick="addReport()">Submit</button>
+                                        <button type="reset" class="btn btn-default" onclick="clearFields()">Reset</button>
                                     </form>
                                 </div>
                                 <!-- /.col-lg-6 (nested) -->
@@ -213,3 +213,72 @@ $(function() {
 </script>
 
 </html>
+
+<!-- INITIAL LOAD SCRIPT -->
+<script>
+$( document ).ready(function() {
+    initialLoad();
+});
+
+var initialLoad = function () {
+    //user Init
+    sendRequest('php/ReportService.php',
+            reportInit,
+            'getAllReports');
+
+}
+</script>
+
+<!-- REPORT ADD/EDIT SCRIPT -->
+<script>
+
+var reports, reportGlobal;
+
+$( "#reportListR" ).change(function() {
+
+  if($(this).val() == 'Add'){
+    $('.titleR').val('');
+    $('.bodyR').val('');
+    $('.refR').val('');
+    
+  } else {
+    reportGlobal = reports[$(this)[0].selectedIndex-1];
+    $('.titleR').val(reportGlobal.title);
+    $('.bodyR').val(reportGlobal.body);
+    $('.refR').val(reportGlobal.reference);
+  }
+  
+});
+
+var addReport = function () {
+    var params = {'groupNo' : convertGroupNo(report.groupNo),
+        'title' : $('.titleR').val(), 
+                'body' : $('.bodyR').val(),
+                'reference' : $('.refR').val()};
+
+    sendRequest('php/ReportService.php',
+            initialLoad,
+            addReport,
+            params);
+
+}
+
+
+var clearFields = function () {
+    /*Clear Fields*/
+    $('.titleR').val('');
+    $('.bodyR').val('');
+    $('.refR').val('');
+}
+
+var reportInit = function (response) {
+    var $reportList = $('#reportListR');
+    reports = [];
+    $.each(response.data, function(i, report) {
+                reports.push(report);
+                $reportList.append('<option value="temp">' + report.groupNo + '</option>');
+            });
+    console.log(response.status);
+}
+
+</script>
