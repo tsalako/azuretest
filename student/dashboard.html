@@ -232,6 +232,12 @@ $(function() {
             'getStudentDashboard');
 });
 
+/**
+ * Loads the student dashboard with the necessary values.
+ * 
+ * @param response    object with 'user','isUploaded',and 'newAssessmentCount' fields
+ * @see   sendRequest success
+ */
 var loadDashValues = function(response) {
     var data = response.data;
 

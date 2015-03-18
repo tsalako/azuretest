@@ -168,7 +168,12 @@ $(function() {
             'getAllGroupStats');
 });
 
-
+/**
+ * Loads statistics table with with stats for all 20 groups.
+ * 
+ * @param response    array of custom group stat objects
+ * @see   sendRequest success
+ */
 var loadStats = function(response) {
     $.each(response.data, function(i, groupStat) {
         var dateString = groupStat.uploadedOn == null ? "--" : new Date(groupStat.uploadedOn).toLocaleDateString();

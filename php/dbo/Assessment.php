@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Assessment Database Object Class
+ */
 class Assessment{
 	private $data = array();
 
@@ -22,8 +25,14 @@ class Assessment{
 		return $returnData;
 	}
 
+	/**
+	 * Gets undone assessments by groupNo in the database
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo groupNo of the group to assess the report
+	 * @return         array of assessment dbo objects
+	 */
 	public static function getUndoneAssessmentsByGroupNo($db, $groupNo) {
-		//get all groupNo where report exists so where reportNo matches with a report in the report table
 		$assessments = array();
 
 		$query = "SELECT
@@ -73,6 +82,13 @@ class Assessment{
 		return $assessments;
 	}
 
+	/**
+	 * Gets done assessments by groupNo in the database
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo groupNo of the group to assess the report
+	 * @return         array of assessment dbo objects
+	 */
 	public static function getDoneAssessmentsByGroupNo($db, $groupNo) {
 		$assessments = array();
 
@@ -125,6 +141,13 @@ class Assessment{
 		return $assessments;
 	}
 
+	/**
+	 * Gets done assessments by reportNo in the database
+	 * 
+	 * @param $db       database connection
+	 * @param $reportNo groupNo of the group of whose report is to be assessed
+	 * @return          array of assessment dbo objects
+	 */
 	public static function getDoneAssessmentsByReportNo($db, $reportNo) {
 		$assessments = array();
 
@@ -158,6 +181,12 @@ class Assessment{
 		return $assessments;
 	}
 
+	/**
+	 * Gets all assessments in the database
+	 * 
+	 * @param $db database connection
+	 * @return    array of assessment dbo objects
+	 */
 	public static function getAllAssessments($db) {
 		$assessments = array();
 
@@ -207,6 +236,19 @@ class Assessment{
 		return $assessments;
 	}
 
+	/**
+	 * Update an assessment in the database.
+	 * 
+	 * @param $db             database connection
+	 * @param $reportNo       groupNo of the group of whose report is to be assessed
+	 * @param $groupNo        groupNo of the group to assess the report
+	 * @param $structureGrade grade on the structure of the report
+	 * @param $strengthGrade  grade on the strength of the report
+	 * @param $formatGrade    grade on the format of the report
+	 * @param $qualityGrade   grade on the quality of the report
+	 * @param $comment        comments on the report
+	 * @return                whether the assessment was updated or not
+	 */
 	public static function setAssessment($db, $reportNo, $groupNo, 
 		$structureGrade, $strengthGrade, $formatGrade, $qualityGrade,
 		$comment) {
@@ -230,6 +272,14 @@ class Assessment{
 
 	}
 
+	/**
+	 * Create an assessment in the database.
+	 * 
+	 * @param $db       database connection
+	 * @param $reportNo groupNo of the group of whose report is to be assessed
+	 * @param $groupNo  groupNo of the group to assess the report
+	 * @return          whether the assessment was assigned or not
+	 */
 	public static function assignAssessment($db, $reportNo, $groupNo) {
 		$query = "INSERT INTO
 					assessment (`reportNo`,`groupNo`)

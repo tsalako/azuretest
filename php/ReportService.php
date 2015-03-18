@@ -5,6 +5,9 @@ include 'dbo/Report.php';
 include 'dbo/Group.php';
 header("content-type:application/json");
 
+/** 
+ * Report service to handle requests that deal with the report dbo object.
+ */
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();

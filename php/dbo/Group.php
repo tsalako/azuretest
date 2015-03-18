@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Group Database Object Class
+ */
 class Group{
 	private $data = array();
 
@@ -20,6 +23,12 @@ class Group{
         return $returnData;
 	}
 
+	/**
+	 * Gets all 20 groups in the database
+	 * 
+	 * @param $db database connection
+	 * @return    list of group dbo objects
+	 */
 	public static function getAllGroups($db){
 		$groups = array();
 
@@ -39,6 +48,13 @@ class Group{
 		return $groups;
 	} 
 
+	/**
+	 * Gets the group object from the database given a groupNo
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo groupNo of group to retrieve
+	 * @return         the group dbo object
+	 */
 	public static function getGroupByNo($db, $groupNo){
 		$queryGroup = "SELECT
 							G.groupNo,
@@ -57,15 +73,28 @@ class Group{
 		return $group;
 	}
 
+	/**
+	 * Modify all group numbers in database.
+	 * 
+	 * @param $db database connection
+	 * @return    1 - the function ran with no errors.
+	 */
 	public static function modifyGroups($db, $groupList){
-		$errorBool = 1;
 		foreach ($groupList as $group){
-			$errorBool = $errorBool && User::setUsersGroupNos($db, $group['usernames'][0],$group['usernames'][1],$group['usernames'][2], $group['groupNo']);
+			User::setUsersGroupNos($db, $group['usernames'][0],$group['usernames'][1],$group['usernames'][2], $group['groupNo']);
 		}
-		return $errorBool;
+		return 1;
 	}
 
-	public static function createGroups($db, $groupList){
+	/**
+	 * Clear the database of all things regarding old groups 
+	 * (group table, assessment table, report table, thread table,
+	 * post table, student users) and assign tne new groups.
+	 * 
+	 * @param $db database connection
+	 * @return    boolean of whether if the deletes and updates took place or not
+	 */
+	public static function createGroups($db, $groupList, $adminNo){
 		$errorBool = 1;
 
 		//must truncate all tables with th exception of user where the admins will be preserved
@@ -77,7 +106,7 @@ class Group{
 			$queryInsert = "INSERT INTO 
 							groups (`groupNo`, `assignedBy`) 
 					  	VALUES 
-					  		('".$group['groupNo']."', '".$group['assignedBy']."')";
+					  		('".$group['groupNo']."', '".$adminNo."')";
 	    	$errorBool = $errorBool && $db->exec($queryInsert);
 
 			foreach ($group['usernames'] as $username){
@@ -88,6 +117,13 @@ class Group{
 		return $errorBool;
 	}
 
+	/**
+	 * Get the statistics for a specified group.
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo groupNo of the group to grab the stats for.
+	 * @return         the groupStats custom object
+	 */
 	public static function getGroupStats($db, $groupNo) {
 		$row = array();
 		$queryReport = "SELECT 
@@ -138,21 +174,6 @@ class Group{
 			$result = $stmt->fetch();
 			$row['uploadedOn'] = !$result ? null : $result['uploadedOn'];
 
-			//original query
-			/*
-				$queryAssessment = "SELECT (
-									SELECT COUNT( * )
-									FROM assessment
-									WHERE groupNo = '{$groupNo}'
-									) AS totalCount, (
-
-									SELECT COUNT( * )
-									FROM assessment
-									WHERE assessedOn IS NOT NULL
-									AND groupNo = '{$groupNo}'
-									) AS writtenCount
-									FROM assessment";
-			*/
 			$queryAssessment = "SELECT 
 									COUNT(*) as total, 
 									COUNT(assessedOn) as written 
@@ -166,12 +187,15 @@ class Group{
 			$row['written'] = $result['written'];
 			$row['total'] = $result['total'];
 
-			
-
-			//returns object with avg, rank, and reportNo fields (see use example in UserService.php)
 			return $row;
 	}
 
+	/**
+	 * Gets stats of all 20 groups in the database
+	 * 
+	 * @param $db database connection
+	 * @return    list of groupStats custom objects
+	 */
 	public static function getAllGroupsStats($db) {
 		$groupStats = array();
 		$query = "SELECT 

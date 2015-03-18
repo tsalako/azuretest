@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Post Database Object Class
+ */
 class Post{
 	private $data = array();
 
@@ -16,6 +19,13 @@ class Post{
 		return $this->data;
 	}
 
+	/**
+	 * Gets list of Post dbo objects by their threadNo from the database.
+	 * 
+	 * @param $db       database connection
+	 * @param $threadNo number of the thread
+	 * @return          array of dbo posts objects 
+	 */
 	public static function getPostListByThreadNo($db, $threadNo){
 		$posts = array();
 		$query = "SELECT
@@ -41,6 +51,15 @@ class Post{
 		return $posts;
 	}
 
+	/**
+	 * Adds a post to the database given the necessary fields.
+	 * 
+	 * @param $db       database connection
+	 * @param $threadNo number of the thread
+	 * @param $creator  userNo of the creator of the post
+	 * @param $comment  the post comment
+	 * @return          the post that was added
+	 */
 	public static function addPost($db, $threadNo, $creator, $comment){
 		$queryInsert = "INSERT INTO
 					post (`postNo`,`threadNo`,`creator`,`comment`,`postedOn`)

@@ -7,11 +7,6 @@ green - #5cb85c
 grey/gray - #999999
 ***********************/
 
-/*.darkBG {
-	background: #000;
-	color: #fff;
-}*/
-
 .login-panel, .register-panel {
 	margin-top: 25%;
 	/*margin-left:15%;*/

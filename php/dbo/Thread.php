@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Thread Database Object Class
+ */
 class Thread{
 	private $data = array();
 
@@ -20,6 +23,13 @@ class Thread{
 		return $this->data;
 	}
 
+	/**
+	 * Gets the thread object from the database given a threadNo
+	 * 
+	 * @param $db       database connection
+	 * @param $threadNo threadNo of thread to retrieve
+	 * @return          the thread dbo object
+	 */
 	public static function getThreadByThreadNo($db, $threadNo){
 		$query = "SELECT
 					T.threadNo,
@@ -55,6 +65,13 @@ class Thread{
 		return new Thread($row);
 	}
 
+	/**
+	 * Gets all threads for a specified group
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo groupNo of whose threads to be retrieved
+	 * @return         array of thread dbo objects
+	 */
 	public static function getThreadListByGroupNo($db, $groupNo){
 		$threads = array();
 		$query = "SELECT
@@ -100,6 +117,15 @@ class Thread{
 		return $threads;
 	}
 
+	/**
+	 * Gets all threads for a specified group with the given string
+	 * in their title or body.
+	 * 
+	 * @param $db           database connection
+	 * @param $groupNo      groupNo of whose threads to be retrieved
+	 * @param $searchString string to search for in the title and body
+	 * @return              array of thread dbo objects
+	 */
 	public static function getSearchThreadList($db, $groupNo, $searchString){
 		$threads = array();
 
@@ -146,6 +172,17 @@ class Thread{
 		return $threads;
 	}
 
+	/**
+	 * Saves the new thread to the database and send it back to the user.
+	 * 
+	 * @param $db          database connection
+	 * @param $groupNo     groupNo of group to retrieve
+	 * @param $creator     userNo of the creator of the thread
+	 * @param $creatorName name of the creator of the thread
+	 * @param $title       title of the thread
+	 * @param $description description of the thread
+	 * @return             thread that was just added
+	 */
 	public static function startThread($db, $groupNo, $creator, $creatorName, $title, $description){
 		$queryInsert = "INSERT INTO
 							thread (`threadNo`,`groupNo`,`creator`,`lastEditor`,`lastUpdate`,`title`,`description`,`createdOn`)

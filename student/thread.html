@@ -131,6 +131,10 @@
 </body>
 
 <script>
+
+/**
+ * Initial load of fields and events.
+ */
 $(function() {
     $('.post-add').hide();
 
@@ -155,7 +159,6 @@ $(function() {
     });
 
     $('.save').click(function(){
-        //send
         sendRequest('../php/ForumService.php',
             addPost,
             'addPost',
@@ -169,6 +172,12 @@ $(function() {
 
 });
 
+/**
+ * Add a post the post list.
+ * 
+ * @param response    post dbo object
+ * @see   sendRequest success
+ */
 var addPost = function(response){
     var postObj = response.data;
 
@@ -189,6 +198,12 @@ var addPost = function(response){
                     '<!-- /.row -->');
 }
 
+/**
+ * Populate the list of post for the desired thread.
+ * 
+ * @param response    array of post dbo objects
+ * @see   sendRequest success
+ */
 var populatePostList = function(response){
     var data = response.data;
     var postList = data.posts;
@@ -201,6 +216,12 @@ var populatePostList = function(response){
     $('button[type=submit]').click(function(){
         var searchText = $('#searchBox').val().trim();
         window.location.href = 'forum.html?&search=' + searchText;
+    });
+
+    $("#searchBox").keyup(function(event){
+        if(event.keyCode == 13){
+            $("button[type=submit]").click();
+        }
     });
 
     $.each(postList, function(i, postObj){

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Report Database Object Class
+ */
 class Report{
 	private $data = array();
 
@@ -24,7 +27,7 @@ class Report{
 					  	";
 		return $db->exec($queryInsert);
 	}
-	
+
 	public static function editReport($db, $groupNo, $title, $body, $reference){
 		$queryUpdate = "UPDATE 
 							report

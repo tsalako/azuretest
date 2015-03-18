@@ -208,6 +208,13 @@ $(document).ready(function() {
             'getAllAssessments');
     });
 
+/**
+ * Loads the assessment-table with the appriopriate data for each
+ * assessment (groupNo, grades, comments, etc.)
+ *
+ * @param response    list of assessments
+ * @see   sendRequest success
+ */
 var loadTable = function(response){
     var total = 0;
     var length = response.data.length;
@@ -246,6 +253,14 @@ var loadTable = function(response){
     $('.fa-asterisk').hide();
 }
 
+/**
+ * Click event of each assessment comment speech icon. Loads the
+ * comments into a module and shows the module.
+ *
+ * @param comments comments for assessment
+ * @param groupNo  groupNo that wrote the assessment
+ * @param reportNo groupNo of the group that wrote the report
+ */
 function popupModule(comments, groupNo, reportNo){
     $('#myModal .modal-title').text("Group No. " + groupNo + " comments on Group No. " + reportNo);
     $('#myModal .modal-body').text(comments);

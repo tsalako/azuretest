@@ -7,9 +7,9 @@ include 'dbo/Thread.php';
 include 'dbo/Post.php';
 header("content-type:application/json");
 
-/* 
- Forum service to handle requests that deal with thread and posts. 
-*/
+/** 
+ * Forum service to handle requests that deal with thread and post dbo objects. 
+ */
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();

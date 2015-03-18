@@ -6,11 +6,9 @@ include 'dbo/Report.php';
 include 'dbo/Group.php';
 header("content-type:application/json");
 
-/*
-Assessment service to access Assessment object and functions.
-Report needed since assessments have an attached report, see
-Assessement.php constructor.
-*/
+/** 
+ * Assessment service to handle requests that deal with the assessment dbo object.
+ */
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();

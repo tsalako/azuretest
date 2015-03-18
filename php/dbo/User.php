@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * User Database Object Class
+ */
 class User{
 	private $data = array();
 
@@ -19,6 +22,14 @@ class User{
 		return $this->data;
 	}
 
+	/**
+	 * Checks if the password and username match one in the database. Ensuring security.
+	 * 
+	 * @param $db       database connection
+	 * @param $username username of the user wanting to login
+	 * @param $password password of the user wanting to login
+	 * @return          user dbo object if login was successful or null if it was not.
+	 */
 	public static function loginUser($db, $username, $password) {
 		$login_ok = false; 
 
@@ -65,6 +76,17 @@ class User{
         } 
 	}
 
+	/**
+	 * Reigsters a user in the database. Ensuring security. The username is already in the
+	 * database, it was added by the admin and the user uses that name to register.
+	 * 
+	 * @param $db       database connection
+	 * @param $username username of the user wanting to register
+	 * @param $password password of the user wanting to register
+	 * @param $fName    first name of the user wanting to register
+	 * @param $lName    last name of the user wanting to register
+	 * @return          user dbo object if registration was successful or null if it was not.
+	 */
 	public static function registerStudent($db, $username, $password, $fName, $lName){
 		$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
         $password = hash('sha256', $password . $salt); 
@@ -115,6 +137,16 @@ class User{
 
 	}
 
+	/**
+	 * Add user to the database by their username, groupNo, and type
+	 * so they can register when they come to the site for the first time.
+	 * 
+	 * @param $db       database connection
+	 * @param $username username of the user
+	 * @param $groupNo  groupNo of the group the user is in
+	 * @param $type     type of user
+	 * @return          whether user was added or not
+	 */
 	public static function addUserBasic($db, $username, $groupNo, $type){
 		$queryInsert = "INSERT INTO 
 							user (`userNo`, `type`, `userName`, `groupNo`) 
@@ -124,6 +156,9 @@ class User{
 		return $db->exec($queryInsert);
 	}
 
+	/**
+	 * REMOVE FUNCTION
+	 */
 	public static function addUser($db, $username, $password, $type, $first, $last){
 		$password = sha1($password);
 		$queryInsert = "INSERT INTO 
@@ -134,6 +169,9 @@ class User{
 		return $db->exec($queryInsert);
 	}
 
+	/**
+	 * REMOVE FUNCTION
+	 */
 	public static function editUser($db, $userNo, $username, $password, $type, $first, $last){
 		if($password != ''){
 			$password = sha1($password);
@@ -163,6 +201,15 @@ class User{
 		return $db->exec($queryUpdate);
 	}
 
+	/**
+	 * Update the password of the specified user.
+	 * 
+	 * @param $db       database connection
+	 * @param $userNo   userNo of the user
+	 * @param $currPass current password to change
+	 * @param $newPass  new password to set
+	 * @return          whether the password was updated or not
+	 */
 	public static function updatePassword($db, $userNo, $currPass, $newPass) {
 		$pass_check = false; 
 
@@ -215,6 +262,15 @@ class User{
         } 
 	}
 
+	/**
+	 * Edit a specified user field for a specified user.
+	 * 
+	 * @param $db     database connection
+	 * @param $userNo userNo of the user
+	 * @param $field  field to update
+	 * @param $data   data to set the field to
+	 * @return        1 - the field was updated
+	 */
 	public static function editUserField($db, $userNo, $field, $data){
 		if($field == 'name') {
 			$queryUpdate = "UPDATE 
@@ -248,17 +304,16 @@ class User{
 		return 1;
 	}
 
-	public static function setUserGroupNo($db, $username, $groupNo){
-		$queryUpdate = "UPDATE 
-							user
-						SET
-							groupNo = '".$groupNo."'
-						WHERE
-							username = '".$username."'
-						";
-		return $db->exec($queryUpdate);
-	}
-
+	/**
+	 * Set the groupNo of an entire group.
+	 * 
+	 * @param $db        database connection
+	 * @param $username1 username of the first group member
+	 * @param $username2 username of the second group member
+	 * @param $username3 username of the third group member
+	 * @param $groupNo   groupNo to set the users to
+	 * @return           1 - the field was updated
+	 */
 	public static function setUsersGroupNos($db, $username1, $username2, $username3, $groupNo){
 		$queryUpdate = "UPDATE 
 							user
@@ -268,11 +323,17 @@ class User{
 							username IN ('".$username1."','".$username2."','".$username3."')
 						";
 
-		//doesnt necessarily need to up date (so always retun 1);
 		$db->exec($queryUpdate);
 		return 1;
 	}
 
+	/**
+	 * Get a user from the database by their user number
+	 * 
+	 * @param $db     database connection
+	 * @param $userNo userNo of the user to retrieve
+	 * @return        the user db object
+	 */
 	public static function getUserByUserNo($db, $userNo){
 		$queryUser = "SELECT 
 						U.userNo, 
@@ -297,6 +358,13 @@ class User{
 		return new User($stmt->fetch());
 	}
 
+	/**
+	 * Get all the users from the database in a group.
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo groupNo of the users to retrieve
+	 * @return         array of user objects
+	 */
 	public static function getUsersByGroupNo($db, $groupNo){
 		$users = array();
 
@@ -322,6 +390,12 @@ class User{
 		return $users;	
 	}
 
+	/**
+	 * Get all the student users from the database in a group.
+	 * 
+	 * @param $db database connection
+	 * @return    array of user objects
+	 */
 	public static function getAllStudents($db){
 		$students = array();
 
@@ -347,6 +421,9 @@ class User{
 		return $students;
 	}
 
+	/**
+	 * REMOVE FUNCTION
+	 */
 	public static function getAllUsers($db){
 		$users = array();
 
@@ -370,16 +447,18 @@ class User{
 		return $users;
 	}
 
+	/**
+	 * Deletes all the user with type student in the database
+	 * 
+	 * @param $db database connection
+	 * @return    whether the students were deleted or not
+	 */
 	public static function deleteCurrentStudents($db) {
 		$query = "DELETE FROM 
 					user 
 				  WHERE type = 'student'
 						";
 		return $db->exec($query);
-	}
-
-	public static function getSessionUser($db) {
-		
 	}
 
 }

@@ -153,10 +153,13 @@ $(function() {
             'getDoneAssessmentsByGroupNo');
 });
 
-/*
-Callback from request that pulls all undone assessments from the database for a specified group.
-This functions adds retrieved assessments to the undoneAssessments div.
-*/
+/**
+ * Callback from request that pulls all undone assessments from the database for a specified group.
+ * This functions adds retrieved assessments to the undoneAssessments div.
+ *
+ * @param response    list of assessment dbo objects
+ * @see   sendRequest success
+ */
 var populateUndoneAssessmentsDiv = function(response) {
     $.each(response.data, function(i, assessment) {
         var report = assessment.report;
@@ -174,10 +177,13 @@ var populateUndoneAssessmentsDiv = function(response) {
     addSliders();
 }
 
-/*
-Callback from request that pulls all done assessments from the database for a specified group.
-This functions adds retrieved assessments to the doneAssessments div.
-*/
+/**
+ * Callback from request that pulls all done assessments from the database for a specified group.
+ * This functions adds retrieved assessments to the doneAssessments div.
+ *
+ * @param response    list of assessment dbo objects
+ * @see   sendRequest success
+ */
 var populateDoneAssessmentsDiv = function(response) {
     $.each(response.data, function(i, assessment) {
         var report = assessment.report;
@@ -193,16 +199,20 @@ var populateDoneAssessmentsDiv = function(response) {
         createPanel("assessed-panel", data);
     });
     
-    //Later used for the edit option.
     addSliders();
     $('.fa-asterisk').hide();
 }
 
-/*
-Creates one of two types of assessment views that are available when you come into the page (four are available alltogether).
-These views are "report-panel" view signifying that the group has not assessed the report and the "assessed-panel" view which
-signifies that the group has written an assessment. Otherviews include "assessing-panel" and "report-assess-panel".
-*/
+/**
+ * Creates one of two types of assessment views that are available when you come into the page (four are available alltogether).
+ * These views are "report-panel" view signifying that the group has not assessed the report and the "assessed-panel" view which
+ * signifies that the group has written an assessment. Other views include "assessing-panel" and "report-assess-panel".
+ *
+ * Adds the appriate click event and sets appriopriate fields
+ * 
+ * @param type type of assessment view to show initially
+ * @param data modified dbo object
+ */
 function createPanel(type, data) {
     var $divToAppendTo = type == "report-panel" ? $(".container-fluid #undone-assessments") : $(".container-fluid #done-assessments")
     $divToAppendTo.append('<div class="row '+type+'"> <!-- change class show and hide divs -->'+
@@ -442,11 +452,15 @@ function createPanel(type, data) {
 }
 
 
-/*
-Handles the transition/transformation between panels. Essentially just goes through and hides the 
-necessary components, shows the necessary components, and does any special cases
-for instance the transition between "assessing" and "assessed" needs to update the database as well.
-*/
+/**
+ * Handles the transition/transformation between panels. Essentially just goes through and hides the 
+ * necessary components, shows the necessary components, and does any special cases
+ * for instance the transition between "assessing" and "assessed" needs to update the database as well.
+ * 
+ * @param $divToChange div to change the view of
+ * @param newType      type the change the view to
+ * @param data         modified assessment dbo object
+ */
 function changePanel($divToChange, newType, data){
     //GET CURRENT CLASS/ REMOVE THE CLASS SO IT CAN BE CHANGED
     var currType = "";
@@ -595,9 +609,9 @@ function changePanel($divToChange, newType, data){
     
 }
 
-/*
-The expand/collapse functionality of the panels.
-*/
+/**
+ * The expand/collapse functionality of the panels.
+ */
 var showMore = function(){
     if($(this).find("i").hasClass("fa-plus")){
         $(this).parent().parent().find(".sub-report").hide();
@@ -622,10 +636,18 @@ var showMore = function(){
     },350);
 }
 
-/*
-Helps create the "assessed" panel. Systematically inserts the correct number of star icons
-as well as updates the comment text.
-*/
+/**
+ * Helps create the "assessed" panel. Systematically inserts the correct number of star icons
+ * as well as updates the comment text.
+ * 
+ * @param $divToChange assessment div the stars and comments will be added to.
+ * @param gradeIDs     ids of the different types of grades (qualityGrade, formatGrade, etc.)
+ * @param values       values corresponding to the specific gradeID
+ * @param title        title of the report the assessment has graded
+ * @param groupNo      groupNo of the group that wrote the report
+ * @param body         text of the report
+ * @param comments     assessment comments on the report
+ */
 function assessmentFormHandler($divToChange, gradeIDs, values, title, groupNo, body, comments){
     //Handles adding approriate number of stars.
     $.each(gradeIDs, function(j, gradeID) {                    
@@ -675,9 +697,9 @@ function assessmentFormHandler($divToChange, gradeIDs, values, title, groupNo, b
     $divToChange.find(".bottom-panel .full-assessment p").html(comments);
 }
 
-/*
-Add sliders to all of the assessment forms.
-*/
+/**
+ * Add sliders to all of the assessment forms.
+ */
 function addSliders(){
     var sliders = ["#structureGrade","#strengthGrade","#formatGrade","#qualityGrade"];
     $.each(sliders, function(i, sliderID) {
@@ -694,13 +716,9 @@ function addSliders(){
     });
 }
 
-/*
-Reset sliders for all the assessment forms (they are somwhat linked), so moving a slider in one
-changes the value in the others, so reset to 1 so it is accurate when you open up sider.
-
-Slider problems can actually be fixed by just making sure only one assessment is being assessed
-at a time, so close the other "assessing" panel.
-*/
+/**
+ * Reset sliders for all the assessment forms.
+ */
 function resetSliders(){
     var sliders = ["#structureGrade","#strengthGrade","#formatGrade","#qualityGrade"];
     $.each(sliders, function(i, sliderID) {
@@ -710,9 +728,11 @@ function resetSliders(){
 }
 
 
-/*
-
-*/
+ /**
+ * Set slider values when editting to current values of the assessment
+ * 
+ * @param $divToChange the div whose slider values will be changed
+ */
 function setSliders($divToChange){
     var sliders = ["#structureGrade","#strengthGrade","#formatGrade","#qualityGrade"];
     $.each(sliders, function(i, sliderID) {
@@ -721,255 +741,5 @@ function setSliders($divToChange){
         $( ".assessment-form "+ sliderID + " #slider" ).slider( "value", value );
     });
 }
-</script>
-
-
-<script>
-//Full Assessment Div Skeleton
-
-/*<div class="row '+type+'">
-    <div class="col-lg-12">
-        <div class="top-panel red-border">
-                <div class="panel-heading show-more">
-                    <span class="pull-left title"></span>
-                    <span class="pull-right"><i class="fa fa-plus"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="panel-body red-div sub-report">
-                    <p></p>
-                </div>
-                <div class="panel-body red-div full-report">
-                    <p></p>
-                </div>
-                <div class="panel-footer">
-                    <span class="pull-left">Assess Report</span>
-                    <span class="pull-right"><i class="fa fa-arrow-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-        </div>
-        <div class="bottom-panel green-border">
-            <div class="panel-heading">
-                <span class="pull-left title"></span>
-                <span class="pull-right"><i class="fa fa-plus"></i></span>
-                <div class="clearfix"></div>
-            </div>
-            <div class="panel-body green-div assessment-form">
-                <div class="row" id="structureGrade">
-                    <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
-                        <p>
-                          <label class="col-lg-5" for="rank">Structure Rank:</label>
-                          <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                        </p>
-                    </div>
-                    <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
-                </div>
-                <div class="row" id="strengthGrade">
-                    <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
-                        <p>
-                          <label class="col-lg-5" for="rank">Strength Rank:</label>
-                          <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                        </p>
-                    </div>
-                    <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
-                </div>
-                <div class="row" id="formatGrade">
-                    <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
-                        <p>
-                          <label class="col-lg-5" for="rank">Format Rank:</label>
-                          <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                        </p>
-                    </div>
-                    <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
-                </div>
-                <div class="row" id="qualityGrade">
-                    <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 col-lg-offset-2">
-                        <p>
-                          <label class="col-lg-5" for="rank">Quality Rank:</label>
-                          <input type="text" id="rank" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                        </p>
-                    </div>
-                    <div class="col-lg-2 col-md-4  col-sm-6 col-xs-8" id="slider"></div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-lg-8 col-lg-offset-2">
-                            <label class="col-lg-5">Comments:</label>
-                            <textarea class="form-control" rows="10"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body green-div sub-assessment">
-                <p></p>
-                <div class="row">
-                    <div id="structureGrade">
-                        <div class="col-lg-offset-2 col-lg-2 col-md-offset-1 col-md-3">
-                            <label>Structure Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                    </div>
-                    <div id="strengthGrade">
-                        <div class="col-lg-2 col-md-3">
-                            <label>Strength Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div id="qualityGrade"> 
-                        <div class="col-lg-offset-2 col-lg-2 col-md-offset-1 col-md-3">
-                            <label>Quality Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-                    </div>
-                    <div id="formatGrade">
-                        <div class="col-lg-2 col-md-3">
-                            <label>Format Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="row black-border">
-                    <div id="overallGrade">
-                        <div class="col-lg-offset-4 col-lg-2 col-md-offset-4 col-md-3">
-                            <label>Overall Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-3 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <label>(2.625)</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body green-div full-assessment">
-                <p></p>
-                <div class="row">
-                    <div id="structureGrade">
-                        <div class="col-lg-offset-2 col-lg-2 col-md-offset-1 col-md-3">
-                            <label>Structure Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                    </div>
-                    <div id="strengthGrade">
-                        <div class="col-lg-2 col-md-3">
-                            <label>Strength Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div id="qualityGrade"> 
-                        <div class="col-lg-offset-2 col-lg-2 col-md-offset-1 col-md-3">
-                            <label>Quality Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-                    </div>
-                    <div id="formatGrade">
-                        <div class="col-lg-2 col-md-3">
-                            <label>Format Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="row black-border">
-                    <div id="overallGrade">
-                        <div class="col-lg-offset-4 col-lg-2 col-md-offset-4 col-md-3">
-                            <label>Overall Grade:</label>
-                        </div>
-                        <div class="col-lg-2 col-md-3 stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <label>(2.625)</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer view-edit-footer">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <span class="pull-left">Edit&nbsp&nbsp<i class="fa fa-edit"></i></span>
-                        <span class="pull-right"></span>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="view-switch col-lg-6">
-                        <span class="pull-left"></span>
-                        <span class="pull-right">Switch View&nbsp&nbsp<i class="fa fa-exchange"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer save-back-footer">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <span class="pull-left">Back&nbsp&nbsp<i class="fa fa-arrow-left"></i></span>
-                        <span class="pull-right"></span>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="save col-lg-6">
-                        <span class="pull-left"></span>
-                        <span class="pull-right">Save Assessment&nbsp&nbsp<i class="fa fa-floppy-o"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.col-lg-12 -->
-</div>
-<!-- /.row -->*/
-
 </script>
 </html>

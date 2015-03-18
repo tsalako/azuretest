@@ -8,9 +8,9 @@ include 'dbo/Report.php';
 header("content-type:application/json");
 
 
-/* 
- User service to handle requests that deal with users, admins, students, and groups. 
-*/
+/** 
+ * User service to handle requests that deal with users (admins, students) and groups dbo objects. 
+ */
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -18,7 +18,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $functionException = isset($_POST['function']) ? ($_POST['function'] == 'registerStudent' || $_POST['function'] == 'loginUser'): false;
 $validSession = isset($_SESSION['user']) || $functionException;
-//will fail and give the wrong error if isset($_POST['function']) is false
 
 if(isset($_POST['function']) && $validSession){
 
@@ -265,7 +264,7 @@ if(isset($_POST['function']) && $validSession){
 			}
 
 			$params = $_POST['params'];
-			$errorBool = Group::createGroups($db, $params['groupList']);
+			$errorBool = Group::createGroups($db, $params['groupList'], $_SESSION['user']['userNo']);
 			echo $errorBool ? json_encode('successfully created') : die("failed creation");
 		break;
 		default:

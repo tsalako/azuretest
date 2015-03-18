@@ -135,8 +135,10 @@
 </body>
 
 <script>
+/**
+ * Initial load of fields and events.
+ */
 $(function() {
-    
     var search = $.urlParam('search');
     var searchString = unescape(search).toLowerCase();
 
@@ -192,8 +194,20 @@ $(function() {
         var searchText = $('#searchBox').val().trim();
         window.location.href = 'forum.html?&search=' + searchText;
     });
+
+    $("#searchBox").keyup(function(event){
+        if(event.keyCode == 13){
+            $("button[type=submit]").click();
+        }
+    });
 });
 
+/**
+ * Add a thread the thread list.
+ *
+ * @param response    thread dbo object
+ * @see   sendRequest success
+ */
 var addThread = function(response){
     var threadObj = response.data;
 
@@ -224,6 +238,12 @@ var addThread = function(response){
     });
 }
 
+/**
+ * Populate the list of threads for the desired group forum.
+ * 
+ * @param response    array of thread dbo objects
+ * @see   sendRequest success
+ */
 var populateThreadList = function(response){
     var threadList = response.data.threads;
     var user = response.data.user;

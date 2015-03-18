@@ -263,6 +263,10 @@
 </body>
 
 <script>
+
+/**
+ * Initial load of fields and events.
+ */
 $(function() {
     $('.name-editting').hide();
     $('.username-editting').hide();
@@ -432,6 +436,12 @@ $(function() {
     });
 });
 
+/**
+ * Load the data of the user into the appriopriate fields
+ * 
+ * @param response    user dbo object
+ * @see   sendRequest success
+ */
 var loadUserData = function(response){
     var data = response.data;
     if(data.fName == null || data.lName == null){
@@ -451,6 +461,12 @@ var loadUserData = function(response){
     $('.fa-asterisk').hide();
 }
 
+/**
+ * Checks whether the password change of a user was successful or not
+ * 
+ * @param response    isPasswordMatch boolean
+ * @see   sendRequest success
+ */
 var passwordCallback = function(response) {
     if(!response.data.isPasswordMatch){
         $('.password-editting td').eq(0).addClass('has-error');

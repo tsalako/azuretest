@@ -293,6 +293,12 @@ $(function() {
             'getAllStudents');
 });
 
+/**
+ * Loads autocomplete bar with all the student names.
+ * 
+ * @param response    list of student user dbo object
+ * @see   sendRequest success
+ */
 var populateStudentAutocomplete = function(response){
     var usernames = [];
     $.each(response.data, function(i, student){
@@ -313,6 +319,12 @@ var populateStudentAutocomplete = function(response){
     $('.fa-asterisk').hide();
 }
 
+/**
+ * Loads the form with the data of the selected user.
+ * 
+ * @param response    user dbo object
+ * @see   sendRequest success
+ */
 var loadForm = function(response) {
     var data = response.data;
     var student = data.student;
@@ -346,6 +358,12 @@ var loadForm = function(response) {
 
 }
 
+/**
+ * Loads the author and assessor tables with the assessment data
+ * 
+ * @param tableName   id of the table to add the assessments to
+ * @param rowDataList array of assessment dbo objects
+ */
 var loadTable = function(tableName, rowDataList){
     $('#'+tableName+' tbody').empty();
 
@@ -386,6 +404,13 @@ var loadTable = function(tableName, rowDataList){
     $('#'+tableName+' #overallAvg').text(avg);
 }
 
+/**
+ * Click event of each assessment comment speech icon. Loads the
+ * text and title into a module and shows the module.
+ *
+ * @param text   desired module body
+ * @param title  desired module title
+ */
 function popupModule(text, title){
     $('#myModal .modal-title').html(title);
     $('#myModal .modal-body').html(text);

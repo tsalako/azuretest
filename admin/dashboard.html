@@ -257,6 +257,12 @@ $(function() {
             'getAdminDashboard');
 });
 
+/**
+ * Loads the admin dashboard with the necessary values.
+ * 
+ * @param response    object with 'user', 'doneReports', 'doneAssessments', and 'totalAssessments' fields
+ * @see   sendRequest success
+ */
 var loadDashValues = function(response) {
     var data = response.data;
 
