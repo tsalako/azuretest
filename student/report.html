@@ -304,7 +304,7 @@ var saveCallback = function(response) {
 var loadReport = function(response) {
     if(response.data != 'noReport'){
         var data = response.data;
-        var date = new Date(data.uploadedOn.date).toLocaleString();
+        var date = new Date(data.uploadedOn).toLocaleString();
         $('.panel-heading').html(data.title + '<span class=pull-right>'+date+'</span>');
         $('.panel-body p').text(data.body);
         $('.panel-footer').html(data.reference+'&nbsp');

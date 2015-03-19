@@ -211,11 +211,6 @@ $(function() {
 var addThread = function(response){
     var threadObj = response.data;
 
-    console.log(threadObj);
-    console.log(threadObj.createdOn);
-    console.log(threadObj.createdOn);
-    console.log(new Date(threadObj.createdOn));
-    console.log(new Date(threadObj.createdOn).toLocaleString());
     var date = new Date(threadObj.createdOn).toLocaleString();
     $('.thread-list').prepend('<div class="row thread">'+
                         '<div class="col-lg-12">'+

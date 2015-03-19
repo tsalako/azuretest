@@ -11,7 +11,7 @@ class Report{
 		$this->data['title'] = $report['title'];
 		$this->data['body'] = $report['body'];
 		$this->data['reference'] = $report['reference'];
-		$this->data['uploadedOn'] = $report['uploadedOn'] == null ? null : date_create($report['uploadedOn'],timezone_open(" Europe/London"));
+		$this->data['uploadedOn'] = $report['uploadedOn'] == null ? null : $report['uploadedOn'];
 		$this->data['assignedGroupsList'] = isset($report['assignedGroupsList']) ? $report['assignedGroupsList'] : null;
 	}
 

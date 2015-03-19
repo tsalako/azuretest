@@ -387,7 +387,7 @@ var loadTable = function(tableName, rowDataList){
         }
 
         total += parseFloat(assessment.averageGrade);
-        var date = new Date(assessment.assessedOn.date);
+        var date = new Date(assessment.assessedOn);
         var commentIcon = i%2 == 0 ? "fa-comment" : "fa-comment-o"
         $('#'+tableName+' tbody')
             .append('<tr class="">'+

@@ -181,7 +181,7 @@ $(function() {
 var addPost = function(response){
     var postObj = response.data;
 
-    var date = new Date(postObj.postedOn.date).toLocaleString();
+    var date = new Date(postObj.postedOn).toLocaleString();
     $('.post-list').append('<div class="row">'+
                         '<div class="col-lg-12">'+
                             '<div class="panel panel-yellow">'+

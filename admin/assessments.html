@@ -220,7 +220,7 @@ var loadTable = function(response){
     var length = response.data.length;
     $.each(response.data, function(i, assessment) {
         total += parseFloat(assessment.averageGrade);
-        var date = new Date(assessment.assessedOn.date);
+        var date = new Date(assessment.assessedOn);
         var commentIcon = i%2 == 0 ? "fa-comment-o" : "fa-comment"
         $('#assessment-table tbody')
             .append('<tr class="">'+

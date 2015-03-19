@@ -16,7 +16,7 @@ class Assessment{
 		$this->data['averageGrade'] = $assessment['averageGrade'];
 		$this->data['assessorAvg'] = isset($assessment['assessorAvg']) ? $assessment['assessorAvg'] : null;
 		$this->data['comment'] = $assessment['comment'];
-		$this->data['assessedOn'] = date_create($assessment['assessedOn'],timezone_open(" Europe/London"));
+		$this->data['assessedOn'] = $assessment['assessedOn'];
 		$this->data['report'] = isset($assessment['report']) ? $assessment['report'] : null;
 	}
 

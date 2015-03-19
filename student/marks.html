@@ -208,7 +208,7 @@
  */
 var loadTable = function(response){
     $.each(response.data.assessments, function(i, assessment) {
-        var date = new Date(assessment.assessedOn.date).toLocaleDateString();
+        var date = new Date(assessment.assessedOn).toLocaleDateString();
         var commentIcon = i%2 == 0 ? "fa-comment" : "fa-comment-o";
 
         console.log(assessment.assessorAvg);

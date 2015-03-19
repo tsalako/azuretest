@@ -12,7 +12,7 @@ class Post{
 		$this->data['creator'] = $post['creator'];
 		$this->data['creatorName'] = $post['creatorName'];
 		$this->data['comment'] = $post['comment'];
-		$this->data['postedOn'] = date_create($post['postedOn'],timezone_open(" Europe/London"));
+		$this->data['postedOn'] = $post['postedOn'];
 	}
 
 	public function getData(){
