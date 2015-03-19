@@ -14,7 +14,7 @@ class Assessment{
 		$this->data['formatGrade'] = $assessment['formatGrade'];
 		$this->data['qualityGrade'] = $assessment['qualityGrade'];
 		$this->data['averageGrade'] = $assessment['averageGrade'];
-		$this->data['assessorStats'] = isset($assessment['assessorStats']) ? $assessment['assessorStats'] : null;
+		$this->data['assessorAvg'] = isset($assessment['assessorAvg']) ? $assessment['assessorAvg'] : null;
 		$this->data['comment'] = $assessment['comment'];
 		$this->data['assessedOn'] = date_create($assessment['assessedOn'],timezone_open(" Europe/London"));
 		$this->data['report'] = isset($assessment['report']) ? $assessment['report'] : null;
@@ -175,7 +175,22 @@ class Assessment{
 		$stmt = $db->prepare($query);
 		$stmt->execute();
 		while($row =  $stmt->fetch()){
-			$row['assessorStats'] = Group::getGroupStats($db,  $row['groupNo']);
+			$queryAvg = "SELECT 
+					reportNo, 
+					AVG((structureGrade+formatGrade+strengthGrade+qualityGrade)/4) as avg 
+				FROM 
+					assessment 
+				WHERE
+					reportNo = '".$row['groupNo']."'
+					";
+			$stmtInner = $db->prepare($queryAvg);
+			$stmtInner->execute();
+			$rowInner =  $stmtInner->fetch();
+			if($rowInner){
+				$row['assessorAvg'] = $rowInner['avg'];
+			} else {
+				$row['assessorAvg'] = null;
+			}
 			array_push($assessments, new Assessment($row));
 		}
 

@@ -223,7 +223,6 @@ class Group{
 		}
 		return $groupStats;
 	}
-
 }
 
 ?>

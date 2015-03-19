@@ -208,19 +208,23 @@
  */
 var loadTable = function(response){
     $.each(response.data.assessments, function(i, assessment) {
-        var date = new Date(assessment.assessedOn.date);
-        var commentIcon = i%2 == 0 ? "fa-comment" : "fa-comment-o"
+        var date = new Date(assessment.assessedOn.date).toLocaleDateString();
+        var commentIcon = i%2 == 0 ? "fa-comment" : "fa-comment-o";
+
+        console.log(assessment.assessorAvg);
+        var otherAvg = assessment.assessorAvg == null ? 'N/A' : parseFloat(assessment.assessorAvg).toFixed(3);
+
         $('#assessment-table tbody')
             .append('<tr class="">'+
                         '<td>'+convertGroupNo(assessment.groupNo)+'</td>'+
-                        '<td>'+parseFloat(assessment.assessorStats.avg).toFixed(3)+'</td>'+
+                        '<td>'+otherAvg+'</td>'+
                         '<td>'+assessment.strengthGrade+'</td>'+
                         '<td>'+assessment.structureGrade+'</td>'+
                         '<td>'+assessment.formatGrade+'</td>'+
                         '<td>'+assessment.qualityGrade+'</td>'+
                         '<td>'+parseFloat(assessment.averageGrade).toFixed(3)+'</td>'+
                         '<td class="comment"><i class="fa '+commentIcon+'"></i></td>'+
-                        '<td>'+date.toLocaleDateString()+'</td>'+
+                        '<td>'+date+'</td>'+
                     '</tr>');
 
         $('#assessment-table tbody tr:nth-last-child(1) .comment').click(function() {

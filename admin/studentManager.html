@@ -378,8 +378,8 @@ var loadTable = function(tableName, rowDataList){
         if(tableName=='author-table'){
             text = "Group No. " + convertGroupNo(assessment.groupNo) + " comments on Group No. " + convertGroupNo(assessment.reportNo);
             group = convertGroupNo(assessment.groupNo);
-            console.log(assessment.assessorStats.avg);
-            var avg = assessment.assessorStats.avg == null ? 'N/A' : assessment.assessorStats.avg;
+            console.log(assessment.assessorAvg);
+            var avg = assessment.assessorAvg == null ? 'N/A' : parseFloat(assessment.assessorAvg).toFixed(3);
             otherAvg = '<td>'+avg+'</td>';
         } else {
             text = "Group No. " + convertGroupNo(assessment.groupNo) + " comments on Group No. " + convertGroupNo(assessment.reportNo);
