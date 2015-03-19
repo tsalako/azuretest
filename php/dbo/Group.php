@@ -113,16 +113,16 @@ class Group{
 		$queryTruncReport = "TRUNCATE report";
 		$db->exec($queryTruncReport);
 
-		$errorBool = $errorBool && User::deleteCurrentStudents($db);
+		User::deleteCurrentStudents($db);
 		foreach ($groupList as $group){
 			$queryInsert = "INSERT INTO 
 							groups (`groupNo`, `assignedBy`) 
 					  	VALUES 
 					  		('".$group['groupNo']."', '".$adminNo."')";
-	    	$errorBool = $errorBool && $db->exec($queryInsert);
+	    	$db->exec($queryInsert);
 
 			foreach ($group['usernames'] as $username){
-				$errorBool = $errorBool && User::addUserBasic($db, $username, $group['groupNo'], 'student');
+				User::addUserBasic($db, $username, $group['groupNo'], 'student');
 			}
 		}
 
