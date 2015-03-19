@@ -14,6 +14,7 @@ class Assessment{
 		$this->data['formatGrade'] = $assessment['formatGrade'];
 		$this->data['qualityGrade'] = $assessment['qualityGrade'];
 		$this->data['averageGrade'] = $assessment['averageGrade'];
+		$this->data['assessorStats'] = isset($assessment['assessorStats']) ? $assessment['assessorStats'] : null;
 		$this->data['comment'] = $assessment['comment'];
 		$this->data['assessedOn'] = date_create($assessment['assessedOn'],timezone_open(" Europe/London"));
 		$this->data['report'] = isset($assessment['report']) ? $assessment['report'] : null;
@@ -74,7 +75,6 @@ class Assessment{
 			$report['body'] = $row['body'];
 			$report['reference'] = $row['reference'];
 			$report['uploadedOn'] = $row['uploadedOn'];
-
 			$row['report'] = new Report($report);
 			array_push($assessments, new Assessment($row));
 		}
@@ -175,6 +175,7 @@ class Assessment{
 		$stmt = $db->prepare($query);
 		$stmt->execute();
 		while($row =  $stmt->fetch()){
+			$row['assessorStats'] = Group::getGroupStats($db,  $row['groupNo']);
 			array_push($assessments, new Assessment($row));
 		}
 

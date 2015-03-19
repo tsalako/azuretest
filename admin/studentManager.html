@@ -173,12 +173,14 @@ p {
                                             <table class="table table-striped table-bordered table-hover assessment-table" id="author-table">
                                                 <thead>
                                                     <tr>
-                                                        <th rowspan="2">Group No.</th>
+                                                        <th colspan="2">Assessor</th>
                                                         <th colspan="5">Scores</th>
                                                         <th rowspan="2">Comments</th>
                                                         <th rowspan="2">Assessed On</th>
                                                     </tr>
                                                     <tr>
+                                                        <th>Group No.</th>
+                                                        <th>Average</th>
                                                         <th>Strength</th>
                                                         <th>Structure</th>
                                                         <th>Format</th>
@@ -372,9 +374,13 @@ var loadTable = function(tableName, rowDataList){
     $.each(rowDataList, function(i, assessment) {
         var text = '';
         var group = '';
+        var otherAvg = '';
         if(tableName=='author-table'){
             text = "Group No. " + convertGroupNo(assessment.groupNo) + " comments on Group No. " + convertGroupNo(assessment.reportNo);
             group = convertGroupNo(assessment.groupNo);
+            console.log(assessment.assessorStats.avg);
+            var avg = assessment.assessorStats.avg == null ? 'N/A' : assessment.assessorStats.avg;
+            otherAvg = '<td>'+avg+'</td>';
         } else {
             text = "Group No. " + convertGroupNo(assessment.groupNo) + " comments on Group No. " + convertGroupNo(assessment.reportNo);
             group = convertGroupNo(assessment.reportNo);
@@ -386,6 +392,7 @@ var loadTable = function(tableName, rowDataList){
         $('#'+tableName+' tbody')
             .append('<tr class="">'+
                         '<td>'+group+'</td>'+
+                        otherAvg+
                         '<td>'+assessment.strengthGrade+'</td>'+
                         '<td>'+assessment.structureGrade+'</td>'+
                         '<td>'+assessment.formatGrade+'</td>'+

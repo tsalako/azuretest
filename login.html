@@ -142,7 +142,11 @@ $(function() {
     });
 
     $("#login-btn").click(function() {
-        if($('.login-panel input').val().replace(/ /g,'') == ''){
+        var filled = true;
+        $('.login-panel input').each(function(i, value) {
+            filled = filled && $(this).val().replace(/ /g,'') != '';
+        });
+        if(!filled){
             reportLoginError({'data': {'errorMessage':'*Please fill the username and password fields.'}});
         } else {
             sendRequest('php/UserService.php',
@@ -160,7 +164,12 @@ $(function() {
     });
 
     $('#register-btn').click(function() {
-        if($('.register-panel input').val().replace(/ /g,'') == ''){
+        var filled = true;
+        $('.register-panel input').each(function(i, value) {
+            filled = filled && $(this).val().replace(/ /g,'') != '';
+        });
+
+        if(!filled){
             reportRegistrationError({'data': {'errorMessage':'*Please fill all fields.'}});
         } else if($('.register-panel input[name=password]').val() != $('.register-panel input[name=retypepassword]').val()) {
             reportRegistrationError({'data': {'errorMessage':'*Retyped password does not match.'}});
