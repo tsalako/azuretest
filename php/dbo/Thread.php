@@ -13,8 +13,8 @@ class Thread{
 		$this->data['title'] = $thread['title'];
 		$this->data['description'] = $thread['description'];
 		$this->data['lastEditor'] = $thread['lastEditor'];
-		$this->data['lastUpdate'] = date_create($thread['lastUpdate'],timezone_open(" Europe/London"));
-		$this->data['createdOn'] = date_create($thread['createdOn'],timezone_open(" Europe/London"));
+		$this->data['lastUpdate'] = $thread['lastUpdate'];
+		$this->data['createdOn'] = $thread['createdOn'];
 		$this->data['postCount'] = $thread['postCount'];
 		$this->data['creatorName'] = $thread['creatorName'];
 	}

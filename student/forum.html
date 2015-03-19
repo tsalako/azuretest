@@ -213,10 +213,10 @@ var addThread = function(response){
 
     console.log(threadObj);
     console.log(threadObj.createdOn);
-    console.log(threadObj.createdOn.date);
-    console.log(new Date(threadObj.createdOn.date));
-    console.log(new Date(threadObj.createdOn.date).toLocaleString());
-    var date = new Date(threadObj.createdOn.date).toLocaleString();
+    console.log(threadObj.createdOn);
+    console.log(new Date(threadObj.createdOn));
+    console.log(new Date(threadObj.createdOn).toLocaleString());
+    var date = new Date(threadObj.createdOn).toLocaleString();
     $('.thread-list').prepend('<div class="row thread">'+
                         '<div class="col-lg-12">'+
                             '<div class="panel panel-primary">'+
