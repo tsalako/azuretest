@@ -145,12 +145,6 @@ if(isset($_POST['function']) && $validSession){
 
 			echo json_encode($return);
 		break;
-		case 'addUser':
-			//remove function
-			$params = $_POST['params'];
-			$errorBool = User::addUser($db, $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
-			echo $errorBool ? json_encode('successfully added') : die("failed add");
-		break;
 		case 'getStudentDetails':
 			if(!$_SESSION['user']['isAdmin']){
 				die('deniedAccess');
@@ -184,18 +178,8 @@ if(isset($_POST['function']) && $validSession){
 			echo json_encode($return);
 		break;
 		case 'getUserByUserNo' :
-			//remove params
 			$return = User::getUserByUserNo($db, $_SESSION['user']['userNo']);
 			echo json_encode($return->getData());
-		break;
-		case 'getAllUsers':
-			//remove function
-			$users = User::getAllUsers($db);
-			$return = array();			
-			foreach ($users as $user){
-				array_push($return, $user->getData());
-			}
-			echo json_encode($return);
 		break;
 		case 'getAllStudents':
 			if(!$_SESSION['user']['isAdmin']){
@@ -209,22 +193,13 @@ if(isset($_POST['function']) && $validSession){
 			}
 			echo json_encode($return);
 		break;
-		case 'editUser':
-			//remove function
-			$params = $_POST['params'];
-			$errorBool = User::editUser($db, $params['userNo'], $params['username'], $params['password'], $params['type'], $params['first'], $params['last']);
-			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
-			
-		break;
 		case 'editUserField':
-			//remove userNo
 			$params = $_POST['params'];
 			$errorBool = User::editUserField($db, $_SESSION['user']['userNo'], $params['type'], $params['data']);
 			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
 			
 		break;
 		case 'updatePassword':
-			//remove userNo
 			$params = $_POST['params'];
 			$errorBool = User::updatePassword($db, $_SESSION['user']['userNo'], $params['currPass'], $params['newPass']);
 			$return['isPasswordMatch'] = $errorBool ? true : false;
@@ -242,12 +217,6 @@ if(isset($_POST['function']) && $validSession){
 				array_push($return, $group->getData());
 			}
 			echo json_encode($return);
-		break;
-		case 'getGroupByNo':
-			//remove function
-			$params = $_POST['params'];
-			$group = Group::getGroupByNo($db, $params['groupNo']);
-			echo json_encode($group->getData());
 		break;
 		case 'modifyGroups':
 			if(!$_SESSION['user']['isAdmin']){

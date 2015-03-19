@@ -110,65 +110,66 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
-
-
-
                 <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel blue-border">
-                        <div class="panel-heading">
-                            Report form
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <form role="form">
-                                        <div class="form-group">
-                                            <label>Title</label>
-                                            <input class="form-control titleR">
-                                            <p class="help-block">Please use a meaningful and descriptive title.</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Body</label>
-                                            <textarea class="form-control bodyR" placeholder="Type in your analysis in here..." rows="7"></textarea>
-                                            <p class="help-block">Or upload a text file below.</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>File input</label>
-                                            <div>
-                                            <button class="btn btn-primary btn-outline fileInputR">
-                                                <label class="upload"><span><i class="fa fa-upload "><input id="fileUploaded" type="file"></i></span></label>
-                                            </button>      
-                                            <p id="fileName">No file chosen<p>
-                                            </div>                                      
-                                        </div>
-                                        <div class="form-group">
-                                            <label>References</label>
-                                            <textarea class="form-control refR" placeholder="Eg.     Contributors' names (Last edited date). Title of resource. Retrieved from http://Web address for OWL resource." rows="4"></textarea>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-default" onclick="addReport()">Submit</button>
-                                        <button type="reset" class="btn btn-default" onclick="clearFields()">Reset</button>
-                                    </form>
-                                </div>
-                                <!-- /.col-lg-6 (nested) -->
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary edit-panel">
+                            <div class="panel-heading">
+                                Report Form
                             </div>
-                            <!-- /.row (nested) -->
+                            <div class="panel-body">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input class="form-control titleR">
+                                        <p class="help-block">Please use a meaningful and descriptive title.</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Body</label>
+                                        <textarea class="form-control bodyR" placeholder="Type in your analysis in here..." rows="7"></textarea>
+                                        <p class="help-block">Or upload a text/xml file below.</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>File input</label>
+                                        <div>
+                                            <button class="btn btn-primary btn-outline fileInputR">
+                                                <label class="upload">
+                                                    <span>
+                                                        <i class="fa fa-upload ">
+                                                            <input id="fileUploaded" type="file">
+                                                        </i>
+                                                    </span>
+                                                </label>
+                                            </button>      
+                                            <p id="fileName">No file chosen</p>
+                                        </div>                                      
+                                    </div>
+                                    <div class="form-group">
+                                        <label>References</label>
+                                        <textarea class="form-control refR" placeholder="Eg.     Contributors' names (Last edited date). Title of resource. Retrieved from http://Web address for OWL resource." rows="4"></textarea>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                    <button type="reset" class="btn btn-default">Reset</button>
+                                </form>
+                            </div>
+                            <!-- /.panel-body -->
                         </div>
-                        <!-- /.panel-body -->
+                        <!-- /.panel -->
+                        <div class="panel panel-primary report-panel">
+                            <div class="panel-heading"></div>
+                            <div class="panel-body">
+                                <p></p>
+                            </div>
+                            <div class="panel-footer"></div>
+                        </div>
                     </div>
-                    <!-- /.panel -->
+                    <!-- /.col-lg-12 -->
                 </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-
-
+                <!-- /.row -->
             </div>
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
 
@@ -191,94 +192,133 @@
 </body>
 
 <script>
-$(function() {
-    $("#fileUploaded").change(function() {
 
-        //console.log(document.getElementById('fileUploaded').files[0]);
+/**
+ * Initial load of fields and events.
+ */
+$(function() {
+    $('.edit-panel').hide();
+    $('.report-panel').hide();
+
+    sendRequest('../php/ReportService.php',
+            loadReport,
+            'getReportByGroupNo');
+
+    //READ FILE AND LOAD XML/NON XML FILES
+    $("#fileUploaded").change(function() {
+        //Reading in the file
         var file = document.getElementById('fileUploaded').files[0];
-        //console.log(file.name);
         $("#fileName").text(file.name);
-        
+        var re = new RegExp(".*\.xml");
+        var xmlFileName = re.exec(file.name);
+        console.log("Execution: "+re.exec(file.name));
         if(file) {
             var reader = new FileReader();
             reader.readAsText(file);
             reader.onload = function (e) {
-                console.log(e.target.result);
+                if(xmlFileName != null){
+                    //Parsing XML
+                    var xml = $.parseXML(e.target.result),
+                    $xml = $( xml ),
+                    $title = $xml.find('title');
+                    $body = $xml.find('body');
+                    $reference = $xml.find('reference');
+
+                    var references = "";
+                    $reference.each(function(i, value){
+                        references += $(value).text() + ". ";
+                    });
+                    console.log(references);
+
+                    $('.titleR').val($title.text());
+                    $('.bodyR').val($body.text());
+                    $('.refR').val(references);
+                } else {
+                    $('.bodyR').val(e.target.result.trim());
+                }
             }
         }
     });
+
+
+    $('button[type=submit]').click(function(e){
+        e.preventDefault();
+
+        var params = {'title' : $('.titleR').val(), 
+                'body' : $('.bodyR').val(),
+                'reference' : $('.refR').val()};
+
+        if($('.titleR').val() != '' && $('.bodyR').val() != ''){
+            sendRequest('../php/ReportService.php',
+                saveCallback,
+                'addReport',
+                params);
+
+            $('.titleR').parent().removeClass('has-error');
+            $('.titleR').parent().removeClass('has-error');
+
+        } else {
+            if($('.titleR').val() == ''){
+                $('.titleR').parent().addClass('has-error');
+            } 
+            if($('.bodyR').val() == '') {
+                $('.bodyR').parent().addClass('has-error');
+            }
+        }
+
+    });
+
+    $('button[type=reset]').click(function(){
+        $('.titleR').val('');
+        $('.bodyR').val('');
+        $('.refR').val('');
+    });
 });
+
+/**
+ * Loads the report of a group into the appriopriate fields (from the ones
+ * they just entered, not the database).
+ *
+ * @param response    list of assessments
+ * @see   sendRequest success
+ */
+var saveCallback = function(response) {
+    var data = response.data;
+    var date = new Date($.now()).toLocaleString();
+    $('.panel-heading').html($('.titleR').val() + '<span class=pull-right>'+date+'</span>');
+    $('.panel-body p').text($('.bodyR').val());
+    $('.panel-footer').text($('.refR').val());
+
+    $('.edit-panel').hide();
+    $('.report-panel').show();
+    $('button[type=reset]').click();
+}
+
+/**
+ * Load the report of a group into the appriate fields (from the database) 
+ * if there is a report. If there is not a report, show the form to upload a report.
+ *
+ * @param response    report dbo object
+ * @see   sendRequest success
+ */
+var loadReport = function(response) {
+    if(response.data != 'noReport'){
+        var data = response.data;
+        var date = new Date(data.uploadedOn.date).toLocaleString();
+        $('.panel-heading').html(data.title + '<span class=pull-right>'+date+'</span>');
+        $('.panel-body p').text(data.body);
+        $('.panel-footer').html(data.reference+'&nbsp');
+
+        $('.report-panel').show();
+    } else {
+        $('.edit-panel').show();
+    }  
+
+    $('.fa-asterisk').hide();
+}
+
 
 
 </script>
 
 </html>
-
-<!-- INITIAL LOAD SCRIPT -->
-<script>
-$( document ).ready(function() {
-    initialLoad();
-});
-
-var initialLoad = function () {
-    //user Init
-    sendRequest('php/ReportService.php',
-            reportInit,
-            'getAllReports');
-
-}
-</script>
-
-<!-- REPORT ADD/EDIT SCRIPT -->
-<script>
-
-var reports, reportGlobal;
-
-$( "#reportListR" ).change(function() {
-
-  if($(this).val() == 'Add'){
-    $('.titleR').val('');
-    $('.bodyR').val('');
-    $('.refR').val('');
-    
-  } else {
-    reportGlobal = reports[$(this)[0].selectedIndex-1];
-    $('.titleR').val(reportGlobal.title);
-    $('.bodyR').val(reportGlobal.body);
-    $('.refR').val(reportGlobal.reference);
-  }
-  
-});
-
-var addReport = function () {
-    var params = {'groupNo' : convertGroupNo(report.groupNo),
-        'title' : $('.titleR').val(), 
-                'body' : $('.bodyR').val(),
-                'reference' : $('.refR').val()};
-
-    sendRequest('php/ReportService.php',
-            initialLoad,
-            addReport,
-            params);
-
-}
-
-
-var clearFields = function () {
-    /*Clear Fields*/
-    $('.titleR').val('');
-    $('.bodyR').val('');
-    $('.refR').val('');
-}
-
-var reportInit = function (response) {
-    var $reportList = $('#reportListR');
-    reports = [];
-    $.each(response.data, function(i, report) {
-                reports.push(report);
-                $reportList.append('<option value="temp">' + report.groupNo + '</option>');
-            });
-    console.log(response.status);
-}
-
-</script>

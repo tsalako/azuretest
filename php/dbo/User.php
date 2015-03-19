@@ -157,51 +157,6 @@ class User{
 	}
 
 	/**
-	 * REMOVE FUNCTION
-	 */
-	public static function addUser($db, $username, $password, $type, $first, $last){
-		$password = sha1($password);
-		$queryInsert = "INSERT INTO 
-							user (`userNo`, `password`, `type`, `userName`,`fName`,`lName`) 
-					  	VALUES 
-					  		(NULL, '".$password."', '".$type."', '".$username."','".$first."','".$last."')
-					  	";
-		return $db->exec($queryInsert);
-	}
-
-	/**
-	 * REMOVE FUNCTION
-	 */
-	public static function editUser($db, $userNo, $username, $password, $type, $first, $last){
-		if($password != ''){
-			$password = sha1($password);
-			$queryUpdate = "UPDATE 
-							user
-						SET
-							password = '".$password."',
-							type = '".$type."',
-							username = '".$username."',
-							fName = '".$first."',
-							lName = '".$last."'
-						WHERE
-							userNo = '".$userNo."'
-						";
-		} else {
-			$queryUpdate = "UPDATE 
-							user
-						SET
-							type = '".$type."',
-							username = '".$username."',
-							fName = '".$first."',
-							lName = '".$last."'
-						WHERE
-							userNo = '".$userNo."'
-						";
-		}
-		return $db->exec($queryUpdate);
-	}
-
-	/**
 	 * Update the password of the specified user.
 	 * 
 	 * @param $db       database connection
@@ -419,32 +374,6 @@ class User{
 		}
 
 		return $students;
-	}
-
-	/**
-	 * REMOVE FUNCTION
-	 */
-	public static function getAllUsers($db){
-		$users = array();
-
-		$queryUsers = "SELECT 
-						U.userNo, 
-						U.userName, 
-						U.type, 
-						U.fName, 
-						U.lName,
-						U.groupNo 
-					FROM 
-						user U
-					";
-
-		$stmt = $db->prepare($queryUsers);
-		$stmt->execute();
-		while($row =  $stmt->fetch()){
-			array_push($users, new User($row));
-		}
-
-		return $users;
 	}
 
 	/**

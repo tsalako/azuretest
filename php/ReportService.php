@@ -19,18 +19,22 @@ if(isset($_POST['function']) && $validSession){
 	$db = new DB();
 
 	switch($_POST['function']){
-
-
-		case 'addReport':
-			if(!$_SESSION['user']['isAdmin']){
+		case 'getReportByGroupNo':
+			if(!$_SESSION['user']['isStudent']){
 				die('deniedAccess');
 			}
-			//$groupNo = groupNo::getGroupNo($db, $params['groupNo']);
-			$group = Group::getGroupByNo($db, $params['groupNo']);
-			Group::createGroups($db, $params['groupList'], $_SESSION['user']['userNo']);
-			//meriem make sure to change this to use the $_SESSION['user']['groupNo']
+
+			$report = Report::getReportByGroupNo($db, $_SESSION['user']['groupNo']);
+			echo $report == null ? json_encode('noReport') : json_encode($report->getData());
+		break;
+
+		case 'addReport':
+			if(!$_SESSION['user']['isStudent']){
+				die('deniedAccess');
+			}
+
 			$params = $_POST['params'];
-			$errorBool = Report::addReport($db, $params['title'], $params['body'], $params['reference']);
+			$errorBool = Report::addReport($db, $_SESSION['user']['groupNo'], $params['title'], $params['body'], $params['reference']);
 			echo $errorBool ? json_encode('Successfully added') : die("failed add");
 		break;
 
@@ -47,16 +51,6 @@ if(isset($_POST['function']) && $validSession){
 			}
 			echo json_encode($return);
 		break;
-
-		
-		case 'editReport':
-			//meriem make sure to change this to use the $_SESSION['user']['groupNo']
-			//also we don't necessarily need to do the edit (not in report description)
-			$params = $_POST['params'];
-			$errorBool = Report::editReport($db, $params['id'], $params['title'], $params['body'], $params['reference']);
-			echo $errorBool ? json_encode('successfully editted') : die("failed edit");
-		break;
-
 
 		default:
 			echo die("Error - No function called '".$_POST['function']."'");

@@ -18,7 +18,6 @@ function sendRequest (urlInput, callback, functionName, params) {
 			errorCallback({'xhr': xhr, 'status': desc, 'error': err});
 		}
 	});
-	console.log('sent');
 }
 
 /**

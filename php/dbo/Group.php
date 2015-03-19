@@ -101,6 +101,18 @@ class Group{
 		$queryTruncGroup = "TRUNCATE groups";
 		$db->exec($queryTruncGroup);
 
+		$queryTruncAssess = "TRUNCATE assessment";
+		$db->exec($queryTruncAssess);
+
+		$queryTruncPost = "TRUNCATE post";
+		$db->exec($queryTruncPost);
+
+		$queryTruncThread = "TRUNCATE thread";
+		$db->exec($queryTruncThread);
+
+		$queryTruncReport = "TRUNCATE report";
+		$db->exec($queryTruncReport);
+
 		$errorBool = $errorBool && User::deleteCurrentStudents($db);
 		foreach ($groupList as $group){
 			$queryInsert = "INSERT INTO 

@@ -19,29 +19,32 @@ class Report{
 		return $this->data;
 	}
 	
+	/**
+	 * Adds a report to the database given the necessary fields.
+	 * 
+	 * @param $db         database connection
+	 * @param $groupNo    number of the group adding the report
+	 * @param $title      title of the report
+	 * @param $body       the report text itself
+	 * @param $reference  the references the group used to write the report
+	 * @return            whethere the report was added or not
+	 */
 	public static function addReport($db, $groupNo, $title, $body, $reference){
 		$queryInsert = "INSERT INTO 
 							report (`groupNo`,`title`, `body`, `reference`) 
 					  	VALUES 
-					  		(NULL, '".$title."', '".$body."', '".$reference."')
+					  		('".$groupNo."', '".$title."', '".$body."', '".$reference."')
 					  	";
 		return $db->exec($queryInsert);
 	}
 
-	public static function editReport($db, $groupNo, $title, $body, $reference){
-		$queryUpdate = "UPDATE 
-							report
-						SET
-							title = '".$title."',
-							body = '".$body."',
-							reference = '".$reference."'
-						WHERE
-							groupNo = '".$groupNo."'
-						";
-		
-		return $db->exec($queryUpdate);
-	}
-
+	/**
+	 * Gets Report dbo object by its groupNo in the database.
+	 * 
+	 * @param $db      database connection
+	 * @param $groupNo number of the group
+	 * @return         report dbo object
+	 */
 	public static function getReportByGroupNo($db, $groupNo) {
 		$query = "SELECT
 					R.groupNo,
@@ -59,9 +62,20 @@ class Report{
 		$stmt->execute();
 		$row =  $stmt->fetch();
 
-		return new Report($row);
+		if($row){
+			return new Report($row);
+		} else {
+			return null;
+		}
+		
 	}
 
+	/**
+	 * Gets all reports from the database.
+	 * 
+	 * @param $db       database connection
+	 * @return          array of dbo report objects 
+	 */
 	public static function getAllReports($db) {
 		$reports = array();
 
